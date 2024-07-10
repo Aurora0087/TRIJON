@@ -1,7 +1,16 @@
 "use client"
 import React, { useState } from 'react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { Button } from './ui/button'
+import {
+    Sheet,
+    SheetTrigger,
+    SheetContent,
+    SheetHeader,
+    SheetFooter,
+    SheetTitle,
+    SheetDescription,
+    SheetClose
+} from './ui/sheet'
 
 import {
     LifeBuoy,
@@ -10,79 +19,118 @@ import {
     Settings,
     Shirt,
     Star,
+    Truck,
     User,
     X,
 } from "lucide-react"
 import Link from 'next/link'
+import IsLogined from './isLogined'
+import { signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import SearchForm from './SearchForm'
+import AdminWrapper from './AdminWrapper'
 
 const categoryItems = [
     {
         name: "Best Seller",
-        link: "/category/Best Seller"
+        link: "/shop/best"
     },
     {
         name: "New Arrivel",
-        link: "/category/New Arrivel"
+        link: "/shop/new"
     },
     {
         name: "Shirt",
-        link: "/category/Shirt"
+        link: "/shop/shirt"
     },
     {
         name: "T-Shirt",
-        link: "/category/T-Shirt"
+        link: "/shop/t-shirt"
     },
 ]
 
 function BurgurManu() {
+
+    const router = useRouter()
+
+    async function handleSignOut() {
+        await signOut().then(() => {
+            router.push("/")
+        })
+    }
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button className=' p-0' variant="ghost">
+        <Sheet>
+            <SheetTrigger asChild>
+                <Button className='p-0' variant="ghost">
                     <Menu />
                 </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Category</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    {
-                        categoryItems.map((item) => {
-                            return (
-                                <DropdownMenuItem key={item.name}>
-                                    <Link href={item.link} className=' flex justify-center items-center'>
-                                        <Shirt className="mr-2 h-4 w-4" />
+            </SheetTrigger>
+            <SheetContent side="left" className=' flex flex-col justify-between'>
+                <div className=' border-b-2'>
+                    <div className=' py-4'>
+                    <SheetHeader className="mb-4">
+                        <SheetTitle>Serch Cetegory</SheetTitle>
+                    </SheetHeader>
+                        <SearchForm/>
+                    </div>
+                    <SheetHeader>
+                        <SheetTitle>Category</SheetTitle>
+                    </SheetHeader>
+                    <div className="space-y-2 py-4 pl-4">
+                        {
+                            categoryItems.map((item) => (
+                                <SheetClose asChild>
+                                    <Link href={item.link} key={item.name} className='flex items-center space-x-2 hover:text-blue-500'>
+                                        <Shirt className="h-4 w-4" />
                                         <span>{item.name}</span>
                                     </Link>
-                                </DropdownMenuItem>
-                            )
-                        })
-                    }
-                </DropdownMenuGroup>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <User className="mr-2 h-4 w-4" />
-                        <span>Profile</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>Settings</span>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                    <LifeBuoy className="mr-2 h-4 w-4" />
-                    <span>Support</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+                                </SheetClose>
+                            ))
+                        }
+                    </div>
+                </div>
+                <div>
+                    <AdminWrapper>
+                    <SheetClose asChild>
+                                    <Link href="/dashbord" className='flex items-center space-x-2 text-red-400 hover:text-red-600'>
+                                        <User className="h-4 w-4" />
+                                        <span>Admin</span>
+                                    </Link>
+                                </SheetClose>
+                    </AdminWrapper>
+                </div>
+                <div className='border-t-2'>
+                    <SheetHeader className="mt-4">
+                        <SheetTitle>My Account</SheetTitle>
+                    </SheetHeader>
+                    <div className="space-y-2 py-4 pl-4">
+                        <IsLogined>
+                            <>
+                                <SheetClose asChild>
+                                    <Link href="/profile" className='flex items-center space-x-2 hover:text-blue-500'>
+                                        <User className="h-4 w-4" />
+                                        <span>Profile</span>
+                                    </Link>
+                                </SheetClose>
+                                <SheetClose asChild>
+                                    <Link href="/orders" className='flex items-center space-x-2  hover:text-blue-500'>
+                                        <Truck className="h-4 w-4" />
+                                        <span>Orders</span>
+                                    </Link>
+                                </SheetClose>
+                                <SheetClose asChild>
+                                    <button className='flex items-center space-x-2 p-0 hover:text-blue-500' onClick={handleSignOut}>
+                                        <LogOut className="h-4 w-4" />
+                                        <span>Log out</span>
+                                    </button>
+                                </SheetClose>
+                            </>
+                        </IsLogined>
+                    </div>
+                </div>
+
+            </SheetContent>
+        </Sheet>
     )
 }
 

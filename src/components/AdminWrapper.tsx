@@ -11,11 +11,16 @@ function AdminWrapper({
 }>) {
 
     const [user, setUser] = useState<User | null | undefined>(null)
+    const [isAdmin,setIsAdmin] = useState(false)
 
     useEffect(() => {
         fatchUser()
-        console.log(user);
+        setIsAdmin(findIsAdmin())
     }, [])
+
+    useEffect(() => {
+        setIsAdmin(findIsAdmin())
+    }, [user])
 
     async function fatchUser() {
         await getSession().then((res) => {
@@ -23,17 +28,20 @@ function AdminWrapper({
         })
     }
 
+    function findIsAdmin() {
+        return user?.role === "ADMIN"
+    }
+
     return (
         <>
             {
-                user ? (
-                    <div className="flex bg-slate-200 min-h-svh w-full relative" >
-                        {children}
-                    </div>
+                isAdmin ? (
+                    <>
+                    { children }
+                    </>
+                    
                 ) : (
-                        <div className=' w-full h-full grid place-content-center'>
-                            <h1 className=' font-semibold text-red-500'>Please Login for viewing this page...</h1>
-                    </div>
+                    null
                 )
             }
         </>

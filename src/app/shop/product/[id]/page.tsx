@@ -105,7 +105,7 @@ function ProductDetailspage({ params: { id } }: SearchParamProps) {
                 </div>
             </div>
             <div>
-                <SemilarProduct category={"new"} />
+                <SemilarProduct category={product.category[0]} />
             </div>
                 </>
                 ) : (null)}

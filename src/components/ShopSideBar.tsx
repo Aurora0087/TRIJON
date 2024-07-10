@@ -22,6 +22,22 @@ const navLinkItems = [
         title: "BestSellers",
         href: "/shop/best"
     },
+    {
+        title: "Anime",
+        href: "/shop/anime"
+    },
+    {
+        title: "Trackpants",
+        href: "/shop/trackpants"
+    },
+    {
+        title: "Hoody",
+        href: "/shop/hoody"
+    },
+    {
+        title: "Sweat-Shirts",
+        href: "/shop/Sweat-Shirts"
+    },
 ]
 
 
@@ -41,12 +57,12 @@ function ShopSideBar() {
                     })
                 }
                 <CollapsibleCard triggerComponent='T-shirt'>
-                    <NavLink link='/shop/t-shirt' name='All' isCurrnt={currentRoute.includes("/shop/t-shirt")} />
-                    <NavLink link='/shop/t-shirt/best' name='BestSeller' isCurrnt={currentRoute.includes("/shop/t-shirt/best")} />
+                    <NavLink link='/shop/t-shirt' name='All' isCurrnt={currentRoute===("/shop/t-shirt")} />
+                    <NavLink link='/shop/t-shirt,best' name='BestSeller' isCurrnt={currentRoute===("/shop/t-shirt,best")} />
                 </CollapsibleCard>
                 <CollapsibleCard triggerComponent='Shirt'>
-                    <NavLink link='/shop/shirt' name='All' isCurrnt={currentRoute.includes("/shop/shirt")} />
-                    <NavLink link='/shop/shirt/best' name='BestSeller' isCurrnt={currentRoute.includes("/shop/shirt/best")} />
+                    <NavLink link='/shop/shirt' name='All' isCurrnt={currentRoute===("/shop/shirt")} />
+                    <NavLink link='/shop/shirt,best' name='BestSeller' isCurrnt={currentRoute===("/shop/shirt,best")} />
                 </CollapsibleCard>
             </div>
         </motion.div>

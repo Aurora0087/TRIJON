@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 const categories = [
     {
@@ -35,11 +36,12 @@ const CategorySection = () => {
                         href={`/shop/${category.name}`}
                         key={category.name} className="text-center">
                         <div className="relative w-24 h-24 mx-auto overflow-hidden rounded-full">
-                            <img
-                                src={"/path/png"}
-                                alt={category.name}
-                                className="w-full h-full object-cover"
-                            />
+                        <Avatar className=' border-2 hover:border-blue-400 w-full h-full'>
+                            <AvatarImage src={`/j${category.image}` } className=' w-full h-full object-cover'/>
+                            <AvatarFallback className=' animate-pulse rounded-md bg-muted bg-slate-200 text-sm'>
+                                {category.name}
+                            </AvatarFallback>
+                        </Avatar>
                         </div>
                         <h3 className="mt-4 text-sm font-medium">{category.name}</h3>
                     </Link>

@@ -241,6 +241,9 @@ function AddtoCart({
 
   async function addIntoCart() {
     if (user === null || user === undefined) {
+      toast({
+        description: "Login first for Adding this to cart.",
+      })
       return
     }
     await addToCart({ email: user?.email as string, productId, quantity, size, color }).then((res) => {
@@ -257,10 +260,10 @@ function AddtoCart({
   }
   
   return (
-    <Button disabled={user === null || quantity === "0"} className="w-full px-4 py-2 rounded-full flex items-center justify-center gap-2" onClick={addIntoCart}>
+    <Button disabled={user === null || user === undefined || quantity === "0"} className="w-full px-4 py-2 rounded-full flex items-center justify-center gap-2" onClick={addIntoCart}>
       <Toaster />
       <ShoppingCart />
-      {user===null ? "Login to Add to Cart":" Add to cart"}
+      {user === null || user === undefined ? "Login to Add to Cart":" Add to cart"}
     </Button>
   )
 }
