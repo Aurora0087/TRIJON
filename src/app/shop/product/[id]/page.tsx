@@ -6,109 +6,91 @@ import PostReview from '@/components/PostReview'
 import ProductDetails from '@/components/ProductDetails'
 import SemilarProduct from '@/components/SemilarProduct'
 import { getProductsById } from '@/database/action/product.action'
+import { getReviews, IReviewWithUsername } from '@/database/action/review.action'
 import { IProduct } from '@/database/models/product.model'
+import { IReview } from '@/database/models/review.model'
 import { SearchParamProps } from '@/types'
 import React, { useEffect, useState } from 'react'
 
-const demoData = {
-    id: "1",
-    title: "Casual T-Shirt",
-    description: "A comfortable and casual T-shirt perfect for everyday wear.",
-    buyingPrice: 200,
-    mainPrice: 400,
-    rating: 4.5,
-    images: [
-        "/a.png",
-        "/a.png",
-        "/a.png",
-        "/a.png",
-        "/a.png",
-    ],
-    varient: [
-        {
-            size: "S",
-            colors: [
-                { name: "Red", value: "#FF0000", stockes: 10 },
-                { name: "Blue", value: "#1000FF", stockes: 0 }
-            ],
-        },
-        {
-            size: "M",
-            colors: [
-                { name: "Green", value: "#00FF00", stockes: 5 },
-                { name: "Yellow", value: "#FFFF00", stockes: 15 }
-            ],
-        }
-    ]
-}
-
-const demoReview = [
-    {
-        name: 'Elena',
-        date: new Date('2023-06-04T15:14:00'),
-        rating: 4,
-        comment: 'Good jeans, the quality is generally satisfactory, the only downside is that they run a little small.',
-        imageUrl: '/path/to/image.jpg' // Adjust the image path as needed
-    },
-    {
-        name: 'John',
-        date: new Date('2023-05-22T10:30:00'),
-        rating: 5,
-        comment: 'The jeans are great! Very comfortable and stylish. Slightly tight around the waist.',
-
-    },
-]
-
 function ProductDetailspage({ params: { id } }: SearchParamProps) {
 
-    const [product, setProduct] = useState<IProduct>()
+    const [product, setProduct] = useState<IProduct>();
+    const [reviews, setReviews] = useState<IReviewWithUsername[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalReviews, setTotalReviews] = useState(0);
+    const [ratingPercentages, setRatingPercentages] = useState<{ [key: number]: number }>({
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+    });
 
     async function getProduct() {
-        await getProductsById({id}).then((res) => {
-            setProduct(res)
-            console.log(res);
-            
-        }).catch((r) => {
-        })
+        try {
+            const res = await getProductsById({ id });
+            setProduct(res);
+        } catch (error) {
+            console.error('Error fetching product:', error);
+        }
+    }
+
+    async function fetchReviews(productId: string, page: number) {
+        try {
+            const { reviews, totalPages, totalReviews, ratingPercentages } = await getReviews({ productId, page });
+            setReviews(reviews);
+            setTotalPages(totalPages);
+            setTotalReviews(totalReviews);
+            setRatingPercentages(ratingPercentages);
+        } catch (error) {
+            console.error('Error fetching reviews:', error);
+        }
     }
 
     useEffect(() => {
-        getProduct()
-    },[])
+        getProduct();
+        fetchReviews(id, currentPage);
+    }, [id, currentPage]);
 
     return (
-        <div className=' py-8 px-3 w-full bg-slate-50'>
+        <div className='py-8 px-3 w-full bg-slate-50'>
             <div>
                 <BackButton />
             </div>
-            {product !== undefined ? (
+            {product ? (
                 <>
                     <ProductDetails
                         id={product._id}
                         title={product.title}
                         description={product.description}
+                        totalReviews={totalReviews}
                         buyingPrice={product.buyingPrice}
                         mainPrice={product.mainPrice}
                         rating={product.rating}
                         images={product.imageList}
                         varient={product.varient} />
-            <div className=' py-8'>
-                <div className=' w-full'>
-                    <PostReview productId={id} uId=''/>
-                </div>
-                <div className=' flex flex-col gap-4'>
-                    {demoReview.map((data, i) => {
-                        return (
-                            <ReviewCard key={i} {...data} />
-                        )
-                    })}
-                </div>
-            </div>
-            <div>
-                <SemilarProduct category={product.category[0]} />
-            </div>
+                    <div>
+                        <SemilarProduct category={product.category[0]} />
+                    </div>
+                    <div className='py-8'>
+                        <div className='w-full'>
+                            <PostReview productId={id} />
+                        </div>
+                        <div className='flex flex-col gap-4'>
+                            {reviews.map((review, index) => (
+                                <ReviewCard
+                                    key={index}
+                                    name={review.username}
+                                    date={new Date(review.createdAt)}
+                                    rating={review.rating}
+                                    comment={review.comment}
+                                />
+                            ))}
+                        </div>
+                    </div>
                 </>
-                ) : (null)}
+            ) : null}
         </div>
     )
 }

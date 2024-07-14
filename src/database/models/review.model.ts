@@ -1,13 +1,12 @@
 "use server"
 
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
 export interface IReview extends Document{
     _id: string;
     productId: string;
-    user: string;
+    userId: string;
     comment: string;
-    image?: string;
     rating: number;
     createdAt: Date;
     updatedAt: Date;
@@ -19,7 +18,7 @@ const ReviewSchema = new Schema({
         ref: 'Product',
         required: true,
     },
-    user: {
+    userId: {
         type: String,
         required: [true, 'User is required'],
     },
@@ -33,9 +32,6 @@ const ReviewSchema = new Schema({
         type: String,
         required: [true, 'Comment is required'],
         trim: true,
-    },
-    image: {
-        type:String,
     },
     createdAt: {
         type: Date,
@@ -52,4 +48,6 @@ ReviewSchema.pre('save', function (next) {
     next();
 });
 
-export default mongoose.models.Review || mongoose.model('Review', ReviewSchema)
+const Review = mongoose.models.Review || mongoose.model('Review', ReviewSchema)
+
+export default Review;

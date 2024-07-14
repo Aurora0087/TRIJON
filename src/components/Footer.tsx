@@ -1,6 +1,7 @@
 "use client"
 
 import { ChevronDown, Facebook, Instagram, Mail, Phone, RotateCcw, Truck, Twitter, Youtube } from 'lucide-react';
+import { FaWhatsapp } from "react-icons/fa"
 import React, { ReactNode, useState } from 'react'
 
 import {
@@ -24,8 +25,8 @@ function Footer() {
                         <span>Returns</span>
                     </div>
                     <div className="flex items-center">
-                        <Phone className="w-6 h-6 mr-2" />
-                        <span>+91 8116020205</span>
+                        <FaWhatsapp className="w-6 h-6 mr-2" />
+                        <span>+91 8942974275</span>
                     </div>
                     <div className="flex items-center">
                         <Mail className="w-6 h-6 mr-2" />
@@ -35,22 +36,28 @@ function Footer() {
 
                 {/* Main footer content */}
                 <div className=" hidden md:grid grid-cols-4 gap-8">
-                    <div>
+                    {/*<div>
                         <h3 className="font-bold text-white mb-4">For buyers</h3>
                         <ul className="space-y-2">
                             <li>Payment</li>
                             <li>Personal data policy</li>
                         </ul>
-                    </div>
+                    </div>*/}
                     <div>
                         <h3 className="font-bold text-white mb-4">Category</h3>
                         <ul className="space-y-2">
-                            <li>Trackpants</li>
-                            <li>Shirts</li>
-                            <li>Jogger</li>
-                            <li>Boxer</li>
-                            <li>Blazer</li>
-                            <li>Hoody</li>
+                            <li><a href="/shop/trackpants">Trackpants</a></li>
+                            <li><a href="/shop/shirt">Shirts</a></li>
+                            <li><a href="/shop/jogger">Jogger</a></li>
+                            <li><a href="/shop/boxer">Boxer</a></li>
+                            <li><a href="/shop/blazer">Blazer</a></li>
+                            <li><a href="/shop/hoody">Hoody</a></li>
+                            <li><a href="/shop/t-Shirt">T-Shirt</a></li>
+                            <li><a href="/shop/shirt">Shirts</a></li>
+                            <li><a href="/shop/casual cap">Casual Cap                            </a></li>
+                            <li><a href="/shop/winter cap">Winter Cap                            </a></li>
+                            <li><a href="/shop/sweat shirts">Sweat Shirts                            </a></li>
+                            <li><a href="/shop/cotton pants">Cotton Pants</a></li>
                         </ul>
                     </div>
                     <div>
@@ -79,12 +86,18 @@ function Footer() {
                     </CollapsibleCard>
                     <CollapsibleCard triggerComponent="Category">
                         <ul className="space-y-2 pb-4">
-                            <li>Trackpants</li>
-                            <li>Shirts</li>
-                            <li>Jogger</li>
-                            <li>Boxer</li>
-                            <li>Blazer</li>
-                            <li>Hoody</li>
+                        <li><a href="/shop/trackpants">Trackpants</a></li>
+                            <li><a href="/shop/shirt">Shirts</a></li>
+                            <li><a href="/shop/jogger">Jogger</a></li>
+                            <li><a href="/shop/boxer">Boxer</a></li>
+                            <li><a href="/shop/blazer">Blazer</a></li>
+                            <li><a href="/shop/hoody">Hoody</a></li>
+                            <li><a href="/shop/t-Shirt">T-Shirt</a></li>
+                            <li><a href="/shop/shirt">Shirts</a></li>
+                            <li><a href="/shop/casual cap">Casual Cap</a></li>
+                            <li><a href="/shop/winter cap">Winter Cap</a></li>
+                            <li><a href="/shop/sweat shirts">Sweat Shirts</a></li>
+                            <li><a href="/shop/cotton pants">Cotton Pants</a></li>
                         </ul>
                     </CollapsibleCard>
                     <div>

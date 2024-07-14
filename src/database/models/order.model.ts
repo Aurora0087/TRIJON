@@ -1,7 +1,8 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 // Define an interface for the Order schema
-interface IOrder extends Document {
+export interface IOrder extends Document {
+    _id: string;
     userId: mongoose.Schema.Types.ObjectId;
     fullName: string;
     mobileNumber: string;

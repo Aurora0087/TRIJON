@@ -8,10 +8,9 @@ interface ReviewProps {
     date: Date;
     rating: number;
     comment: string;
-    imageUrl?: string;
 }
 
-function ReviewCard({ name, date, rating, comment, imageUrl }: ReviewProps) {
+function ReviewCard({ name, date, rating, comment }: ReviewProps) {
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
@@ -34,9 +33,6 @@ function ReviewCard({ name, date, rating, comment, imageUrl }: ReviewProps) {
                 </div>
             </div>
             <p className="mb-4">{comment}</p>
-            {imageUrl && (
-                <img src={imageUrl} alt="Review Image" className="w-32 h-32 object-cover rounded-md" />
-            )}
         </div>
     );
 }

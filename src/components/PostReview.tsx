@@ -16,15 +16,25 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+
+import { Toaster } from "@/components/ui/toaster"
+import { useToast } from "@/components/ui/use-toast"
+
+
 import { Textarea } from './ui/textarea'
 import { getSession } from 'next-auth/react'
 import { User } from 'next-auth'
+import ReviewRating from './ReviewRating'
+import { addReview } from '@/database/action/review.action'
 
 const formSchema = z.object({
-    text: z.string().min(2).max(50),
+    text: z.string().min(2, "Review must be at least 2 characters").max(500, "Review must be at most 500 characters"),
+    rating: z.number().min(1, "Rating is required").max(5, "Rating must be between 1 and 5"),
 })
 
-function PostReview({ uId, productId }: { uId: string, productId: string }) {
+function PostReview({ productId }: { productId: string }) {
+
+    const { toast } = useToast()
 
     const [user, setUser] = useState<User | null | undefined>(null)
 
@@ -36,29 +46,67 @@ function PostReview({ uId, productId }: { uId: string, productId: string }) {
 
     useEffect(() => {
         fatchUser()
-    },[])
+    }, [])
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             text: "",
+            rating: 1,
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        if (user === null || user === undefined) {
+            toast({
+                variant: "destructive",
+                description: "Your are not login, please login.",
+            })
+            return
+        }
+        await addReview({ userEmail: user?.email as string, productId:productId, rating: values.rating, comment: values.text })
+            .then((res) => {
+                toast({
+                    description: "Your Review is posted, thankes for Your feedback.",
+                })
+                form.reset()
+            })
+            .catch((e) => {
+                toast({
+                    variant: "destructive",
+                    description: `${String(e)}`,
+                })
+        })
     }
+
+
     return (
-        <div className=' w-full py-4 px-2'>
-            {user !== null ? (
+        <div className='w-full py-4 px-2'>
+            <Toaster />
+            {user ? (
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <FormField
+                            control={form.control}
+                            name="rating"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Overall Rating</FormLabel>
+                                    <FormControl>
+                                        <>
+                                            <ReviewRating totalStars={5} onRatingChange={field.onChange} />
+                                        </>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name="text"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Write Review</FormLabel>
+                                    <FormLabel>Written Review</FormLabel>
                                     <FormControl>
                                         <Textarea placeholder="Write here..." {...field} />
                                     </FormControl>
@@ -66,16 +114,19 @@ function PostReview({ uId, productId }: { uId: string, productId: string }) {
                                 </FormItem>
                             )}
                         />
-                        <Button disabled={form.getValues().text === ""}
+                        
+                        <Button
+                            disabled={form.formState.isSubmitting || form.getValues().text === ""}
                             type="submit"
-                            className=' rounded-full'
-                        >Submit</Button>
+                            className='rounded-full'
+                        >
+                            Submit
+                        </Button>
                     </form>
                 </Form>
             ) : (
-                    <Button>Login for Writing Review</Button>
+                <Button>Login to Write Review</Button>
             )}
-
         </div>
     )
 }

@@ -20,8 +20,9 @@ import { User } from 'next-auth';
 import { addToCart } from '@/database/action/cart.action';
 import { Toaster } from './ui/toaster';
 import { useToast } from './ui/use-toast';
+import { addToWishList } from '@/database/action/product.action';
 
-function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating, images, varient }: { id: string, title: string, description: string, buyingPrice: number, mainPrice: number, rating: number, images: string[], varient: { size: string, colors: { name: string, value: string, stockes: number }[] }[] }) {
+function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating, images, varient ,totalReviews }: { id: string, title: string, description: string,totalReviews:number, buyingPrice: number, mainPrice: number, rating: number, images: string[], varient: { size: string, colors: { name: string, value: string, stockes: number }[] }[] }) {
 
   const [variantIndex, setVarientIndex] = useState(0)
   const [sizeTYpe, setSizeType] = useState(varient[0].size)
@@ -30,6 +31,9 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
   const [avalableStock, setAvalableStock] = useState(varient[0].colors[0].stockes)
 
   const [quantity, setQuantity] = useState(0);
+  const [user, setUser] = useState<User | null | undefined>(null)
+
+  const { toast } = useToast()
 
   useEffect(() => {
     setColorType(varient[variantIndex].colors[0].name)
@@ -43,6 +47,37 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
     setAvalableStock(varient[variantIndex].colors[colorIndex].stockes)
     setQuantity(0)
   }, [colorIndex])
+
+  useEffect(() => {
+    fatchUser()
+  }, [])
+
+  async function fatchUser() {
+    await getSession().then((res) => {
+      setUser(res?.user)
+    })
+  }
+
+  async function handleAddToWishList() {
+    if (user === null || user === undefined) {
+      toast({
+        description: "Login first to add this item to your wishlist.",
+      })
+      return
+    }
+    try {
+      console.log(String(user.id));
+      
+      await addToWishList({ email: String(user.email), productId: id })
+      toast({
+        description: "Added to wishlist.",
+      })
+    } catch (error) {
+      toast({
+        description: String(error),
+      })
+    }
+  }
 
   return (
     <div>
@@ -59,12 +94,16 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
           </h1>
           <div className="flex items-center mb-2">
             <StarRating rating={rating} />
-            <span className="ml-2 text-sm">(2 reviews)</span>
+            <span className="ml-2 text-sm">{totalReviews}</span>
           </div>
           <div className=' flex gap-4'>
-            <p className="text-xl font-semibold mb-4">{`₹ ${buyingPrice}`}</p>
+            <p className="text-xl font-semibold mb-4 py-2">{`₹ ${buyingPrice}`}</p>
             {buyingPrice !== mainPrice && (
-              <del className=" text-red-500 mb-4">{`₹ ${mainPrice}`}</del>
+              <>
+                <del className=" text-red-500 mb-4 text-center py-2">{`₹ ${mainPrice}`}</del>
+                <span className=' bg-red-400 rounded-full px-4 py-2 h-fit font-semibold text-white'>{`${((mainPrice-buyingPrice)/mainPrice)*100}% OFF`}</span>
+              </>
+              
             )}
           </div>
           <div className="mb-4">
@@ -80,7 +119,6 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
                         style={{ backgroundColor: `${v.value}` }}
                         className={`w-8 h-8 p-1 border-2 rounded-full ${colorIndex === i && "border-[#ffffff]"}`}></Button>
                     </div>
-
                   )
                 })
               }
@@ -101,6 +139,10 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
               }
             </div>
           </div>
+          <div className="mb-4">
+            <label className="block mb-1">Available Stock:</label>
+            <span className="text-xl font-semibold mb-4 py-2">{Number(varient[variantIndex].colors[colorIndex].stockes)}</span>
+          </div>
           <div className="flex items-center mb-4">
             <label className="block mb-1">Quantity:</label>
             <div className="flex items-center ml-2">
@@ -120,6 +162,12 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
                 +
               </Button>
             </div>
+          </div>
+          <div className=''>
+            <Button className=' w-full mb-4 rounded-full' onClick={handleAddToWishList}>
+              <Heart className=' mr-2'/>
+              Add to WishList
+            </Button>
           </div>
           <AddtoCart productId={id} size={sizeTYpe} color={colorType} quantity={String(quantity)} />
         </div>

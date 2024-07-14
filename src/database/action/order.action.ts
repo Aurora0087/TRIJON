@@ -4,7 +4,7 @@ import Razorpay from 'razorpay';
 import dbConnect from '../connect';
 import UserModel from '../models/user.model';
 import Cart from '../models/cart.model';
-import Order from '../models/order.model';
+import Order, { IOrder } from '../models/order.model';
 import RazorpayOrder from '../models/razorpayOrder.model';
 import Product from '../models/product.model';
 import { getImageUrl } from '../aws/s3/Utils';
@@ -206,5 +206,100 @@ export async function getOrdersPayedByUser({ email }: { email: string }) {
     } catch (error) {
         console.error("Error retrieving paid orders: ", error);
         return { success: false, message: 'Error retrieving paid orders' };
+    }
+}
+
+export interface OrderDetailsResponse {
+    orders: IOrder[];
+    totalPages: number;
+    currentPage: number;
+    totalOrders: number;
+    isMoreExist: boolean;
+}
+
+export async function getOrdersDetails({ page }: { page: number }): Promise<OrderDetailsResponse> {
+    const pageSize = 5; // Number of orders per page
+    const skip = (page - 1) * pageSize; // Calculate the number of documents to skip
+
+    try {
+
+        await dbConnect()
+        // Fetch orders from the database with pagination
+        const orders: IOrder[] = await Order.find()
+            .sort({ createdAt: -1 }) // Sort by newest first
+            .skip(skip)
+            .limit(pageSize)
+            .exec();
+
+        // Get the total number of orders
+        const totalOrders = await Order.countDocuments();
+
+        // Calculate total pages
+        const totalPages = Math.ceil(totalOrders / pageSize);
+
+        // Determine if there are more orders beyond the current page
+        const isMoreExist = page < totalPages;
+
+        // Return the orders and additional info
+        return JSON.parse(JSON.stringify({
+            orders,
+            totalPages,
+            currentPage: page,
+            totalOrders,
+            isMoreExist,
+        }));
+    } catch (error) {
+        console.error('Error retrieving orders:', error);
+        throw new Error('Error retrieving orders. Please try again later.');
+    }
+}
+
+export async function getOrderById({ orderId }: { orderId: string }): Promise<IOrder | null> {
+    try {
+        await dbConnect()
+        // Find the order by its ID
+        const order = await Order.findById(orderId).exec();
+
+        if (!order) {
+            throw new Error('Order not found');
+        }
+
+        // Return the order
+        return JSON.parse(JSON.stringify(order));
+    } catch (error) {
+        console.error('Error retrieving order:', error);
+        throw new Error('Error retrieving order. Please try again later.');
+    }
+}
+
+export async function changeOrderedProductsStatus({ orderId, productId, statusType }: { orderId: string; productId: string; statusType: string }) {
+    try {
+        await dbConnect()
+        // Fetch the order by orderId
+        const order = await Order.findById(orderId);
+        if (!order) {
+            throw new Error('Order not found');
+        }
+
+        // Find the specific product by productId within the order
+        const product = order.products.find((p: any) => p.productId.toString() === productId);
+        if (!product) {
+            throw new Error('Product not found in order');
+        }
+
+        // Update the deliveryStatus of the found product
+        product.deliveryStatus = statusType;
+
+        // Save the updated order back to the database
+        await order.save();
+
+        return JSON.parse(JSON.stringify({
+            success: true,
+            message: 'Product status updated successfully',
+            order,
+        }));
+    } catch (error) {
+        console.error('Error updating product status:', error);
+        throw new Error('Error updating product status. Please try again later.');
     }
 }

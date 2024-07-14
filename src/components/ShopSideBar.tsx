@@ -38,7 +38,44 @@ const navLinkItems = [
         title: "Sweat-Shirts",
         href: "/shop/Sweat-Shirts"
     },
-]
+    {
+        title: "Shirts",
+        href: "/shop/shirt"
+    },
+    {
+        title: "Jogger",
+        href: "/shop/jogger"
+    },
+    {
+        title: "Boxer",
+        href: "/shop/boxer"
+    },
+    {
+        title: "Blazer",
+        href: "/shop/blazer"
+    },
+    {
+        title: "T-Shirt",
+        href: "/shop/t-Shirt"
+    },
+    {
+        title: "Casual Cap",
+        href: "/shop/casual cap"
+    },
+    {
+        title: "Winter Cap",
+        href: "/shop/winter cap"
+    },
+    {
+        title: "Sweat Shirts",
+        href: "/shop/sweat shirts"
+    },
+    {
+        title: "Cotton Pants",
+        href: "/shop/cotton pants"
+    }
+];
+
 
 
 function ShopSideBar() {
@@ -56,14 +93,6 @@ function ShopSideBar() {
                         )
                     })
                 }
-                <CollapsibleCard triggerComponent='T-shirt'>
-                    <NavLink link='/shop/t-shirt' name='All' isCurrnt={currentRoute===("/shop/t-shirt")} />
-                    <NavLink link='/shop/t-shirt,best' name='BestSeller' isCurrnt={currentRoute===("/shop/t-shirt,best")} />
-                </CollapsibleCard>
-                <CollapsibleCard triggerComponent='Shirt'>
-                    <NavLink link='/shop/shirt' name='All' isCurrnt={currentRoute===("/shop/shirt")} />
-                    <NavLink link='/shop/shirt,best' name='BestSeller' isCurrnt={currentRoute===("/shop/shirt,best")} />
-                </CollapsibleCard>
             </div>
         </motion.div>
     )

@@ -4,18 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { getSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { User } from 'next-auth'
-import Link from 'next/link'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Button } from './ui/button'
 
 
@@ -23,9 +12,9 @@ import { Button } from './ui/button'
 function IsLogined(
     {
         children,
-      }: Readonly<{
+    }: Readonly<{
         children: React.ReactNode;
-      }>
+    }>
 ) {
 
     const [user, setUser] = useState<User | null | undefined>(null)
@@ -53,11 +42,11 @@ function IsLogined(
         <>
             {user ? (
                 <>
-                {children}
+                    {children}
                 </>
             ) : (
                 <Button onClick={handleGoogleSignIn} className=' rounded-full'>
-                        Login
+                    Login
                 </Button>
             )}
         </>
