@@ -1,13 +1,14 @@
 "use client"
 
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import ProductCard from './card/ProductCard';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Dot } from 'lucide-react';
 import { IProduct } from '@/database/models/product.model';
 import { getProductsByCategory } from '@/database/action/product.action';
+import { useInView } from 'react-intersection-observer';
 
 import {
     DropdownMenu,
@@ -18,31 +19,37 @@ import {
     DropdownMenuSeparator,
 } from './ui/dropdown-menu';
 
-
-
-function ShopProductItems({category}:{category?:string[]}) {
-
-    const [products, setProducts] = useState<IProduct[]>([])
-    const [filter, setFilter] = useState<IProduct[]>([])
-    const [pageNumber, setPageNumber] = useState(1)
+function ShopProductItems({ category }: { category?: string[] }) {
+    const [products, setProducts] = useState<IProduct[]>([]);
+    const [filter, setFilter] = useState<IProduct[]>([]);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [isMore, setIsMore] = useState(true);
+    const { ref, inView } = useInView();
 
     async function getProducts() {
-        const res = await getProductsByCategory({ category: category || [], page: pageNumber })
-        setProducts(res.products)
-        setFilter(res.products)
+        const res = await getProductsByCategory({ category: category || [], page: pageNumber });
+        setProducts((prevProducts) => [...prevProducts, ...res.products]);
+        setFilter((prevFilter) => [...prevFilter, ...res.products]);
+        setIsMore(res.isMore);
     }
 
     useEffect(() => {
         getProducts();
-    }, [category, pageNumber])
-    
+    }, [category, pageNumber]);
+
+    useEffect(() => {
+        if (inView && isMore) {
+            setPageNumber((prevPage) => prevPage + 1);
+        }
+    }, [inView, isMore]);
+
     function sortByPriceLowToHigh() {
-        const sortedItems = [...products].sort((a, b) => a.buyingPrice - b.buyingPrice);
+        const sortedItems = [...filter].sort((a, b) => a.buyingPrice - b.buyingPrice);
         setFilter(sortedItems);
     }
 
     function sortByPriceHighToLow() {
-        const sortedItems = [...products].sort((a, b) => b.buyingPrice - a.buyingPrice);
+        const sortedItems = [...filter].sort((a, b) => b.buyingPrice - a.buyingPrice);
         setFilter(sortedItems);
     }
 
@@ -53,12 +60,10 @@ function ShopProductItems({category}:{category?:string[]}) {
         setFilter(filteredItems);
     }
 
-
-
     return (
-        <div className=' py-8'>
-            <div className=' my-8 flex gap-4 items-center'>
-                <span className=' text-sm text-slate-600'>Filter</span>
+        <div className='py-8'>
+            <div className='my-8 flex gap-4 items-center'>
+                <span className='text-sm text-slate-600'>Filter</span>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="link">
@@ -117,12 +122,14 @@ function ShopProductItems({category}:{category?:string[]}) {
                     })}
                 </AnimatePresence>
             </motion.div>
+            <div className='w-full grid place-content-center mt-4' ref={ref}>
+                <Dot />
+            </div>
         </div>
     );
 }
 
 function CollapsibleCard({ triggerComponent, children }: { triggerComponent: string, children: ReactNode }) {
-
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleOpen = () => {
@@ -130,9 +137,9 @@ function CollapsibleCard({ triggerComponent, children }: { triggerComponent: str
     };
 
     return (
-        <Collapsible open={isOpen} onOpenChange={toggleOpen} className=' border-b'>
-            <CollapsibleTrigger className=' w-full flex gap-4 justify-between '>
-                <h3 className=" mb-4">{triggerComponent}</h3>
+        <Collapsible open={isOpen} onOpenChange={toggleOpen} className='border-b'>
+            <CollapsibleTrigger className='w-full flex gap-4 justify-between'>
+                <h3 className="mb-4">{triggerComponent}</h3>
                 <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
@@ -149,7 +156,7 @@ function CollapsibleCard({ triggerComponent, children }: { triggerComponent: str
                         transition={{ duration: 0.3 }}
                         className='overflow-hidden'
                     >
-                        <CollapsibleContent className=' bg-white'>
+                        <CollapsibleContent className='bg-white'>
                             {children}
                         </CollapsibleContent>
                     </motion.div>
@@ -157,7 +164,6 @@ function CollapsibleCard({ triggerComponent, children }: { triggerComponent: str
             </AnimatePresence>
         </Collapsible>
     )
-
 }
 
-export default ShopProductItems
+export default ShopProductItems;

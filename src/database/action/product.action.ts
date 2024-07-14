@@ -61,7 +61,7 @@ export async function createNewProduct({ title, description, categorys, buyingPr
 export async function getProductsByCategory(
     { category, page }: { category: string[], page: number }
 ) {
-    const itemsPerPage = 10;
+    const itemsPerPage = 2;
     const skipItems = (page - 1) * itemsPerPage;
 
     try {

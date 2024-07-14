@@ -86,13 +86,6 @@ export const columns: ColumnDef<IOrder>[] = [
         ),
     },
     {
-        accessorKey: "state",
-        header: "State",
-        cell: ({ row }) => (
-            <div>{row.getValue("state")}</div>
-        ),
-    },
-    {
         accessorKey: "totalPrice",
         header: () => <div className="text-right">Total Price</div>,
         cell: ({ row }) => {
@@ -111,6 +104,21 @@ export const columns: ColumnDef<IOrder>[] = [
         header: "Created At",
         cell: ({ row }) => (
             <div>{new Date(row.getValue("createdAt")).toLocaleString()}</div>
+        ),
+    },
+    {
+        accessorKey: "deliveryStatus",
+        header: "Delivery Status",
+        cell: ({ row }) => {
+            const allDelivered = row.original.products.every(product => product.deliveryStatus === "Delivered");
+            return <div>{allDelivered ? "All Delivered" : "Pending"}</div>;
+        },
+    },
+    {
+        accessorKey: "isPaid",
+        header: "Payed Status",
+        cell: ({ row }) => (
+            <div>{row.original.isPaid ? "Paid" : "Not Paid"}</div>
         ),
     },
     {
@@ -149,8 +157,6 @@ export const columns: ColumnDef<IOrder>[] = [
 
 function OrdersDetailsPageForAdmin() {
 
-    const [pageNumber, setpageNumber] = React.useState(1)
-    const [isMore,setIsMore] = React.useState(true)
     const [orders, setOrders] = React.useState<IOrder[]>([])
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -164,10 +170,8 @@ function OrdersDetailsPageForAdmin() {
 
     async function getOrders() {
         try {
-            const res = await getOrdersDetails({ page: pageNumber });
+            const res = await getOrdersDetails();
             setOrders(res.orders)
-            setpageNumber(pageNumber + 1)
-            setIsMore(res.isMoreExist)
         } catch (e) {
             toast({
                 description: `${String(e)}`,

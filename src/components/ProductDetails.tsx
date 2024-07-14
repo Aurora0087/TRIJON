@@ -101,7 +101,7 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
             {buyingPrice !== mainPrice && (
               <>
                 <del className=" text-red-500 mb-4 text-center py-2">{`₹ ${mainPrice}`}</del>
-                <span className=' bg-red-400 rounded-full px-4 py-2 h-fit font-semibold text-white'>{`${((mainPrice-buyingPrice)/mainPrice)*100}% OFF`}</span>
+                <span className=' bg-red-400 rounded-full px-4 py-2 h-fit font-semibold text-white'>{`${(((mainPrice-buyingPrice)/mainPrice)*100).toFixed(2)}% OFF`}</span>
               </>
               
             )}

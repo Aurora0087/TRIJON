@@ -22,7 +22,7 @@ function TopNav() {
                 </div>
                 <div className=' hidden md:flex gap-6 justify-center items-center capitalize'>
                     <Link href='/shop/new'>New</Link>
-                    <Link href='/shop/best'>Best sellers</Link>
+                    <Link href='/shop/best'>Best selling</Link>
                     <Link href='/shop/t-shirt'>t-shirts</Link>
                     <Link href='/shop/shirt'>shirts</Link>
                 </div>

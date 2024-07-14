@@ -82,19 +82,19 @@ function ShopSideBar() {
 
     const currentRoute = usePathname()
     return (
-        <motion.div
+        <div
             className=' hidden md:grid relative w-[350px] border-r-2 bg-slate-200'>
-            <div className=' sticky top-0 px-4 py-8 min-h-screen rounded-xl flex flex-col gap-1 font-semibold bg-white m-4 dark:bg-slate-900'>
+            <div className=' sticky top-0 px-4 py-8 h-screen rounded-xl flex flex-col gap-1 font-semibold bg-white m-4 dark:bg-slate-900'>
             <NavLink link="/shop" name="All" isCurrnt={currentRoute==="/shop"} />
                 {
                     navLinkItems.map((item, i) => {
                         return (
-                            <NavLink link={(item.href)} name={item.title} isCurrnt={currentRoute.includes(item.href)} />
+                            <NavLink key={i} link={(item.href)} name={item.title} isCurrnt={currentRoute.includes(item.href)} />
                         )
                     })
                 }
             </div>
-        </motion.div>
+        </div>
     )
 }
 

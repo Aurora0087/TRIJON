@@ -211,46 +211,26 @@ export async function getOrdersPayedByUser({ email }: { email: string }) {
 
 export interface OrderDetailsResponse {
     orders: IOrder[];
-    totalPages: number;
-    currentPage: number;
     totalOrders: number;
-    isMoreExist: boolean;
 }
 
-export async function getOrdersDetails({ page }: { page: number }): Promise<OrderDetailsResponse> {
-    const pageSize = 5; // Number of orders per page
-    const skip = (page - 1) * pageSize; // Calculate the number of documents to skip
+export async function getOrdersDetails(): Promise<OrderDetailsResponse> {
+    await dbConnect();
 
     try {
+        // Retrieve all orders
+        const orders: IOrder[] = await Order.find().exec();
 
-        await dbConnect()
-        // Fetch orders from the database with pagination
-        const orders: IOrder[] = await Order.find()
-            .sort({ createdAt: -1 }) // Sort by newest first
-            .skip(skip)
-            .limit(pageSize)
-            .exec();
+        // Count the total number of orders
+        const totalOrders: number = await Order.countDocuments().exec();
 
-        // Get the total number of orders
-        const totalOrders = await Order.countDocuments();
-
-        // Calculate total pages
-        const totalPages = Math.ceil(totalOrders / pageSize);
-
-        // Determine if there are more orders beyond the current page
-        const isMoreExist = page < totalPages;
-
-        // Return the orders and additional info
-        return JSON.parse(JSON.stringify({
-            orders,
-            totalPages,
-            currentPage: page,
-            totalOrders,
-            isMoreExist,
-        }));
+        return {
+            orders: JSON.parse(JSON.stringify(orders)),
+            totalOrders: totalOrders,
+        };
     } catch (error) {
-        console.error('Error retrieving orders:', error);
-        throw new Error('Error retrieving orders. Please try again later.');
+        console.error("Error fetching order details: ", error);
+        throw new Error("Error fetching order details");
     }
 }
 

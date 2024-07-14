@@ -31,7 +31,7 @@ function MainBestSell() {
 
     return (
         <div className=" py-8 w-full">
-            <h2 className="text-2xl font-extrabold">BestSellers</h2>
+            <h2 className="text-2xl font-extrabold">Best Selling</h2>
             <div className=' w-full'>
                 <Carousel
                     opts={{
