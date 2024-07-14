@@ -41,7 +41,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { IOrder } from '@/database/models/order.model'
 import Link from "next/link"
 
-export const columns: ColumnDef<IOrder>[] = [
+const columns: ColumnDef<IOrder>[] = [
     {
         id: "select",
         header: ({ table }) => (
