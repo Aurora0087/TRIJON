@@ -2,6 +2,7 @@
 
 import { ChevronDown, Facebook, Instagram, Mail, Phone, RotateCcw, Truck, Twitter, Youtube } from 'lucide-react';
 import { FaWhatsapp } from "react-icons/fa"
+import { RiTwitterXLine } from "react-icons/ri"
 import React, { ReactNode, useState } from 'react'
 
 import {
@@ -46,18 +47,8 @@ function Footer() {
                     <div>
                         <h3 className="font-bold text-white mb-4">Category</h3>
                         <ul className="space-y-2">
-                            <li><a href="/shop/trackpants">Trackpants</a></li>
-                            <li><a href="/shop/shirt">Shirts</a></li>
-                            <li><a href="/shop/jogger">Jogger</a></li>
-                            <li><a href="/shop/boxer">Boxer</a></li>
-                            <li><a href="/shop/blazer">Blazer</a></li>
-                            <li><a href="/shop/hoody">Hoody</a></li>
-                            <li><a href="/shop/t-Shirt">T-Shirt</a></li>
-                            <li><a href="/shop/shirt">Shirts</a></li>
-                            <li><a href="/shop/casual cap">Casual Cap                            </a></li>
-                            <li><a href="/shop/winter cap">Winter Cap                            </a></li>
-                            <li><a href="/shop/sweat shirts">Sweat Shirts                            </a></li>
-                            <li><a href="/shop/cotton pants">Cotton Pants</a></li>
+                            <li><a href="/shop/trackpants">Summer Sale</a></li>
+                            <li><a href="/shop/trackpants">Winter Sale</a></li>
                         </ul>
                     </div>
                     <div>
@@ -71,9 +62,10 @@ function Footer() {
                         <h3 className="font-bold text-white mb-4">Social networks</h3>
                         <div className="flex space-x-4">
                             <Facebook className="w-6 h-6" />
-                            <Youtube className="w-6 h-6" />
+                            
                             <Instagram className="w-6 h-6" />
-                            <Twitter className="w-6 h-6" />
+                            <Youtube className="w-6 h-6" />
+                            <RiTwitterXLine className="w-6 h-6" />
                         </div>
                     </div>
                 </div>
@@ -112,7 +104,7 @@ function Footer() {
                 </div>
                 {/* Copyright */}
                 <div className="mt-8 text-sm w-full grid place-content-center">
-                    <p>&copy; 2024 TRIJON,</p>
+                    <p>&copy; 2024 TRIJON</p>
                     <p>All rights reserved.</p>
                 </div>
             </div>

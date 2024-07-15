@@ -84,7 +84,7 @@ function OrderCard({ order }: OrderCardProps) {
                                     </p>
                                     <p className="text-sm">
                                         <span className='px-2 font-medium text-slate-500'>Price:</span>
-                                        ${product.price}
+                                        ₹{product.price}
                                     </p>
                                     <p className="text-sm grid gap-2">
                                         <span className='px-2 font-medium text-slate-500'>Delivery Status:</span>

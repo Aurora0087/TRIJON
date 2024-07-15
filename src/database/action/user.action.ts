@@ -57,3 +57,24 @@ export async function updateUserDetails({
         throw new Error("Error updating user details. Please try again later.");
     }
 }
+
+export async function getUsers({ page = 1, limit = 20 }: { page: number, limit?: number }) {
+    try {
+        const skip = (page - 1) * limit;
+        const users = await UserModel.find()
+            .skip(skip)
+            .limit(limit)
+            .exec();
+
+        const totalUsers = await UserModel.countDocuments().exec();
+
+        return JSON.parse(JSON.stringify({
+            users,
+            totalPages: Math.ceil(totalUsers / limit),
+            currentPage: page,
+        }));
+    } catch (error) {
+        console.error("Error fetching users: ", error);
+        throw new Error("Error fetching users");
+    }
+}

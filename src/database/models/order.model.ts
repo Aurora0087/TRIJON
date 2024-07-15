@@ -13,6 +13,7 @@ export interface IOrder extends Document {
     city: string;
     state: string;
     isPaid: boolean;
+    paymentMethod: string;
     products: {
         productId: mongoose.Schema.Types.ObjectId;
         color: string;
@@ -38,6 +39,7 @@ const OrderSchema: Schema<IOrder> = new Schema(
         landmark: { type: String },
         city: { type: String, required: true },
         state: { type: String, required: true },
+        paymentMethod:{type:String,required:true},
         isPaid: { type: Boolean, default: false },
         products: [
             {

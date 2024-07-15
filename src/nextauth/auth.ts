@@ -83,7 +83,7 @@ export const {
 
             const dbUser = await UserModel.findOne({ email: user.email })
 
-            if (user?.email === (process.env.ADMIN_EMAIL)) {
+            if (user?.email === (process.env.ADMIN_EMAIL) || user.role === "ADMIN") {
                 user.role = "ADMIN"
             }
             else user.role = "USER"
@@ -132,5 +132,9 @@ export const {
             }
             return token;
         },
+    },
+    
+    pages: {
+        error: '/auth/error', // Error code passed in query string as ?error=
     },
 })

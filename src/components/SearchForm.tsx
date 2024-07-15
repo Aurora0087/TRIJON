@@ -18,12 +18,15 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Search } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
     category: z.string().min(1).max(50),
 })
 
 function SearchForm() {
+
+    const router = useRouter()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -33,7 +36,7 @@ function SearchForm() {
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+        router.push(`/shop/${values.category}`)
     }
 
     return (

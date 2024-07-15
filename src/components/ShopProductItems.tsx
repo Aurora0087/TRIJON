@@ -28,8 +28,13 @@ function ShopProductItems({ category }: { category?: string[] }) {
 
     async function getProducts() {
         const res = await getProductsByCategory({ category: category || [], page: pageNumber });
-        setProducts((prevProducts) => [...prevProducts, ...res.products]);
-        setFilter((prevFilter) => [...prevFilter, ...res.products]);
+        if (pageNumber === 1) {
+            setProducts(res.products);
+            setFilter(res.products);
+        } else {
+            setProducts((prevProducts) => [...prevProducts, ...res.products]);
+            setFilter((prevFilter) => [...prevFilter, ...res.products]);
+        }
         setIsMore(res.isMore);
     }
 
@@ -98,7 +103,7 @@ function ShopProductItems({ category }: { category?: string[] }) {
             <motion.div className='grid gap-2 gap-y-4 place-content-center md:grid-cols-2 lg:grid-cols-3' layout>
                 <AnimatePresence>
                     {filter.map((data) => {
-                        const uniqueColors = new Set(data.varient.flatMap((variant) => variant.colors.map((color) => color.name)))
+                        const uniqueColors = new Set(data.varient.flatMap((variant) => variant.colors.map((color) => color.name)));
                         return (
                             <motion.div
                                 key={data._id}
@@ -114,7 +119,7 @@ function ShopProductItems({ category }: { category?: string[] }) {
                                     imageSrc={data.imageList[0]}
                                     productName={data.title}
                                     price={data.buyingPrice}
-                                    sizes={data.varient.map((v) => (v.size))}
+                                    sizes={data.varient.map((v) => v.size)}
                                     colors={uniqueColors.size}
                                 />
                             </motion.div>
@@ -123,7 +128,7 @@ function ShopProductItems({ category }: { category?: string[] }) {
                 </AnimatePresence>
             </motion.div>
             <div className='w-full grid place-content-center mt-4' ref={ref}>
-                <Dot />
+                {isMore && <Dot />}
             </div>
         </div>
     );

@@ -24,12 +24,14 @@ export async function makeOrder({
     landmark,
     city,
     street,
+    paymentMethod,
 }: {
     email: string;
     fullName: string;
     mobileNumber: string;
     pincode: string;
     houseNumber: string;
+    paymentMethod: string;
     street: string;
     landmark: string;
     city: string;
@@ -65,6 +67,7 @@ export async function makeOrder({
             city,
             state,
             totalPrice,
+            paymentMethod,
             products: cart.products.map((product: { productId: any; color: any; size: any; quantity: any; price: any; }) => ({
                 productId: product.productId,
                 color: product.color,
@@ -78,32 +81,45 @@ export async function makeOrder({
 
         const savedOrder = await order.save();
 
-        // Create Razorpay order
-        const razorpayOrder = await razorpay.orders.create({
-            amount: totalPrice * 100, // amount in paise
-            currency: 'INR',
-            receipt: savedOrder._id.toString(),
-        });
+        if (paymentMethod === "RAZORPAY") {
+            // Create Razorpay order
+            const razorpayOrder = await razorpay.orders.create({
+                amount: totalPrice * 100, // amount in paise
+                currency: 'INR',
+                receipt: savedOrder._id.toString(),
+            });
 
-        // Save Razorpay order details in your database
-        const razorpayOrderDetails = new RazorpayOrder({
-            orderId: razorpayOrder.id,
-            userId: user._id,
-            amount: razorpayOrder.amount,
-            currency: razorpayOrder.currency,
-            receipt: razorpayOrder.receipt,
-            status: razorpayOrder.status,
-        });
+            // Save Razorpay order details in your database
+            const razorpayOrderDetails = new RazorpayOrder({
+                orderId: razorpayOrder.id,
+                userId: user._id,
+                amount: razorpayOrder.amount,
+                currency: razorpayOrder.currency,
+                receipt: razorpayOrder.receipt,
+                status: razorpayOrder.status,
+            });
 
-        await razorpayOrderDetails.save();
+            await razorpayOrderDetails.save();
 
-        return {
-            success: true,
-            orderId: savedOrder._id,
-            razorpayOrderId: razorpayOrder.id,
-            amount: razorpayOrder.amount,
-            currency: razorpayOrder.currency,
-        };
+            return JSON.parse(JSON.stringify({
+                success: true,
+                orderId: savedOrder._id,
+                razorpayOrderId: razorpayOrder.id,
+                amount: razorpayOrder.amount,
+                currency: razorpayOrder.currency,
+            }));
+        }
+
+        if (paymentMethod === "COD") {
+            return JSON.parse(JSON.stringify({
+                success: true,
+                orderId: savedOrder._id,
+                razorpayOrderId: "",
+                amount: "",
+                currency: "",
+            }));
+        }
+
     } catch (error) {
         console.error('Error making order: ', error);
         throw new Error('Error making order');
@@ -176,7 +192,7 @@ export async function getOrdersPayedByUser({ email }: { email: string }) {
         }
 
         // Find all paid orders for the user and populate product details
-        const orders = await Order.find({ userId: user._id, isPaid: true })
+        const orders = await Order.find({ userId: user._id })
             .populate({
                 path: 'products.productId',
                 select: 'title imageList',

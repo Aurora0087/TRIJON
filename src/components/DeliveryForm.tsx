@@ -31,6 +31,7 @@ import { afterPaymentDone, makeOrder } from '@/database/action/order.action'
 import { getSession } from 'next-auth/react'
 import { User } from 'next-auth'
 import { useToast } from './ui/use-toast'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
     fullName: z.string().min(2, { message: "Full name must be at least 2 characters" }).max(50, { message: "Full name must be less than 50 characters" }),
@@ -40,16 +41,19 @@ const formSchema = z.object({
     street: z.string().min(1, { message: "Street is required" }),
     landmark: z.string().min(1, { message: "Landmark is required" }),
     city: z.string().min(1, { message: "City is required" }),
-    state: z.string().min(1, { message: "State is required" })
+    state: z.string().min(1, { message: "State is required" }),
+    paymentMethod: z.string().min(1, { message: "Payment Method is required" }),
 })
 
 
 
-function DeliveryForm({ goodsCost, discont, deliveryCost,afterPayment }: { goodsCost: number, discont: number, deliveryCost: number,afterPayment: ()=>void }) {
+function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { goodsCost: number, discont: number, deliveryCost: number, afterPayment: () => void }) {
 
     const [total, setTotal] = useState(0)
 
     const [user, setUser] = useState<User | null | undefined>(null)
+
+    const router = useRouter()
 
     const { toast } = useToast()
 
@@ -77,7 +81,7 @@ function DeliveryForm({ goodsCost, discont, deliveryCost,afterPayment }: { goods
         });
     }
 
-    const handlePayment = async ({razorpayOrderId,orderId,amount,mobileNumber}:{razorpayOrderId: string,orderId:string, amount: number, mobileNumber : number}) => {
+    const handlePayment = async ({ razorpayOrderId, orderId, amount, mobileNumber }: { razorpayOrderId: string, orderId: string, amount: number, mobileNumber: number }) => {
         const res = await loadRazorpayScript();
 
         if (!res) {
@@ -110,7 +114,7 @@ function DeliveryForm({ goodsCost, discont, deliveryCost,afterPayment }: { goods
                             title: "payment Failed",
                             description: `${String(e)}`,
                         });
-                })
+                    })
             },
             prefill: {
                 name: user?.name,
@@ -145,7 +149,8 @@ function DeliveryForm({ goodsCost, discont, deliveryCost,afterPayment }: { goods
             street: "",
             landmark: "",
             city: "",
-            state: ""
+            state: "",
+            paymentMethod: ""
         },
     })
 
@@ -162,33 +167,39 @@ function DeliveryForm({ goodsCost, discont, deliveryCost,afterPayment }: { goods
             street: values.street,
             landmark: values.landmark,
             city: values.city,
-            state: values.state
+            state: values.state,
+            paymentMethod: values.paymentMethod
         }).then(async (res) => {
 
             if (!res.success) {
                 toast({
-                    variant:"destructive",
+                    variant: "destructive",
                     description: "Fail to create Order",
                 })
                 return
             }
 
-            //open rezorpay and make payment
-            await handlePayment({
-                razorpayOrderId: res.razorpayOrderId,
-                orderId: res.orderId,
-                amount: Number(res.amount),
-                mobileNumber: Number(values.mobileNumber)
-            })
+            if (values.paymentMethod === "RAZORPAY") {
+                //open rezorpay and make payment
+                await handlePayment({
+                    razorpayOrderId: res.razorpayOrderId,
+                    orderId: res.orderId,
+                    amount: Number(res.amount),
+                    mobileNumber: Number(values.mobileNumber)
+                })
+            }
+
 
             toast({
                 description: "Order created.",
             })
 
+            router.push("/orders")
+
         }).catch((e) => {
             toast({
-                variant:"destructive",
-                title:"error",
+                variant: "destructive",
+                title: "error",
                 description: `${String(e)}`,
             })
         })
@@ -221,7 +232,7 @@ function DeliveryForm({ goodsCost, discont, deliveryCost,afterPayment }: { goods
                             <FormItem>
                                 <FormLabel>Mobile Number</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Your mobile number..." {...field} />
+                                    <Input placeholder="Your mobile number..." type="number" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -346,8 +357,30 @@ function DeliveryForm({ goodsCost, discont, deliveryCost,afterPayment }: { goods
                         )}
                     />
 
+                    <FormField
+                        control={form.control}
+                        name="paymentMethod"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Payment Method</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue defaultValue={"COD"} />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="COD">Pay on Delivery</SelectItem>
+                                        <SelectItem value="RAZORPAY">Pay online</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
                     <div className="border-t pt-4 mb-4">
-                        <h3 className="font-semibold mb-2">THE TOTAL AMOUNT OF THE ORDER</h3>
+                        <h3 className="font-semibold mb-2">TOTAL AMOUNT</h3>
                         <div className="flex justify-between">
                             <span>Cost of goods</span>
                             <span>{`₹ ${goodsCost}`}</span>
@@ -366,7 +399,7 @@ function DeliveryForm({ goodsCost, discont, deliveryCost,afterPayment }: { goods
                         </div>
                     </div>
                     <Button
-                        disabled={form.getValues().city === "" || form.getValues().fullName === "" || form.getValues().houseNumber === "" || form.getValues().landmark === "" || form.getValues().mobileNumber === "" || form.getValues().pincode === "" || form.getValues().state === "" || form.getValues().street === "" || form.formState.isSubmitting}
+                        disabled={form.getValues().city === "" || form.getValues().paymentMethod === "" || form.getValues().fullName === "" || form.getValues().houseNumber === "" || form.getValues().landmark === "" || form.getValues().mobileNumber === "" || form.getValues().pincode === "" || form.getValues().state === "" || form.getValues().street === "" || form.formState.isSubmitting}
                         type='submit'
                         className="w-full rounded-full">
                         Pay
