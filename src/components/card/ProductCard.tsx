@@ -28,16 +28,15 @@ function ProductCard({ id, imageSrc, productName, price, sizes, colors }: Produc
                     <div className="flex justify-between items-center">
                         <div className="flex space-x-2">
                             {sizes.map((size, index) => (
-                                <span key={index} className="px-2 py-1 text-sm font-semibold text-gray-700 bg-gray-200 rounded">
+                                <span key={index} className="px-2 py-1 text-sm font-semibold uppercase text-gray-700 bg-gray-200 rounded">
                                     {size}
                                 </span>
                             ))}
                         </div>
-                        <span className="text-sm text-gray-600">{colors} color{colors !== 1 ? 's' : ''}</span>
+                        <span className="text-sm text-gray-600 capitalize">{colors} color{colors !== 1 ? 's' : ''}</span>
                     </div>
                 </div>
             </Link>
-
         </div>
     )
 }
