@@ -21,7 +21,7 @@ import { AnimatePresence, motion } from "framer-motion"
 
 const navLinkItems = [
     { title: "New", href: "/shop/new", icon: <FaRegNewspaper className="h-4 w-4" /> },
-    { title: "BestSellers", href: "/shop/best", icon: <FaFire className="h-4 w-4" /> },
+    { title: "Best Selling", href: "/shop/best", icon: <FaFire className="h-4 w-4" /> },
     { title: "Trackpants", href: "/shop/trackpants", icon: <PiPants className="h-4 w-4" /> },
     { title: "Hoody", href: "/shop/hoody", icon: <GiHoodie className="h-4 w-4" /> },
     { title: "Sweat-Shirts", href: "/shop/Sweat-Shirts", icon: <GiMonclerJacket className="h-4 w-4" /> },
