@@ -34,61 +34,79 @@ import SearchForm from './SearchForm'
 import AdminWrapper from './AdminWrapper'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
 
+import { FaRegNewspaper, FaFire, FaTshirt } from 'react-icons/fa';
+import { GiHoodie, GiMonclerJacket, GiUnderwearShorts, GiPirateCoat, GiBilledCap } from 'react-icons/gi';
+import { RiShirtFill, RiTShirt2Line, RiRunLine } from 'react-icons/ri';
+import { PiPants } from "react-icons/pi";
+import { LuShirt } from "react-icons/lu";
+
 const categoryItems = [
     {
         name: "New",
-        link: "/shop/new"
+        link: "/shop/new",
+        icon: <FaRegNewspaper className="h-4 w-4" />
     },
     {
-        name: "BestSellers",
-        link: "/shop/best"
+        name: "Best Selling",
+        link: "/shop/best",
+        icon: <FaFire className="h-4 w-4" />
     },
     {
         name: "Trackpants",
-        link: "/shop/trackpants"
+        link: "/shop/trackpants",
+        icon: <PiPants className="h-4 w-4" />
     },
     {
         name: "Hoody",
-        link: "/shop/hoody"
+        link: "/shop/hoody",
+        icon: <GiHoodie className="h-4 w-4" />
     },
     {
         name: "Sweat-Shirts",
-        link: "/shop/Sweat-Shirts"
+        link: "/shop/Sweat-Shirts",
+        icon: <GiMonclerJacket className="h-4 w-4" />
     },
     {
         name: "Sweat Shirts",
-        link: "/shop/sweat shirts"
+        link: "/shop/sweat shirts",
+        icon: <GiMonclerJacket className="h-4 w-4" />
     },
     {
         name: "Shirts",
-        link: "/shop/shirt"
+        link: "/shop/shirt",
+        icon: <LuShirt className="h-4 w-4" />
     },
     {
         name: "Jogger",
-        link: "/shop/jogger"
+        link: "/shop/jogger",
+        icon: <RiRunLine className="h-4 w-4" />
     },
     {
         name: "Boxer",
-        link: "/shop/boxer"
+        link: "/shop/boxer",
+        icon: <GiUnderwearShorts className="h-4 w-4" />
     },
     {
         name: "Blazer",
-        link: "/shop/blazer"
+        link: "/shop/blazer",
+        icon: <GiPirateCoat className="h-4 w-4" />
     },
     {
         name: "T-Shirt",
-        link: "/shop/t-Shirt"
+        link: "/shop/t-Shirt",
+        icon: <FaTshirt className="h-4 w-4" />
     },
     {
         name: "Cap",
-        link: "/shop/cap"
+        link: "/shop/cap",
+        icon: <GiBilledCap className="h-4 w-4" />
     },
-
     {
         name: "Cotton Pants",
-        link: "/shop/cotton pants"
+        link: "/shop/cotton pants",
+        icon: <PiPants className="h-4 w-4" />
     }
-]
+];
 
 function BurgurManu() {
 
@@ -118,16 +136,14 @@ function BurgurManu() {
                         <SheetTitle>Category</SheetTitle>
                     </SheetHeader>
                     <div className="flex flex-col gap-2 py-4 pl-4">
-                        {
-                            categoryItems.map((item, i) => (
-                                <SheetClose key={i} asChild>
-                                    <Link href={item.link} className=' flex items-center space-x-2 hover:text-blue-500 text-black'>
-                                        <Shirt className="h-4 w-4" />
-                                        <span>{item.name}</span>
-                                    </Link>
-                                </SheetClose>
-                            ))
-                        }
+                        {categoryItems.map((item, index) => (
+                            <Link key={index} href={item.link}>
+                                <div className="flex items-center gap-2">
+                                    {item.icon}
+                                    <span>{item.name}</span>
+                                </div>
+                            </Link>
+                        ))}
                     </div>
                 </div>
                 <div>
@@ -148,7 +164,7 @@ function BurgurManu() {
                                     </SheetClose>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                <SheetClose asChild>
+                                    <SheetClose asChild>
                                         <Link href="/dashbord/orders" className='flex items-center space-x-2'>
                                             <Truck className="h-4 w-4" />
                                             <span>View Orders</span>
@@ -156,7 +172,7 @@ function BurgurManu() {
                                     </SheetClose>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                <SheetClose asChild>
+                                    <SheetClose asChild>
                                         <Link href="/dashbord/users" className='flex items-center space-x-2'>
                                             <Users className="h-4 w-4" />
                                             <span>View Users</span>

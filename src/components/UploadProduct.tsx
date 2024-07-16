@@ -232,7 +232,7 @@ function UploadProduct() {
                     )}
                 />
                 <div className=" grid gap-3">
-                    <h1 className=" font-semibold text-sm">Product Images(Image size must be under 5mb) </h1>
+                    <h1 className=" font-semibold text-sm">Product Images(Max size 5mb) </h1>
                     <Input
                         type="file"
                         id="images"

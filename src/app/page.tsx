@@ -7,7 +7,7 @@ export default function Home() {
     <div className=" flex flex-col">
       <Hero />
       <MainProductShow />
-      <Newsletter />
+      {/*<Newsletter />*/}
     </div>
   );
 }

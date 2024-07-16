@@ -16,7 +16,7 @@ function Footer() {
     return (
         <footer id='footer' className="bg-gray-900 text-gray-300 py-10">
             <div className="container mx-auto px-4">
-                <div className="grid  gap-8 md:grid-cols-4 mb-8">
+                <div className="grid  gap-2 md:grid-cols-4 mb-8">
                     <div className="flex items-center">
                         <Truck className="w-6 h-6 mr-2" />
                         <span>Delivery</span>
@@ -25,32 +25,25 @@ function Footer() {
                         <RotateCcw className="w-6 h-6 mr-2" />
                         <span>Returns</span>
                     </div>
-                    <div className="flex items-center">
+                    <a
+                        href="https://wa.me/918942974275"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center"
+                    >
                         <FaWhatsapp className="w-6 h-6" />
-                        <span className=' ml-2'>+91 8942974275</span>
-                    </div>
-                    <div className="flex items-center">
-                        <Mail className="w-6 h-6 mr-2" />
+                        <span className='ml-2'>+91 8942974275</span>
+                    </a>
+                    <a
+                        href="mailto:info@trijoncreation.in"
+                        className="flex items-center"
+                    >
+                        <Mail className="w-6 h-6 mr-1" />
                         <span>info@trijoncreation.in</span>
-                    </div>
+                    </a>
                 </div>
-
                 {/* Main footer content */}
                 <div className=" hidden md:grid grid-cols-4 gap-8">
-                    <div>
-                        <h3 className="font-bold text-white mb-4">Payment Method</h3>
-                        <ul className="space-y-2">
-                            <li>Pay on Delivery</li>
-                            <li>Pay online</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-white mb-4">Category</h3>
-                        <ul className="space-y-2">
-                            <li><a href="/shop/trackpants">Summer Sale</a></li>
-                            <li><a href="/shop/trackpants">Winter Sale</a></li>
-                        </ul>
-                    </div>
                     <div>
                         <h3 className="font-bold text-white mb-4">About company</h3>
                         <ul className="space-y-2">
@@ -70,10 +63,21 @@ function Footer() {
                             <a href="https://twitter.com/TrijonIN" target="_blank">
                                 <RiTwitterXLine className="w-6 h-6" />
                             </a>
-                            <a href="https://www.linkedin.com/in/tis-group-and-company-7a3b55315/" target="_blank">
-                                <Linkedin className="w-6 h-6" />
-                            </a>
                         </div>
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-white mb-4">Category</h3>
+                        <ul className="space-y-2">
+                            <li><a href="/shop/trackpants">Summer Sale</a></li>
+                            <li><a href="/shop/trackpants">Winter Sale</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-white mb-4">Payment Method</h3>
+                        <ul className="space-y-2">
+                            <li>Pay on Delivery</li>
+                            <li>Pay online</li>
+                        </ul>
                     </div>
                 </div>
                 <div className='grid gap-4 md:hidden text-white'>
@@ -100,9 +104,6 @@ function Footer() {
                             </a>
                             <a href="https://twitter.com/TrijonIN">
                                 <RiTwitterXLine className="w-6 h-6" />
-                            </a>
-                            <a href="https://www.linkedin.com/in/tis-group-and-company-7a3b55315/" target="_blank">
-                                <Linkedin className="w-6 h-6" />
                             </a>
                         </div>
                     </div>

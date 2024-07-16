@@ -9,101 +9,59 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible"
-import { ChevronDown, ChevronLeft, MoveRight } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
+
+import { FaRegNewspaper, FaFire, FaTshirt } from 'react-icons/fa';
+import { GiHoodie, GiMonclerJacket, GiUnderwearShorts, GiPirateCoat, GiBilledCap } from 'react-icons/gi';
+import { RiRunLine } from 'react-icons/ri';
+import { PiPants } from "react-icons/pi";
+import { LuShirt } from "react-icons/lu";
 
 import { AnimatePresence, motion } from "framer-motion"
 
 const navLinkItems = [
-    {
-        title: "New",
-        href: "/shop/new"
-    },
-    {
-        title: "BestSellers",
-        href: "/shop/best"
-    },
-    {
-        title: "Trackpants",
-        href: "/shop/trackpants"
-    },
-    {
-        title: "Hoody",
-        href: "/shop/hoody"
-    },
-    {
-        title: "Sweat-Shirts",
-        href: "/shop/Sweat-Shirts"
-    },
-    {
-        title: "Shirts",
-        href: "/shop/shirt"
-    },
-    {
-        title: "Jogger",
-        href: "/shop/jogger"
-    },
-    {
-        title: "Boxer",
-        href: "/shop/boxer"
-    },
-    {
-        title: "Blazer",
-        href: "/shop/blazer"
-    },
-    {
-        title: "T-Shirt",
-        href: "/shop/t-Shirt"
-    },
-    {
-        title: "Casual Cap",
-        href: "/shop/casual cap"
-    },
-    {
-        title: "Winter Cap",
-        href: "/shop/winter cap"
-    },
-    {
-        title: "Sweat Shirts",
-        href: "/shop/sweat shirts"
-    },
-    {
-        title: "Cotton Pants",
-        href: "/shop/cotton pants"
-    }
+    { title: "New", href: "/shop/new", icon: <FaRegNewspaper className="h-4 w-4" /> },
+    { title: "BestSellers", href: "/shop/best", icon: <FaFire className="h-4 w-4" /> },
+    { title: "Trackpants", href: "/shop/trackpants", icon: <PiPants className="h-4 w-4" /> },
+    { title: "Hoody", href: "/shop/hoody", icon: <GiHoodie className="h-4 w-4" /> },
+    { title: "Sweat-Shirts", href: "/shop/Sweat-Shirts", icon: <GiMonclerJacket className="h-4 w-4" /> },
+    { title: "Shirts", href: "/shop/shirt", icon: <LuShirt className="h-4 w-4" /> },
+    { title: "Jogger", href: "/shop/jogger", icon: <RiRunLine className="h-4 w-4" /> },
+    { title: "Boxer", href: "/shop/boxer", icon: <GiUnderwearShorts className="h-4 w-4" /> },
+    { title: "Blazer", href: "/shop/blazer", icon: <GiPirateCoat className="h-4 w-4" /> },
+    { title: "T-Shirt", href: "/shop/t-Shirt", icon: <FaTshirt className="h-4 w-4" /> },
+    { title: "Casual Cap", href: "/shop/casual cap", icon: <GiBilledCap className="h-4 w-4" /> },
+    { title: "Winter Cap", href: "/shop/winter cap", icon: <GiBilledCap className="h-4 w-4" /> },
+    { title: "Sweat Shirts", href: "/shop/sweat shirts", icon: <GiMonclerJacket className="h-4 w-4" /> },
+    { title: "Cotton Pants", href: "/shop/cotton pants", icon: <PiPants className="h-4 w-4" /> }
 ];
 
-
-
 function ShopSideBar() {
-
     const currentRoute = usePathname()
     return (
-        <div
-            className=' hidden md:grid relative w-[350px] border-r-2 bg-slate-200'>
-            <div className=' sticky top-0 px-4 py-8 h-screen rounded-xl flex flex-col gap-1 font-semibold bg-white m-4 dark:bg-slate-900'>
-            <NavLink link="/shop" name="All" isCurrnt={currentRoute==="/shop"} />
-                {
-                    navLinkItems.map((item, i) => {
-                        return (
-                            <NavLink key={i} link={(item.href)} name={item.title} isCurrnt={currentRoute.includes(item.href)} />
-                        )
-                    })
-                }
+        <div className='hidden md:grid relative w-[350px] border-r-2 bg-slate-200'>
+            <div className='sticky top-0 px-4 py-8 h-screen rounded-xl flex flex-col gap-1 font-semibold bg-white m-4 dark:bg-slate-900'>
+                <NavLink link="/shop" name="All" isCurrnt={currentRoute === "/shop"} icon={undefined} />
+                {navLinkItems.map((item, i) => (
+                    <NavLink key={i} link={item.href} name={item.title} isCurrnt={currentRoute.includes(item.href)} icon={item.icon} />
+                ))}
             </div>
         </div>
     )
 }
 
-function NavLink({ link, name, isCurrnt }: { link: string, name: string, isCurrnt: Boolean }) {
+function NavLink({ link, name, isCurrnt, icon }: { link: string, name: string, isCurrnt: Boolean, icon: ReactNode }) {
     return (
-        <Link className={`${isCurrnt ? "text-blue-500" : ""} rounded-md px-4 py-2 hover:bg-slate-200`} href={link}>
-            {name}
+        <Link href={link}>
+            <div className={`${isCurrnt ? "text-blue-500" : ""} flex items-center gap-2 rounded-md px-4 py-2 hover:bg-slate-200`}>
+                {icon}
+                {name}
+            </div>
         </Link>
     )
 }
 
 function CollapsibleCard({ triggerComponent, children }: { triggerComponent: string, children: ReactNode }) {
-
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleOpen = () => {
@@ -138,7 +96,6 @@ function CollapsibleCard({ triggerComponent, children }: { triggerComponent: str
             </AnimatePresence>
         </Collapsible>
     )
-
 }
 
-export default ShopSideBar
+export default ShopSideBar;
