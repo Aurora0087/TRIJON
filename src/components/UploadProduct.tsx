@@ -42,10 +42,10 @@ const formSchema = z.object({
         message: "Category must be at least 2 characters.",
     }),
     buyingPrice: z.string().min(1, {
-        message: "Buying Price must be at least 1 characters.",
+        message: "Buying Price must be at least 1 character.",
     }),
     mainPrice: z.string().min(1, {
-        message: "Main Price must be at least 1 characters.",
+        message: "Main Price must be at least 1 character.",
     }),
     varient: z.array(
         z.object({
@@ -59,6 +59,9 @@ const formSchema = z.object({
             ),
         })
     ),
+}).refine(data => parseFloat(data.mainPrice) >= parseFloat(data.buyingPrice), {
+    message: "Main Price must be greater than or equal to Buying Price.",
+    path: ["mainPrice"], // This will make the error appear in the mainPrice field
 });
 
 function UploadProduct() {
@@ -229,7 +232,7 @@ function UploadProduct() {
                     )}
                 />
                 <div className=" grid gap-3">
-                    <h1 className=" font-semibold text-sm">Product Images </h1>
+                    <h1 className=" font-semibold text-sm">Product Images(Image size must be under 5mb) </h1>
                     <Input
                         type="file"
                         id="images"

@@ -32,6 +32,7 @@ import { getSession } from 'next-auth/react'
 import { User } from 'next-auth'
 import { useToast } from './ui/use-toast'
 import { useRouter } from 'next/navigation'
+import { updateRazorpayOrderAfterPayment } from '@/database/action/razorpayOrder.action'
 
 const formSchema = z.object({
     fullName: z.string().min(2, { message: "Full name must be at least 2 characters" }).max(50, { message: "Full name must be less than 50 characters" }),
@@ -102,12 +103,17 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
             handler: async function (response: any) {
                 // Handle payment success
 
+                const { razorpay_payment_id } = response;
+
                 await afterPaymentDone({ orderId, email: user?.email as string })
-                    .then((res) => {
+                    .then(async (res) => {
                         toast({
                             description: `${res.message}`,
                         });
+                        await updateRazorpayOrderAfterPayment({razorpayOrderId:razorpayOrderId,razorpayPaymentId:razorpay_payment_id})
                         afterPayment()
+
+                        router.push("/orders")
                     }).catch((e) => {
                         toast({
                             variant: "destructive",
@@ -122,7 +128,7 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
                 contact: mobileNumber,
             },
             theme: {
-                color: "#F37254"
+                color: "black"
             },
         };
 
@@ -150,7 +156,7 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
             landmark: "",
             city: "",
             state: "",
-            paymentMethod: ""
+            paymentMethod: "POD"
         },
     })
 
@@ -189,13 +195,13 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
                 })
             }
 
-
             toast({
                 description: "Order created.",
             })
 
-            router.push("/orders")
-
+            if (values.paymentMethod === "POD") {
+                router.push("/orders")
+            }
         }).catch((e) => {
             toast({
                 variant: "destructive",
@@ -366,11 +372,11 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue defaultValue={"COD"} />
+                                            <SelectValue defaultValue={"POD"} />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="COD">Pay on Delivery</SelectItem>
+                                        <SelectItem value="POD">Pay on Delivery</SelectItem>
                                         <SelectItem value="RAZORPAY">Pay online</SelectItem>
                                     </SelectContent>
                                 </Select>

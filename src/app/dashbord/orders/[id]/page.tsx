@@ -18,12 +18,15 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from '@/components/ui/button';
+import BackButton from '@/components/BackButton';
+import { getRazorpayOrderDetails } from '@/database/action/razorpayOrder.action';
 
 function Page({ params: { id } }: SearchParamProps) {
     
     const [order, setOrder] = useState<IOrder | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [razorpay,setRezorpay] = useState(null)
     const { toast } = useToast();
 
     const fetchOrderDetails = async () => {
@@ -44,6 +47,15 @@ function Page({ params: { id } }: SearchParamProps) {
         }
     };
 
+    const fetchRazorpayDetails = async () => {
+        const fetchedRazerpay = await getRazorpayOrderDetails({ orderId: id })
+        if (fetchedRazerpay) {
+            setRezorpay(fetchedRazerpay.razorpayPaymentId)
+        } else {
+            setRezorpay(null)
+        }
+    }
+
     const handleChangeStatus = async (orderId: string, productId: string, statusType: string) => {
         try {
             await changeOrderedProductsStatus({ orderId, productId, statusType });
@@ -59,7 +71,8 @@ function Page({ params: { id } }: SearchParamProps) {
     };
 
     useEffect(() => {
-        fetchOrderDetails();
+        fetchOrderDetails()
+        fetchRazorpayDetails()
     }, [id]);
 
     if (loading) {
@@ -72,6 +85,9 @@ function Page({ params: { id } }: SearchParamProps) {
 
     return (
         <div className="max-w-4xl mx-auto p-4 sm:p-8 bg-slate-100 shadow-md rounded-lg">
+            <div className=' py-4'>
+                <BackButton/>
+            </div>
             <Toaster />
             {order ? (
                 <div>
@@ -81,17 +97,24 @@ function Page({ params: { id } }: SearchParamProps) {
                     <p className="mb-2"><strong>Mobile Number:</strong> {order.mobileNumber}</p>
                     <p className="mb-2"><strong>Address:</strong> {order.houseNumber}, {order.street}, {order.landmark}, {order.city}, {order.state}, {order.pincode}</p>
                     <p className="mb-2"><strong>Total Price:</strong> {order.totalPrice}</p>
+                    <p className="mb-2"><strong>Payment Method:</strong> {order.paymentMethod}</p>
                     <p className="mb-2"><strong>Paid:</strong> {order.isPaid ? 'Yes' : 'No'}</p>
+                    {razorpay !== null ? (
+                        <p className="mb-2"><strong>Razorpay Payment id:</strong> {razorpay}</p>
+                    ):(
+                    <div></div>
+                    )
+                    }
                     <h2 className="text-xl font-semibold mt-6 mb-4">Products</h2>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {order.products.map(product => (
                             <li key={product.productId.toString()} className="border p-4 rounded-lg relative">
                                 <div className='absolute top-2 right-2'>
                                     <DropdownMenu>
-                                        <DropdownMenuTrigger>
+                                        <DropdownMenuTrigger className=' bg-white mt-2 rounded-full p-2'>
                                             <MoreHorizontal />
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
+                                        <DropdownMenuContent >
                                             <DropdownMenuLabel>Change Status to</DropdownMenuLabel>
                                             <DropdownMenuSeparator />
                                             <DropdownMenuItem onClick={() => handleChangeStatus(order._id, String(product.productId), 'Order Confirmed')}>

@@ -23,6 +23,7 @@ import {
     Truck,
     User,
     User2,
+    Users,
     X,
 } from "lucide-react"
 import Link from 'next/link'
@@ -151,6 +152,14 @@ function BurgurManu() {
                                         <Link href="/dashbord/orders" className='flex items-center space-x-2'>
                                             <Truck className="h-4 w-4" />
                                             <span>View Orders</span>
+                                        </Link>
+                                    </SheetClose>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                <SheetClose asChild>
+                                        <Link href="/dashbord/users" className='flex items-center space-x-2'>
+                                            <Users className="h-4 w-4" />
+                                            <span>View Users</span>
                                         </Link>
                                     </SheetClose>
                                 </DropdownMenuItem>

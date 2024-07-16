@@ -91,7 +91,8 @@ export async function makeOrder({
 
             // Save Razorpay order details in your database
             const razorpayOrderDetails = new RazorpayOrder({
-                orderId: razorpayOrder.id,
+                orderId: savedOrder._id.toString(),
+                razorpayOrderId: razorpayOrder.id,
                 userId: user._id,
                 amount: razorpayOrder.amount,
                 currency: razorpayOrder.currency,
@@ -110,7 +111,13 @@ export async function makeOrder({
             }));
         }
 
-        if (paymentMethod === "COD") {
+        if (paymentMethod === "POD") {
+
+            await Cart.findOneAndUpdate(
+                { userId: user._id },
+                { products: [] }
+            ).exec();
+            
             return JSON.parse(JSON.stringify({
                 success: true,
                 orderId: savedOrder._id,
@@ -192,19 +199,27 @@ export async function getOrdersPayedByUser({ email }: { email: string }) {
         }
 
         // Find all paid orders for the user and populate product details
-        const orders = await Order.find({ userId: user._id })
-            .populate({
-                path: 'products.productId',
-                select: 'title imageList',
-            })
-            .exec();
+        const orders = await Order.find({
+            userId: user._id,
+            $or: [
+                { paymentMethod: "POD" },
+                { isPaid: true }
+            ]
+        })
+        .populate({
+            path: 'products.productId',
+            select: 'title imageList',
+        })
+        .exec();
 
         // Generate image URLs for each product
         const formattedOrders = await Promise.all(
             orders.map(async order => ({
                 ...order.toObject(),
                 products: await Promise.all(
-                    order.products.map(async (product: { productId: { _id: any; title: any; imageList: string[]; }; color: any; size: any; quantity: any; price: any; deliveryStatus: any; }) => ({
+                    order.products.map(async (product: {
+                        paymentMethod: any; productId: { _id: any; title: any; imageList: string[]; }; color: any; size: any; quantity: any; price: any; deliveryStatus: any; 
+}) => ({
                         _id: product.productId._id,
                         title: product.productId.title,
                         imageUrl: await getImageUrl(product.productId.imageList[0]),
@@ -213,6 +228,7 @@ export async function getOrdersPayedByUser({ email }: { email: string }) {
                         quantity: product.quantity,
                         price: product.price,
                         deliveryStatus: product.deliveryStatus,
+                        paymentMethod: product.paymentMethod
                     }))
                 )
             }))

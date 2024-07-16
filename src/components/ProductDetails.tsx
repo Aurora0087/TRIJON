@@ -112,7 +112,7 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
               {
                 varient[variantIndex].colors.map((v, i) => {
                   return (
-                    <div key={i} className=' flex flex-col gap-2'>
+                    <div key={i} className=' flex flex-col gap-2 capitalize'>
                       <span className={`${colorIndex === i && "text-blue-500 font-semibold"} text-sm`}>{v.name}</span>
                       <Button
                         onClick={() => setColorIndex(i)}
@@ -126,14 +126,14 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
           </div>
           <div className="mb-4">
             <label className="block mb-1">Size:</label>
-            <div className="flex gap-2">
+            <div className="flex gap-2 capitalize">
               {
                 varient.map((v, i) => {
                   return (
                     <Button key={i}
                       variant="outline"
                       onClick={() => setVarientIndex(i)}
-                      className={`px-4 py-2 rounded-full border-2 ${variantIndex === i && " border-blue-400"}`}>{v.size}</Button>
+                      className={`px-4 py-2 rounded-full border-2 ${variantIndex === i && " border-blue-400 uppercase"}`}>{v.size}</Button>
                   )
                 })
               }

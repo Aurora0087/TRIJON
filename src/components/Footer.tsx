@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronDown, Facebook, Instagram, Mail, Phone, RotateCcw, Truck, Twitter, Youtube } from 'lucide-react';
+import { ChevronDown, Facebook, Instagram, Linkedin, Mail, Phone, RotateCcw, Truck, Twitter, Youtube } from 'lucide-react';
 import { FaWhatsapp } from "react-icons/fa"
 import { RiTwitterXLine } from "react-icons/ri"
 import React, { ReactNode, useState } from 'react'
@@ -16,7 +16,7 @@ function Footer() {
     return (
         <footer id='footer' className="bg-gray-900 text-gray-300 py-10">
             <div className="container mx-auto px-4">
-                <div className="flex flex-col gap-8 md:flex-row justify-between mb-8">
+                <div className="grid  gap-8 md:grid-cols-4 mb-8">
                     <div className="flex items-center">
                         <Truck className="w-6 h-6 mr-2" />
                         <span>Delivery</span>
@@ -26,8 +26,8 @@ function Footer() {
                         <span>Returns</span>
                     </div>
                     <div className="flex items-center">
-                        <FaWhatsapp className="w-6 h-6 mr-2" />
-                        <span>+91 8942974275</span>
+                        <FaWhatsapp className="w-6 h-6" />
+                        <span className=' ml-2'>+91 8942974275</span>
                     </div>
                     <div className="flex items-center">
                         <Mail className="w-6 h-6 mr-2" />
@@ -37,13 +37,13 @@ function Footer() {
 
                 {/* Main footer content */}
                 <div className=" hidden md:grid grid-cols-4 gap-8">
-                    {/*<div>
-                        <h3 className="font-bold text-white mb-4">For buyers</h3>
+                    <div>
+                        <h3 className="font-bold text-white mb-4">Payment Method</h3>
                         <ul className="space-y-2">
-                            <li>Payment</li>
-                            <li>Personal data policy</li>
+                            <li>Pay on Delivery</li>
+                            <li>Pay online</li>
                         </ul>
-                    </div>*/}
+                    </div>
                     <div>
                         <h3 className="font-bold text-white mb-4">Category</h3>
                         <ul className="space-y-2">
@@ -61,11 +61,18 @@ function Footer() {
                     <div>
                         <h3 className="font-bold text-white mb-4">Social networks</h3>
                         <div className="flex space-x-4">
-                            <Facebook className="w-6 h-6" />
-                            
-                            <Instagram className="w-6 h-6" />
-                            <Youtube className="w-6 h-6" />
-                            <RiTwitterXLine className="w-6 h-6" />
+                            <a href="https://www.facebook.com/trijon.in" target="_blank">
+                                <Facebook className="w-6 h-6" />
+                            </a>
+                            <a href="https://www.instagram.com/trijon.in" target="_blank">
+                                <Instagram className="w-6 h-6" />
+                            </a>
+                            <a href="https://twitter.com/TrijonIN" target="_blank">
+                                <RiTwitterXLine className="w-6 h-6" />
+                            </a>
+                            <a href="https://www.linkedin.com/in/tis-group-and-company-7a3b55315/" target="_blank">
+                                <Linkedin className="w-6 h-6" />
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -78,27 +85,25 @@ function Footer() {
                     </CollapsibleCard>
                     <CollapsibleCard triggerComponent="Category">
                         <ul className="space-y-2 pb-4">
-                        <li><a href="/shop/trackpants">Trackpants</a></li>
-                            <li><a href="/shop/shirt">Shirts</a></li>
-                            <li><a href="/shop/jogger">Jogger</a></li>
-                            <li><a href="/shop/boxer">Boxer</a></li>
-                            <li><a href="/shop/blazer">Blazer</a></li>
-                            <li><a href="/shop/hoody">Hoody</a></li>
-                            <li><a href="/shop/t-Shirt">T-Shirt</a></li>
-                            <li><a href="/shop/shirt">Shirts</a></li>
-                            <li><a href="/shop/casual cap">Casual Cap</a></li>
-                            <li><a href="/shop/winter cap">Winter Cap</a></li>
-                            <li><a href="/shop/sweat shirts">Sweat Shirts</a></li>
-                            <li><a href="/shop/cotton pants">Cotton Pants</a></li>
+                            <li><a href="/shop/trackpants">Summer Sale</a></li>
+                            <li><a href="/shop/trackpants">Winter Sale</a></li>
                         </ul>
                     </CollapsibleCard>
                     <div>
                         <h3 className="font-bold text-white mb-4">Social networks</h3>
                         <div className="flex space-x-4">
-                            <Facebook className="w-6 h-6" />
-                            <Youtube className="w-6 h-6" />
-                            <Instagram className="w-6 h-6" />
-                            <Twitter className="w-6 h-6" />
+                            <a href="https://www.facebook.com/trijon.in" target="_blank">
+                                <Facebook className="w-6 h-6" />
+                            </a>
+                            <a href="https://www.instagram.com/trijon.in" target="_blank">
+                                <Instagram className="w-6 h-6" />
+                            </a>
+                            <a href="https://twitter.com/TrijonIN">
+                                <RiTwitterXLine className="w-6 h-6" />
+                            </a>
+                            <a href="https://www.linkedin.com/in/tis-group-and-company-7a3b55315/" target="_blank">
+                                <Linkedin className="w-6 h-6" />
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -119,7 +124,7 @@ function CollapsibleCard({ triggerComponent, children }: { triggerComponent: str
     const toggleOpen = () => {
         setIsOpen(!isOpen);
     };
-    
+
     return (
         <Collapsible open={isOpen} onOpenChange={toggleOpen} className=' border-b'>
             <CollapsibleTrigger className=' w-full flex gap-4 justify-between '>

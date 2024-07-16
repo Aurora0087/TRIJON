@@ -23,10 +23,6 @@ const navLinkItems = [
         href: "/shop/best"
     },
     {
-        title: "Anime",
-        href: "/shop/anime"
-    },
-    {
         title: "Trackpants",
         href: "/shop/trackpants"
     },
