@@ -35,13 +35,21 @@ const navLinkItems = [
 ];
 
 function ShopSideBar() {
-    const currentRoute = usePathname()
+
+    const currentRoute = usePathname().toLowerCase()
+
     return (
         <div className='hidden md:grid relative w-[350px] border-r-2 bg-slate-200'>
             <div className='sticky top-0 px-4 py-8 h-screen rounded-xl flex flex-col gap-1 font-semibold bg-white m-4 dark:bg-slate-900'>
                 <NavLink link="/shop" name="All" isCurrnt={currentRoute === "/shop"} icon={undefined} />
                 {navLinkItems.map((item, i) => (
-                    <NavLink key={i} link={item.href} name={item.title} isCurrnt={currentRoute.includes(item.href)} icon={item.icon} />
+                    <NavLink 
+                        key={i} 
+                        link={item.href.toLowerCase()}
+                        name={item.title} 
+                        isCurrnt={currentRoute.includes(item.href.toLowerCase())} 
+                        icon={item.icon}
+                    />
                 ))}
             </div>
         </div>
@@ -53,7 +61,7 @@ function NavLink({ link, name, isCurrnt, icon }: { link: string, name: string, i
         <Link href={link}>
             <motion.div 
                 className={`${isCurrnt ? "text-blue-500" : ""} flex items-center gap-2 rounded-md px-4 py-2 bg-white`}
-                whileHover={{ x: 5, backgroundColor: "#3b82f6",color: "white" }}
+                whileHover={{ x: 5, backgroundColor: "#3b82f6", color: "white" }}
                 transition={{ type: "spring", stiffness: 200 }}
             >
                 {icon}

@@ -83,13 +83,12 @@ export const {
 
             const dbUser = await UserModel.findOne({ email: user.email })
 
-            if (user?.email === (process.env.ADMIN_EMAIL) || user.role === "ADMIN") {
+            if (user?.email === (process.env.ADMIN_EMAIL)) {
                 user.role = "ADMIN"
             }
             else user.role = "USER"
 
             if (!dbUser) {
-
                 const newUser = new UserModel({
                     name: user.name,
                     email: user.email,
@@ -104,6 +103,9 @@ export const {
                     role: user.role,
                 });
                 await newUser.save();
+            }
+            else {
+                user.role = dbUser.role
             }
 
             return true;

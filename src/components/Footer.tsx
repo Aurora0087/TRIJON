@@ -13,7 +13,7 @@ import {
 import { AnimatePresence, motion } from 'framer-motion';
 
 const facebookPageId = '361122133747842'
-const fallbackUrl = 'https://www.facebook.com/trijon.in';
+const fallbackUrl = 'https://www.facebook.com/share/Geqdk99gyv4AaEW2/?mibextid=LQQJ4d';
 function Footer() {
     return (
         <footer id='footer' className="bg-gray-900 text-gray-300 py-10">
