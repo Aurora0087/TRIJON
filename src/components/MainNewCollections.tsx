@@ -13,8 +13,8 @@ const collections = [
         image: '/assets/image/T-shirts.png',
     },
     {
-        name: 'Half Sleeve',
-        image: '/assets/image/HALF SLEEVE.png',
+        name: 'Jogger',
+        image: '/assets/image/Jogger.png',
     },
 ]
 

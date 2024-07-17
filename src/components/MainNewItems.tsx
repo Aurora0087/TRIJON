@@ -46,6 +46,7 @@ function MainNewItems() {
                             price={data.buyingPrice}
                             sizes={data.varient.map((v) => (v.size))}
                             colors={uniqueColors.size}
+                            viewColor={false}
                         />
                     </motion.div>
                 )})}

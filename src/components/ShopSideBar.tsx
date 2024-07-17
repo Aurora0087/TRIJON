@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
 
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import {
     Collapsible,
     CollapsibleContent,
@@ -35,8 +35,7 @@ const navLinkItems = [
 ];
 
 function ShopSideBar() {
-
-    const currentRoute = usePathname().toLowerCase()
+    const currentRoute = decodeURIComponent(usePathname().toLowerCase())
 
     return (
         <div className='hidden md:grid relative w-[350px] border-r-2 bg-slate-200'>
@@ -45,10 +44,10 @@ function ShopSideBar() {
                 {navLinkItems.map((item, i) => (
                     <NavLink 
                         key={i} 
-                        link={item.href.toLowerCase()}
+                        link={item.href.toLowerCase()} // Convert href to lowercase for case-insensitive comparison
                         name={item.title} 
                         isCurrnt={currentRoute.includes(item.href.toLowerCase())} 
-                        icon={item.icon}
+                        icon={item.icon} 
                     />
                 ))}
             </div>
@@ -56,12 +55,17 @@ function ShopSideBar() {
     )
 }
 
-function NavLink({ link, name, isCurrnt, icon }: { link: string, name: string, isCurrnt: Boolean, icon: ReactNode }) {
+function NavLink({ link, name, isCurrnt, icon }: { link: string, name: string, isCurrnt: boolean, icon: ReactNode }) {
+
     return (
         <Link href={link}>
             <motion.div 
-                className={`${isCurrnt ? "text-blue-500" : ""} flex items-center gap-2 rounded-md px-4 py-2 bg-white`}
-                whileHover={{ x: 5, backgroundColor: "#3b82f6", color: "white" }}
+                className={` flex items-center gap-2 rounded-md px-4 py-2 bg-white`}
+                animate={{ 
+                    color: isCurrnt ? "#3b82f6" : "black", 
+                    x: isCurrnt ? 5 : 0 
+                }}
+                whileHover={{ x: 10, backgroundColor: "#3b82f6", color: "white" }}
                 transition={{ type: "spring", stiffness: 200 }}
             >
                 {icon}

@@ -161,7 +161,7 @@ function FacebookLink() {
         const appUrl = `fb://page/${facebookPageId}`;
         const timeout = setTimeout(() => {
             window.location.href = fallbackUrl;
-        }, 500);
+        }, 500)
 
         window.location.href = appUrl;
 

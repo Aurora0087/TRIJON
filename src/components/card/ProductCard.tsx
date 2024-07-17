@@ -10,9 +10,10 @@ interface ProductCardProps {
     price: number;
     sizes: string[];
     colors: number;
+    viewColor?: boolean;
 }
 
-function ProductCard({ id, imageSrc, productName, price, sizes, colors }: ProductCardProps) {
+function ProductCard({ id, imageSrc, productName, price, sizes, colors, viewColor = true }: ProductCardProps) {
     return (
         <div className="max-w-xs rounded-lg overflow-hidden shadow-lg bg-white">
             <Link href={`/shop/product/${id}`}>
@@ -33,7 +34,9 @@ function ProductCard({ id, imageSrc, productName, price, sizes, colors }: Produc
                                 </span>
                             ))}
                         </div>
+                        {viewColor && (
                         <span className="text-sm text-gray-600 capitalize">{colors} color{colors !== 1 ? 's' : ''}</span>
+                        )}
                     </div>
                 </div>
             </Link>
