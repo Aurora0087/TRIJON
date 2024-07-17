@@ -26,10 +26,10 @@ function TopNav() {
                 </div>
                 <div className='flex gap-6 justify-center items-center capitalize'>
                     <IsLoginButton />
-                    <Link href='/wishList'>
+                    <Link href='/wishList' className=' hover:text-blue-500'>
                     <Heart/>
                     </Link>
-                    <Link href='/cart'>
+                    <Link href='/cart' className=' hover:text-blue-500'>
                     <ShoppingCart/>
                     </Link>
                 </div>

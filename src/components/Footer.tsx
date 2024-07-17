@@ -50,7 +50,7 @@ function Footer() {
                         <h3 className="font-bold text-white mb-4">About TRIJON</h3>
                         <ul className="space-y-2">
                             <li><a href="/about">About Us</a></li>
-                            <li>Contacts</li>
+                            <li><a href="/contacts">Contacts</a></li>
                         </ul>
                     </div>
                     <div>
@@ -155,7 +155,7 @@ function CollapsibleCard({ triggerComponent, children }: { triggerComponent: str
 
 }
 
-function FacebookLink() {
+export function FacebookLink() {
     const handleFacebookLinkClick = (event: { preventDefault: () => void }) => {
         event.preventDefault();
         const appUrl = `fb://page/${facebookPageId}`;
