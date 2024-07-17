@@ -36,7 +36,7 @@ export async function createNewProduct({ title, description, categorys, buyingPr
         )
 
         await dbConnect()
-        const category = categorys.split(",")
+        const category = categorys.toLocaleLowerCase().split(",")
 
         const setVarients = varient.map((v) => ({
             size: v.size,
@@ -67,9 +67,11 @@ export async function getProductsByCategory(
     try {
         await dbConnect();
 
-        const query = category.length > 0 ? { category: { $in: category } } : {};
+        const normalizedCategory = category.map((c) => c.toLowerCase());
+        const query = normalizedCategory.length > 0 ? { category: { $in: normalizedCategory } } : {};
 
         const products = await Product.find(query)
+            .sort({ createdAt: -1 })
             .skip(skipItems)
             .limit(itemsPerPage)
             .exec();
@@ -112,7 +114,7 @@ export async function getProductsByCategory(
 
 export async function getProductsById({ id }: { id: string }) {
     await dbConnect();
-    
+
     try {
         const product = await Product.findById(id).exec();
         if (!product) {
@@ -130,7 +132,7 @@ export async function getProductsById({ id }: { id: string }) {
                 }
             })
         )
-        
+
         return JSON.parse(JSON.stringify(
             {
                 ...product.toObject(),
@@ -145,33 +147,33 @@ export async function getProductsById({ id }: { id: string }) {
 
 export async function addToWishList({ email, productId }: { email: string, productId: string }) {
     await dbConnect()
-        // Find the user by email
-        const user = await UserModel.findOne({ email });
+    // Find the user by email
+    const user = await UserModel.findOne({ email });
 
-        if (!user) {
-            throw new Error("User not found");
-        }
+    if (!user) {
+        throw new Error("User not found");
+    }
 
-        // Check if the product is already in the user's wishList
-        const productExistsInWishlist = user.wishList.some((wishlistItem: any) => wishlistItem.equals(productId));
+    // Check if the product is already in the user's wishList
+    const productExistsInWishlist = user.wishList.some((wishlistItem: any) => wishlistItem.equals(productId));
 
-        if (productExistsInWishlist) {
-            throw new Error("Product already exists in wishlist");
-        }
+    if (productExistsInWishlist) {
+        throw new Error("Product already exists in wishlist");
+    }
 
-        // Find the product by ID
-        const product = await Product.findById(productId);
+    // Find the product by ID
+    const product = await Product.findById(productId);
 
-        if (!product) {
-            throw new Error("Product not found");
-        }
+    if (!product) {
+        throw new Error("Product not found");
+    }
 
-        // Add the product to the user's wishList
-        user.wishList.push(productId);
-        await user.save();
+    // Add the product to the user's wishList
+    user.wishList.push(productId);
+    await user.save();
 
-        // Return the updated user object
-        return JSON.parse(JSON.stringify(user));
+    // Return the updated user object
+    return JSON.parse(JSON.stringify(user));
 }
 
 export async function getWishListByEmail({ email }: { email: string }): Promise<IProduct[]> {
@@ -188,7 +190,7 @@ export async function getWishListByEmail({ email }: { email: string }): Promise<
             throw new Error("User not found");
         }
 
-// Extract populated product details from the wishList
+        // Extract populated product details from the wishList
         const wishlistedProducts: IProduct[] = await Promise.all(user.wishList.map(async (wishlistItem: any) => {
             const productDetails = {
                 _id: wishlistItem._id,
@@ -218,7 +220,7 @@ export async function getWishListByEmail({ email }: { email: string }): Promise<
 
             return productDetails;
         }));
-        
+
         return JSON.parse(JSON.stringify(wishlistedProducts));
     } catch (error) {
         console.error("Error retrieving wishlisted products for user:", error);

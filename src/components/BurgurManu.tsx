@@ -106,7 +106,7 @@ function BurgurManu() {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button className='p-0' variant="ghost">
+                <Button className='p-0 hover:text-blue-500' variant="ghost">
                     <Menu />
                 </Button>
             </SheetTrigger>
@@ -123,16 +123,18 @@ function BurgurManu() {
                     </SheetHeader>
                     <div className="flex flex-col gap-2 py-4 pl-4">
                         {categoryItems.map((item, index) => (
-                            <Link key={index} href={item.link}>
-                                <motion.div 
-                                    className="flex items-center gap-2"
-                                    whileHover={{ x: 5, color: "#3b82f6" }}
-                                    transition={{ type: "spring", stiffness: 300 }}
-                                >
-                                    {item.icon}
-                                    <span>{item.name}</span>
-                                </motion.div>
-                            </Link>
+                            <SheetClose asChild>
+                                <Link key={index} href={item.link}>
+                                    <motion.div
+                                        className="flex items-center gap-2"
+                                        whileHover={{ x: 5, color: "#3b82f6" }}
+                                        transition={{ type: "spring", stiffness: 300 }}
+                                    >
+                                        {item.icon}
+                                        <span>{item.name}</span>
+                                    </motion.div>
+                                </Link>
+                            </SheetClose>
                         ))}
                     </div>
                 </div>

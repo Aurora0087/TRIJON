@@ -1,5 +1,4 @@
 
-import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 
@@ -15,11 +14,11 @@ interface ProductCardProps {
 
 function ProductCard({ id, imageSrc, productName, price, sizes, colors, viewColor = false }: ProductCardProps) {
     return (
-        <div className="max-w-xs rounded-lg overflow-hidden shadow-lg bg-white">
+        <div className="max-w-xs rounded-lg overflow-hidden shadow-lg bg-white h-full">
             <Link href={`/shop/product/${id}`}>
                 <div className=' relative p-2 rounded-lg overflow-hidden w-full'>
                     <div className='rounded-lg overflow-hidden w-full'>
-                        <Image className="w-full h-64 object-cover" src={imageSrc} alt={productName} width={5000} height={5000} />
+                        <img className="w-full h-64 object-cover" src={imageSrc} alt={productName}  />
                     </div>
                     
                 </div>

@@ -57,8 +57,8 @@ function MainBestSell() {
                             ) : (
                                 <>
                                     {products.map((data, index) => (
-                                        <CarouselItem key={index} className=" basis-1/2 md:basis-1/3 lg:basis-1/4">
-                                            <div className="p-1">
+                                        <CarouselItem key={index} className=" basis-1/1 md:basis-1/2 lg:basis-1/4">
+                                            <div className="p-1 h-full">
                                                 <ProductCard
                                                     id={data._id}
                                                     imageSrc={data.imageList[0]}

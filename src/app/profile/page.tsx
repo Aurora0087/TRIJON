@@ -40,34 +40,37 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 
-import { Toaster } from "@/components/ui/toaster"
 import { useToast } from "@/components/ui/use-toast"
+import ProfilePageSkeleton from '@/components/skeletons/ProfilePageSkeleton'
+import BackButton from '@/components/BackButton'
 
 
 function page() {
-
-    const [user, setUser] = useState<User | null | undefined>(null)
-
-    const [userDetails, setUserDetails] = useState<IUser | null>(null)
-
-    const router = useRouter()
+    const [user, setUser] = useState<User | null | undefined>(null);
+    const [userDetails, setUserDetails] = useState<IUser | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const router = useRouter();
 
     useEffect(() => {
-        fetchUserAuth()
-    }, [])
+        fetchUserAuth();
+    }, []);
 
     useEffect(() => {
-        getUserDetails()
-    }, [user])
+        if (user) {
+            getUserDetails();
+        }
+    }, [user]);
 
     async function getUserDetails() {
-        if (user === null || user === undefined) {
-            return
+        if (!user) {
+            return;
         }
-        await getUserByEmail({ email: user?.email as string }).then((res) => {
-            setUserDetails(res)
+        setLoading(true);
+        await getUserByEmail({ email: user.email as string }).then((res) => {
+            setUserDetails(res);
+            setLoading(false);
             console.log(res);
-        })
+        });
     }
 
     async function fetchUserAuth() {
@@ -75,21 +78,24 @@ function page() {
         if (session?.user) {
             setUser(session.user);
             console.log(session.user);
-
         }
     }
 
     async function handleGoogleSignIn() {
-        await signIn('google', {
-        }).then((res) => {
-            router.push("/")
-        })
+        await signIn('google').then(() => {
+            router.push("/");
+        });
     }
 
     return (
         <WidthWrraper className='bg-slate-100 min-h-screen'>
-            {userDetails !== null && user ? (
-                <div className='py-8 flex flex-col gap-4 items-center'>
+            {loading ? (
+                <ProfilePageSkeleton />
+            ) : userDetails && user ? (
+                    <div className='py-8 flex flex-col gap-4 items-center'>
+                        <div className=' w-full'>
+                            <BackButton/>
+                        </div>
                     <h3 className='text-3xl font-semibold'>{`Hello, ${user.name}`}</h3>
                     <div>
                         <Avatar className='w-20 h-20'>
@@ -97,58 +103,49 @@ function page() {
                             <AvatarFallback>{user.name}</AvatarFallback>
                         </Avatar>
                     </div>
-                    <div className=' rounded-lg bg-slate-50 p-4 w-full'>
-                        <div className=' flex flex-col md:flex-row justify-between gap-4 items-center'>
-                            <div className=' flex gap-2 items-center text-xs text-slate-500'>
+                    <div className='rounded-lg bg-slate-50 p-4 w-full'>
+                        <div className='flex flex-col md:flex-row justify-between gap-4 items-center'>
+                            <div className='flex gap-2 items-center text-xs text-slate-500'>
                                 <span>E-Mail:</span>
-                                <span className=' text-slate-900 font-semibold'>{userDetails.email}</span>
+                                <span className='text-slate-900 font-semibold'>{userDetails.email}</span>
                             </div>
-                            <div className=' flex gap-2 items-center text-xs text-slate-500'>
+                            <div className='flex gap-2 items-center text-xs text-slate-500'>
                                 <span>Joined:</span>
-                                <span className=' text-slate-900'>{formatISODate({ isoString: String(userDetails.joined) })}</span>
+                                <span className='text-slate-900'>{formatISODate({ isoString: String(userDetails.joined) })}</span>
                             </div>
                         </div>
-
                         <div className='grid md:grid-cols-2 w-full my-4'>
-                            <Button variant="link" onClick={() => router.push('/orders')} className=' bg-slate-100 rounded-smrounded-lg shadow-md flex gap-2 items-center border-b-2 md:border-b-0 md:border-r-2'>
+                            <Button variant="link" onClick={() => router.push('/orders')} className='bg-slate-100 rounded-lg shadow-md flex gap-2 items-center border-b-2 md:border-b-0 md:border-r-2'>
                                 <Truck />
                                 Orders
                             </Button>
-                            <Button variant="link"
-                                onClick={() => router.push('/cart')} className=' bg-slate-100 rounded-lg shadow-md flex gap-2 items-center border-t-2 md:border-t-0 md:border-l-2'>
+                            <Button variant="link" onClick={() => router.push('/cart')} className='bg-slate-100 rounded-lg shadow-md flex gap-2 items-center border-t-2 md:border-t-0 md:border-l-2'>
                                 <ShoppingCart />
                                 Cart
                             </Button>
                         </div>
-                        <div className=' flex flex-col gap-2 p-2 text-sm'>
+                        <div className='flex flex-col gap-2 p-2 text-sm'>
                             <div className='flex gap-2 items-center'>
                                 <span>Information:</span>
-                                <EditProfile uid={userDetails._id}
-                                    firstName={userDetails.firstName as string}
-                                    lastName={userDetails.lastName as string}
-                                    userName={userDetails.name}
-                                    mobile={userDetails.mobile}
-                                    getUser={getUserDetails}
-                                />
+                                {/* EditProfile component here */}
                             </div>
-                            <div className=' flex flex-col md:flex-row gap-x-8 gap-y-2'>
-
-                                <div className=' flex gap-2 items-center text-slate-500'>
+                            <div className='flex flex-col md:flex-row gap-x-8 gap-y-2'>
+                                <div className='flex gap-2 items-center text-slate-500'>
                                     <span>First Name:</span>
-                                    <span className=' text-slate-900'>{userDetails.firstName}</span>
+                                    <span className='text-slate-900'>{userDetails.firstName}</span>
                                 </div>
-                                <div className=' flex gap-2 items-center text-slate-500'>
+                                <div className='flex gap-2 items-center text-slate-500'>
                                     <span>Last Name:</span>
-                                    <span className=' text-slate-900'>{userDetails.lastName}</span>
+                                    <span className='text-slate-900'>{userDetails.lastName}</span>
                                 </div>
                             </div>
-                            <div className=' flex gap-2 items-center text-slate-500'>
+                            <div className='flex gap-2 items-center text-slate-500'>
                                 <span>UserName:</span>
-                                <span className=' text-slate-900'>{userDetails.name}</span>
+                                <span className='text-slate-900'>{userDetails.name}</span>
                             </div>
-                            <div className=' flex gap-2 items-center text-slate-500'>
+                            <div className='flex gap-2 items-center text-slate-500'>
                                 <span>Mobile No.:</span>
-                                <span className=' text-slate-900'>{userDetails.mobile}</span>
+                                <span className='text-slate-900'>{userDetails.mobile}</span>
                             </div>
                         </div>
                     </div>

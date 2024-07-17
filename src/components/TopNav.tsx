@@ -16,13 +16,13 @@ function TopNav() {
                     </div>
                     <div className=' aspect-square w-10 h-10 overflow-hidden'>
                         <Link href={"/"}>
-                            <Image src={'/assets/logo/BLACK.png'} alt='TRIJON' width={500} height={500}/>
+                            <img src={'/assets/logo/BLACK.png'} alt='TRIJON' width={500} height={500}/>
                         </Link>
                     </div>
                 </div>
                 <div className=' hidden md:flex gap-6 justify-center items-center capitalize'>
-                    <Link href='/shop/new'>New</Link>
-                    <Link href='/shop/best'>Best selling</Link>
+                    <Link href='/shop/new' className=' hover:text-blue-500'>New</Link>
+                    <Link href='/shop/best' className=' hover:text-blue-500'>Best selling</Link>
                 </div>
                 <div className='flex gap-6 justify-center items-center capitalize'>
                     <IsLoginButton />

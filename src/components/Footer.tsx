@@ -31,14 +31,14 @@ function Footer() {
                         href="https://wa.me/918942974275"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center"
+                        className="flex items-center hover:text-green-400"
                     >
                         <FaWhatsapp className="w-6 h-6" />
                         <span className='ml-2'>+91 8942974275</span>
                     </a>
                     <a
                         href="mailto:info@trijoncreation.in"
-                        className="flex items-center"
+                        className="flex items-center hover:text-blue-500"
                     >
                         <Mail className="w-6 h-6 mr-1" />
                         <span>info@trijoncreation.in</span>
@@ -49,18 +49,18 @@ function Footer() {
                     <div>
                         <h3 className="font-bold text-white mb-4">About TRIJON</h3>
                         <ul className="space-y-2">
-                            <li><a href="/about">About Us</a></li>
-                            <li><a href="/contacts">Contacts</a></li>
+                            <li><a href="/about" className=' hover:text-blue-400'>About Us</a></li>
+                            <li><a href="/contacts" className=' hover:text-green-400'>Contacts</a></li>
                         </ul>
                     </div>
                     <div>
                         <h3 className="font-bold text-white mb-4">Social Networks</h3>
                         <div className="flex space-x-4">
                             <FacebookLink />
-                            <a href="https://www.instagram.com/trijon.in" target="_blank">
+                            <a href="https://www.instagram.com/trijon.in" target="_blank" className=' hover:text-red-400'>
                                 <Instagram className="w-6 h-6" />
                             </a>
-                            <a href="https://twitter.com/TrijonIN" target="_blank">
+                            <a href="https://twitter.com/TrijonIN" className=' hover:text-blue-500'>
                                 <RiTwitterXLine className="w-6 h-6" />
                             </a>
                         </div>
@@ -97,10 +97,10 @@ function Footer() {
                         <h3 className="font-bold text-white mb-4">Social networks</h3>
                         <div className="flex space-x-4">
                             <FacebookLink />
-                            <a href="https://www.instagram.com/trijon.in" target="_blank">
+                            <a href="https://www.instagram.com/trijon.in" target="_blank" className=' hover:text-red-400'>
                                 <Instagram className="w-6 h-6" />
                             </a>
-                            <a href="https://twitter.com/TrijonIN">
+                            <a href="https://twitter.com/TrijonIN" className=' hover:text-blue-500'>
                                 <RiTwitterXLine className="w-6 h-6" />
                             </a>
                         </div>
@@ -169,7 +169,7 @@ export function FacebookLink() {
     };
 
     return (
-        <a href={fallbackUrl} onClick={handleFacebookLinkClick} target="_blank">
+        <a href={fallbackUrl} onClick={handleFacebookLinkClick} target="_blank" className=' hover:text-blue-500'>
             <FaFacebook className="w-6 h-6" />
         </a>
     );

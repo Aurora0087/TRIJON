@@ -127,8 +127,8 @@ function UploadProduct() {
             setSizeVarients(form.getValues().varient)
         } catch (error) {
             toast({
-                title: "Product Created",
-                description: `product id : ${String(error)}`,
+                title: "Error",
+                description: `${String(error)}`,
             })
         }
     }
@@ -245,7 +245,7 @@ function UploadProduct() {
                         <div className=" flex gap-2">
                             {imagesUrl.map((url, index) => (
                                 <div key={index} className="w-full overflow-hidden rounded-xl border-2 border-blue-500">
-                                    <img src={url} alt="Thumbnail Preview" className="w-full object-cover" />
+                                    <img src={url} alt="Product Images Preview" className="w-full object-cover" />
                                 </div>
                             ))}
                         </div>
@@ -316,7 +316,6 @@ function UploadProduct() {
                                         Remove Color
                                     </Button>
                                 </div>
-
                             </div>
                         ))}
                         <div className=" flex gap-4 w-full p-4">
@@ -327,7 +326,6 @@ function UploadProduct() {
                                 Remove Size
                             </Button>
                         </div>
-
                     </div>
                 ))}
                 <div className=" flex flex-col gap-4 w-full">

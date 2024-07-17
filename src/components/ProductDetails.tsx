@@ -36,9 +36,9 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
   const { toast } = useToast()
 
   useEffect(() => {
-    setColorType(varient[variantIndex].colors[0].name)
+    setColorIndex(0)
     setSizeType(varient[variantIndex].size)
-    setAvalableStock(varient[variantIndex].colors[colorIndex].stockes)
+    setAvalableStock(varient[variantIndex].colors[0].stockes)
     setQuantity(0)
   }, [variantIndex])
 
@@ -66,7 +66,6 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
       return
     }
     try {
-      console.log(String(user.id));
       
       await addToWishList({ email: String(user.email), productId: id })
       toast({
@@ -117,7 +116,7 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
                       <Button
                         onClick={() => setColorIndex(i)}
                         style={{ backgroundColor: `${v.value}` }}
-                        className={`w-8 h-8 p-1 border-2 rounded-full ${colorIndex === i && "border-[#ffffff]"}`}></Button>
+                        className={`w-8 h-8 p-1 border-2 rounded-full ${colorIndex === i && "border-[#519fff]"} shadow`}></Button>
                     </div>
                   )
                 })
@@ -133,7 +132,7 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
                     <Button key={i}
                       variant="outline"
                       onClick={() => setVarientIndex(i)}
-                      className={`px-4 py-2 rounded-full border-2 ${variantIndex === i && " border-blue-400 uppercase"}`}>{v.size}</Button>
+                      className={`px-4 py-2 rounded-full border-2 ${variantIndex === i && " border-blue-400"} uppercase`}>{v.size}</Button>
                   )
                 })
               }
@@ -141,7 +140,7 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
           </div>
           <div className="mb-4">
             <label className="block mb-1">Available Stock:</label>
-            <span className="text-xl font-semibold mb-4 py-2">{Number(varient[variantIndex].colors[colorIndex].stockes)}</span>
+            <span className="text-xl font-semibold mb-4 py-2">{avalableStock}</span>
           </div>
           <div className="flex items-center mb-4">
             <label className="block mb-1">Quantity:</label>
@@ -241,7 +240,7 @@ function ImageShower({ images }: { images: string[] }) {
           {images.map((imageurl, i) => (
             <CarouselItem key={i}>
               <div className=' w-full h-full overflow-hidden rounded-xl'>
-                <Image className=' w-full h-full object-cover' src={imageurl} alt='' width={5000} height={5000} />
+                <img className=' w-full h-full object-cover' src={imageurl} alt='' width={5000} height={5000} />
               </div>
             </CarouselItem>
           ))}
@@ -249,7 +248,7 @@ function ImageShower({ images }: { images: string[] }) {
         <CarouselPrevious className=' left-0' />
         <CarouselNext className=' right-0' />
       </Carousel>
-      <div className="py-2 text-center text-sm text-muted-foreground flex gap-2 w-full px-2 justify-between">
+      <div className="py-2 text-center text-sm text-muted-foreground flex gap-2 w-full px-2 justify-center">
         {
           images.map((imagUrl, i) => {
             return (
@@ -257,7 +256,7 @@ function ImageShower({ images }: { images: string[] }) {
                 variant='outline'
                 className={`h-11 w-11 border-2 overflow-hidden ${i === (current - 1) && " border-blue-500"}`}
                 onClick={() => api?.scrollTo(i)}>
-                <Image className=' w-full h-full object-cover' src={imagUrl} alt={`${i}`} width={100} height={100} />
+                <img className=' w-full h-full object-cover' src={imagUrl} alt={`${i}`} width={100} height={100} />
               </Button>
             )
           })

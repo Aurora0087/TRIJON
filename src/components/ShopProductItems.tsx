@@ -18,15 +18,19 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
 } from './ui/dropdown-menu';
+import ProductCardSkeletons from './skeletons/ProductCardSkeletons';
 
 function ShopProductItems({ category }: { category?: string[] }) {
+    
     const [products, setProducts] = useState<IProduct[]>([]);
     const [filter, setFilter] = useState<IProduct[]>([]);
     const [pageNumber, setPageNumber] = useState(1);
     const [isMore, setIsMore] = useState(true);
+    const [loading, setLoading] = useState(true);
     const { ref, inView } = useInView();
 
     async function getProducts() {
+        setLoading(true);
         const res = await getProductsByCategory({ category: category || [], page: pageNumber });
         if (pageNumber === 1) {
             setProducts(res.products);
@@ -36,6 +40,7 @@ function ShopProductItems({ category }: { category?: string[] }) {
             setFilter((prevFilter) => [...prevFilter, ...res.products]);
         }
         setIsMore(res.isMore);
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -82,7 +87,6 @@ function ShopProductItems({ category }: { category?: string[] }) {
                         <DropdownMenuItem onClick={sortByPriceHighToLow}>High to Low</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="link">
@@ -97,34 +101,42 @@ function ShopProductItems({ category }: { category?: string[] }) {
                         <DropdownMenuItem onClick={() => filterBySize('S')}>S</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => filterBySize('M')}>M</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => filterBySize('L')}>L</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => filterBySize('XL')}>XL</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => filterBySize('XXL')}>XXL</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
             <motion.div className='grid gap-2 gap-y-4 place-content-center md:grid-cols-2 lg:grid-cols-3' layout>
                 <AnimatePresence>
-                    {filter.map((data) => {
-                        const uniqueColors = new Set(data.varient.flatMap((variant) => variant.colors.map((color) => color.name)));
-                        return (
-                            <motion.div
-                                key={data._id}
-                                className='h-full w-full'
-                                layout
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <ProductCard
-                                    id={data._id}
-                                    imageSrc={data.imageList[0]}
-                                    productName={data.title}
-                                    price={data.buyingPrice}
-                                    sizes={data.varient.map((v) => v.size)}
-                                    colors={uniqueColors.size}
-                                />
-                            </motion.div>
-                        )
-                    })}
+                    {loading ? (
+                        Array.from({ length: 6 }).map((_, index) => (
+                            <ProductCardSkeletons key={index} />
+                        ))
+                    ) : (
+                        filter.map((data) => {
+                            const uniqueColors = new Set(data.varient.flatMap((variant) => variant.colors.map((color) => color.name)));
+                            return (
+                                <motion.div
+                                    key={data._id}
+                                    className='h-full w-full'
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <ProductCard
+                                        id={data._id}
+                                        imageSrc={data.imageList[0]}
+                                        productName={data.title}
+                                        price={data.buyingPrice}
+                                        sizes={data.varient.map((v) => v.size)}
+                                        colors={uniqueColors.size}
+                                    />
+                                </motion.div>
+                            )
+                        })
+                    )}
                 </AnimatePresence>
             </motion.div>
             <div className='w-full grid place-content-center mt-4' ref={ref}>

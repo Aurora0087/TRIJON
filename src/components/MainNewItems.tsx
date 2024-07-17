@@ -26,7 +26,7 @@ function MainNewItems() {
     return (
         <div className=" py-8 w-full">
             <h2 className="text-2xl font-extrabold">New Items</h2>
-            <div className=' w-full mt-6 grid grid-cols-2 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-4'>
+            <div className=' w-full mt-6 grid gap-y-6 gap-x-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
                 {
                     products.length < 1 ? (
                         <>
@@ -38,7 +38,7 @@ function MainNewItems() {
                 {products.map((data, i) => {
                     const uniqueColors = new Set(data.varient.flatMap((variant) => variant.colors.map((color) => color.name)))
                     return (
-                    <motion.div key={i} className=' h-full w-full' layout>
+                    <motion.div key={i} className=' h-full' layout>
                         <ProductCard
                             id={data._id}
                             imageSrc={data.imageList[0]}

@@ -40,7 +40,7 @@ const ContactsPage: React.FC = () => {
                                 href="https://wa.me/918942974275"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center hover:text-blue-500 w-fit"
+                                className="flex items-center hover:text-green-500 w-fit"
                             >
                                 <FaWhatsapp className="w-6 h-6" />
                                 <span className='ml-2'>+91 8942974275</span>
@@ -74,7 +74,7 @@ const ContactsPage: React.FC = () => {
                                 animate={{ x: 0 }}
                                 transition={{ type: "spring", stiffness: 500 }}
                                 href="https://www.instagram.com/trijon.in" target="_blank"
-                                className="flex items-center hover:text-blue-500  w-fit"
+                                className="flex items-center hover:text-red-400  w-fit"
                             >
                                 <Instagram className="w-6 h-6 mr-1" />
                                 <span>trijon.in</span>
