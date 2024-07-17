@@ -14,7 +14,7 @@ function TopNav() {
                     <div>
                         <BurgurManu/>
                     </div>
-                    <div className=' aspect-square w-8 h-8 overflow-hidden'>
+                    <div className=' aspect-square w-10 h-10 overflow-hidden'>
                         <Link href={"/"}>
                             <Image src={'/assets/logo/BLACK.png'} alt='TRIJON' width={500} height={500}/>
                         </Link>
@@ -23,8 +23,6 @@ function TopNav() {
                 <div className=' hidden md:flex gap-6 justify-center items-center capitalize'>
                     <Link href='/shop/new'>New</Link>
                     <Link href='/shop/best'>Best selling</Link>
-                    <Link href='/shop/t-shirt'>t-shirts</Link>
-                    <Link href='/shop/shirt'>shirts</Link>
                 </div>
                 <div className='flex gap-6 justify-center items-center capitalize'>
                     <IsLoginButton />

@@ -48,13 +48,13 @@ function SearchForm() {
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
-                                <Input placeholder="shirt,anime" {...field} className=' rounded-full' />
+                                <Input placeholder="Search Your Own" {...field} className=' rounded-full' />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className=' rounded-full'>
+                <Button type="submit" className=' rounded-full h-full'>
                     <Search />
                 </Button>
             </form>

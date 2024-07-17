@@ -34,26 +34,22 @@ import SearchForm from './SearchForm'
 import AdminWrapper from './AdminWrapper'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
 
-import { FaRegNewspaper, FaFire, FaTshirt } from 'react-icons/fa';
+import { FaTshirt } from 'react-icons/fa';
 import { GiHoodie, GiMonclerJacket, GiUnderwearShorts, GiPirateCoat, GiBilledCap } from 'react-icons/gi';
-import { RiShirtFill, RiTShirt2Line, RiRunLine } from 'react-icons/ri';
+import { RiRunLine } from 'react-icons/ri';
 import { PiPants } from "react-icons/pi";
 import { LuShirt } from "react-icons/lu";
+import { motion } from 'framer-motion'
 
 const categoryItems = [
     {
-        name: "New",
-        link: "/shop/new",
-        icon: <FaRegNewspaper className="h-4 w-4" />
+        name: "T-Shirt",
+        link: "/shop/t-Shirt",
+        icon: <FaTshirt className="h-4 w-4" />
     },
     {
-        name: "Best Selling",
-        link: "/shop/best",
-        icon: <FaFire className="h-4 w-4" />
-    },
-    {
-        name: "Trackpants",
-        link: "/shop/trackpants",
+        name: "Trackpant",
+        link: "/shop/trackpant",
         icon: <PiPants className="h-4 w-4" />
     },
     {
@@ -62,17 +58,12 @@ const categoryItems = [
         icon: <GiHoodie className="h-4 w-4" />
     },
     {
-        name: "Sweat-Shirts",
-        link: "/shop/Sweat-Shirts",
+        name: "Sweat Shirt",
+        link: "/shop/Sweat-Shirt",
         icon: <GiMonclerJacket className="h-4 w-4" />
     },
     {
-        name: "Sweat Shirts",
-        link: "/shop/sweat shirts",
-        icon: <GiMonclerJacket className="h-4 w-4" />
-    },
-    {
-        name: "Shirts",
+        name: "Shirt",
         link: "/shop/shirt",
         icon: <LuShirt className="h-4 w-4" />
     },
@@ -80,6 +71,11 @@ const categoryItems = [
         name: "Jogger",
         link: "/shop/jogger",
         icon: <RiRunLine className="h-4 w-4" />
+    },
+    {
+        name: "Cap",
+        link: "/shop/cap",
+        icon: <GiBilledCap className="h-4 w-4" />
     },
     {
         name: "Boxer",
@@ -92,18 +88,8 @@ const categoryItems = [
         icon: <GiPirateCoat className="h-4 w-4" />
     },
     {
-        name: "T-Shirt",
-        link: "/shop/t-Shirt",
-        icon: <FaTshirt className="h-4 w-4" />
-    },
-    {
-        name: "Cap",
-        link: "/shop/cap",
-        icon: <GiBilledCap className="h-4 w-4" />
-    },
-    {
-        name: "Cotton Pants",
-        link: "/shop/cotton pants",
+        name: "Cotton Pant",
+        link: "/shop/cotton pant",
         icon: <PiPants className="h-4 w-4" />
     }
 ];
@@ -125,10 +111,10 @@ function BurgurManu() {
                 </Button>
             </SheetTrigger>
             <SheetContent side="left" className=' flex flex-col justify-between'>
-                <div className=' border-b-2 overflow-auto'>
+                <div className=' border-b-2 overflow-x-hidden'>
                     <div className=' py-2'>
                         <SheetHeader className="mb-2">
-                            <SheetTitle>Serch Cetegory</SheetTitle>
+                            <SheetTitle>Search Category</SheetTitle>
                         </SheetHeader>
                         <SearchForm />
                     </div>
@@ -138,10 +124,14 @@ function BurgurManu() {
                     <div className="flex flex-col gap-2 py-4 pl-4">
                         {categoryItems.map((item, index) => (
                             <Link key={index} href={item.link}>
-                                <div className="flex items-center gap-2">
+                                <motion.div 
+                                    className="flex items-center gap-2"
+                                    whileHover={{ x: 5, color: "#3b82f6" }}
+                                    transition={{ type: "spring", stiffness: 300 }}
+                                >
                                     {item.icon}
                                     <span>{item.name}</span>
-                                </div>
+                                </motion.div>
                             </Link>
                         ))}
                     </div>
@@ -205,7 +195,7 @@ function BurgurManu() {
                                 <SheetClose asChild>
                                     <button className='flex items-center space-x-2 p-0 hover:text-blue-500' onClick={handleSignOut}>
                                         <LogOut className="h-4 w-4" />
-                                        <span>Log out</span>
+                                        <span>Log Out</span>
                                     </button>
                                 </SheetClose>
                             </>

@@ -5,15 +5,15 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 
 const collections = [
     {
-        name: 'T-shirts',
+        name: 'T-Shirt',
         image: '/assets/image/T-shirts.png',
     },
     {
-        name: 'Shirts',
+        name: 'Shirt',
         image: '/assets/image/T-shirts.png',
     },
     {
-        name: 'HALF SLEEVE',
+        name: 'Half Sleeve',
         image: '/assets/image/HALF SLEEVE.png',
     },
 ]
@@ -21,7 +21,7 @@ const collections = [
 function MainNewCollections() {
     return (
         <div className=" py-8">
-            <h2 className="text-2xl font-extrabold">New Collections</h2>
+            <h2 className="text-2xl font-extrabold">New Collection</h2>
             <div className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-1 sm:gap-x-6 md:grid-cols-3">
                 {collections.map((collection) => (
                     <Link

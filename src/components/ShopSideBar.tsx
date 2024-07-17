@@ -20,20 +20,18 @@ import { LuShirt } from "react-icons/lu";
 import { AnimatePresence, motion } from "framer-motion"
 
 const navLinkItems = [
-    { title: "New", href: "/shop/new", icon: <FaRegNewspaper className="h-4 w-4" /> },
-    { title: "Best Selling", href: "/shop/best", icon: <FaFire className="h-4 w-4" /> },
-    { title: "Trackpants", href: "/shop/trackpants", icon: <PiPants className="h-4 w-4" /> },
+    { title: "T-Shirt", href: "/shop/t-Shirt", icon: <FaTshirt className="h-4 w-4" /> },
+    { title: "Trackpant", href: "/shop/trackpant", icon: <PiPants className="h-4 w-4" /> },
     { title: "Hoody", href: "/shop/hoody", icon: <GiHoodie className="h-4 w-4" /> },
-    { title: "Sweat-Shirts", href: "/shop/Sweat-Shirts", icon: <GiMonclerJacket className="h-4 w-4" /> },
+    { title: "Sweat Shirt", href: "/shop/Sweat-Shirt", icon: <GiMonclerJacket className="h-4 w-4" /> },
     { title: "Shirts", href: "/shop/shirt", icon: <LuShirt className="h-4 w-4" /> },
     { title: "Jogger", href: "/shop/jogger", icon: <RiRunLine className="h-4 w-4" /> },
     { title: "Boxer", href: "/shop/boxer", icon: <GiUnderwearShorts className="h-4 w-4" /> },
     { title: "Blazer", href: "/shop/blazer", icon: <GiPirateCoat className="h-4 w-4" /> },
-    { title: "T-Shirt", href: "/shop/t-Shirt", icon: <FaTshirt className="h-4 w-4" /> },
     { title: "Casual Cap", href: "/shop/casual cap", icon: <GiBilledCap className="h-4 w-4" /> },
     { title: "Winter Cap", href: "/shop/winter cap", icon: <GiBilledCap className="h-4 w-4" /> },
-    { title: "Sweat Shirts", href: "/shop/sweat shirts", icon: <GiMonclerJacket className="h-4 w-4" /> },
-    { title: "Cotton Pants", href: "/shop/cotton pants", icon: <PiPants className="h-4 w-4" /> }
+    { title: "Sweat Shirt", href: "/shop/sweat shirt", icon: <GiMonclerJacket className="h-4 w-4" /> },
+    { title: "Cotton Pant", href: "/shop/cotton pant", icon: <PiPants className="h-4 w-4" /> }
 ];
 
 function ShopSideBar() {
@@ -53,10 +51,14 @@ function ShopSideBar() {
 function NavLink({ link, name, isCurrnt, icon }: { link: string, name: string, isCurrnt: Boolean, icon: ReactNode }) {
     return (
         <Link href={link}>
-            <div className={`${isCurrnt ? "text-blue-500" : ""} flex items-center gap-2 rounded-md px-4 py-2 hover:bg-slate-200`}>
+            <motion.div 
+                className={`${isCurrnt ? "text-blue-500" : ""} flex items-center gap-2 rounded-md px-4 py-2 bg-white`}
+                whileHover={{ x: 5, backgroundColor: "#3b82f6",color: "white" }}
+                transition={{ type: "spring", stiffness: 200 }}
+            >
                 {icon}
                 {name}
-            </div>
+            </motion.div>
         </Link>
     )
 }

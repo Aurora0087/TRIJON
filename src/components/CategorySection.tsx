@@ -5,20 +5,20 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 const categories = [
     {
-        name: 'T-shirts',
+        name: 'T-Shirt',
         image: '/assets/image/T-shirts.png',
     },
     {
-        name: 'Shirts',
+        name: 'Shirt',
         image: '/assets/image/T-shirts.png',
     },
     {
-        name: 'HALF SLEEVE',
+        name: 'Half Sleeve',
         image: '/assets/image/HALF SLEEVE.png',
     },
     {
-        name: 'SPUN POLO COLLAR',
-        image: '/assets/image/SPUN POLO COLLAR.png',
+        name: 'Polo',
+        image: '/assets/image/POLO.png',
     },
     {
         name: 'Sale',

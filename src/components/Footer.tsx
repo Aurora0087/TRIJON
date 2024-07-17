@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronDown, Facebook, Instagram, Linkedin, Mail, Phone, RotateCcw, Truck, Twitter, Youtube } from 'lucide-react';
-import { FaWhatsapp } from "react-icons/fa"
+import { FaFacebook, FaWhatsapp } from "react-icons/fa"
 import { RiTwitterXLine } from "react-icons/ri"
 import React, { ReactNode, useState } from 'react'
 
@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/collapsible"
 import { AnimatePresence, motion } from 'framer-motion';
 
+const facebookPageId = '361122133747842'
+const fallbackUrl = 'https://www.facebook.com/trijon.in';
 function Footer() {
     return (
         <footer id='footer' className="bg-gray-900 text-gray-300 py-10">
@@ -43,20 +45,18 @@ function Footer() {
                     </a>
                 </div>
                 {/* Main footer content */}
-                <div className=" hidden md:grid grid-cols-4 gap-8">
+                <div className=" hidden md:grid grid-cols-4 gap-2">
                     <div>
-                        <h3 className="font-bold text-white mb-4">About company</h3>
+                        <h3 className="font-bold text-white mb-4">About TRIJON</h3>
                         <ul className="space-y-2">
                             <li>About Us</li>
                             <li>Contacts</li>
                         </ul>
                     </div>
                     <div>
-                        <h3 className="font-bold text-white mb-4">Social networks</h3>
+                        <h3 className="font-bold text-white mb-4">Social Networks</h3>
                         <div className="flex space-x-4">
-                            <a href="https://www.facebook.com/trijon.in" target="_blank">
-                                <Facebook className="w-6 h-6" />
-                            </a>
+                            <FacebookLink />
                             <a href="https://www.instagram.com/trijon.in" target="_blank">
                                 <Instagram className="w-6 h-6" />
                             </a>
@@ -68,8 +68,8 @@ function Footer() {
                     <div>
                         <h3 className="font-bold text-white mb-4">Category</h3>
                         <ul className="space-y-2">
-                            <li><a href="/shop/trackpants">Summer Sale</a></li>
-                            <li><a href="/shop/trackpants">Winter Sale</a></li>
+                            <li className=' hover:text-blue-500'><a href="/shop/trackpants">Summer Sale</a></li>
+                            <li className=' hover:text-blue-500'><a href="/shop/trackpants">Winter Sale</a></li>
                         </ul>
                     </div>
                     <div>
@@ -81,10 +81,10 @@ function Footer() {
                     </div>
                 </div>
                 <div className='grid gap-4 md:hidden text-white'>
-                    <CollapsibleCard triggerComponent="For buyers">
+                    <CollapsibleCard triggerComponent="Payment Method">
                         <ul className="space-y-2 pb-4">
-                            <li>Payment</li>
-                            <li>Personal data policy</li>
+                            <li>Pay on Delivery</li>
+                            <li>Pay online</li>
                         </ul>
                     </CollapsibleCard>
                     <CollapsibleCard triggerComponent="Category">
@@ -96,9 +96,7 @@ function Footer() {
                     <div>
                         <h3 className="font-bold text-white mb-4">Social networks</h3>
                         <div className="flex space-x-4">
-                            <a href="https://www.facebook.com/trijon.in" target="_blank">
-                                <Facebook className="w-6 h-6" />
-                            </a>
+                            <FacebookLink />
                             <a href="https://www.instagram.com/trijon.in" target="_blank">
                                 <Instagram className="w-6 h-6" />
                             </a>
@@ -111,7 +109,7 @@ function Footer() {
                 {/* Copyright */}
                 <div className="mt-8 text-sm w-full grid place-content-center">
                     <p>&copy; 2024 TRIJON</p>
-                    <p>All rights reserved.</p>
+                    <p>All Rights Reserved.</p>
                 </div>
             </div>
         </footer>
@@ -155,6 +153,26 @@ function CollapsibleCard({ triggerComponent, children }: { triggerComponent: str
         </Collapsible>
     )
 
+}
+
+function FacebookLink() {
+    const handleFacebookLinkClick = (event: { preventDefault: () => void }) => {
+        event.preventDefault();
+        const appUrl = `fb://page/${facebookPageId}`;
+        const timeout = setTimeout(() => {
+            window.location.href = fallbackUrl;
+        }, 500);
+
+        window.location.href = appUrl;
+
+        window.addEventListener('blur', () => clearTimeout(timeout));
+    };
+
+    return (
+        <a href={fallbackUrl} onClick={handleFacebookLinkClick} target="_blank">
+            <FaFacebook className="w-6 h-6" />
+        </a>
+    );
 }
 
 export default Footer

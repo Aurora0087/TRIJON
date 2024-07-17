@@ -22,7 +22,7 @@ function Hero() {
                                 <span className="block text-indigo-600">with TRIJON</span>
                             </h1>
                             <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                                Explore the awesome collection of t shirts, Shirts, Trackpants, Jogger and more from TRIJON.
+                                Explore the awesome collection by TRIJON.
                             </p>
                             <div className="mt-10 sm:mt-12">
                                 <a

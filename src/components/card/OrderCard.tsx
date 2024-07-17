@@ -9,7 +9,7 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, MapPin } from 'lucide-react';
 
 
 interface IProduct {
@@ -48,16 +48,16 @@ function OrderCard({ order }: OrderCardProps) {
 
     const [paymentMethod, setPaymentMethod] = useState("Pay on Delivery")
 
-    
+
 
     useEffect(() => {
         if (order.paymentMethod === "RAZORPAY") {
             setPaymentMethod("Online")
         }
-    },[])
+    }, [])
 
     return (
-        <div className="p-4 bg-white shadow rounded-md mt-4 flex flex-col md:flex-row gap-4">
+        <div className="p-4 bg-white shadow-md rounded-md mt-4 flex flex-col md:flex-row gap-4">
             <div className="w-full md:w-auto">
                 <h3 className="text-lg font-bold mb-2">Order ID: {order._id}</h3>
                 <p className="text-sm mb-1 font-semibold text-slate-500">Full Name: {order.fullName}</p>
@@ -65,41 +65,47 @@ function OrderCard({ order }: OrderCardProps) {
                 <p className="text-sm mb-1 font-semibold text-slate-500">Total Price: ₹{order.totalPrice}</p>
                 <p className="text-sm mb-1 font-semibold text-slate-500">Payment Method: {paymentMethod}</p>
                 <p className="text-sm mb-1 font-semibold text-slate-500">Order Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-                <p className="text-sm mb-1 font-semibold text-slate-500">Address:</p>
-                <p className="text-sm mb-1 text-slate-500">{order.houseNumber}, {order.street}</p>
-                {order.landmark && <p className="text-sm mb-1 text-slate-500">Landmark: {order.landmark}</p>}
-                <p className="text-sm mb-1 text-slate-500">{order.city}, {order.state} - {order.pincode}</p>
+                <div className=' rounded-lg p-2 border-2 border-blue-400 my-2'>
+                    <div>
+                        
+                    </div>
+                    <p className="text-sm mb-1 font-semibold text-slate-500 flex items-center"><MapPin className=' mr-2'/>Address:</p>
+                    <p className="text-sm mb-1 text-slate-500">{order.houseNumber}, {order.street}</p>
+                    {order.landmark && <p className="text-sm mb-1 text-slate-500">Landmark: {order.landmark}</p>}
+                    <p className="text-sm mb-1 text-slate-500">{order.city}, {order.state} - {order.pincode}</p>
+                </div>
+
             </div>
 
             <div className='w-full md:w-auto'>
                 <CollapsibleCard triggerComponent='Products:'>
                     <div className='p-2 flex flex-wrap gap-4'>
                         {order.products.map((product, i) => (
-                            <div key={i} className="flex p-2 gap-2 bg-slate-200 rounded-xl w-full md:w-[350px]">
-                                <a href={`/shop/product/${product._id}`} className='rounded-xl overflow-hidden border-2'>
+                            <div key={i} className="flex p-2 gap-2 bg-slate-200 rounded-xl w-full md:w-fit">
+                                <a href={`/shop/product/${product._id}`} className='rounded-xl overflow-hidden border-2 md:max-w-[350px]'>
                                     <img src={product.imageUrl} alt={product.title} className="w-full h-full object-cover" />
                                 </a>
-                                <div className='flex flex-col p-2 gap-2 rounded-xl bg-white flex-grow'>
+                                <div className='flex flex-col p-2 gap-2 rounded-xl bg-white w-fit'>
                                     <p className="text-xl font-semibold">{product.title}</p>
-                                    <p className="text-sm">
+                                    <p className="text-sm flex gap-2">
                                         <span className='px-2 font-medium text-slate-500'>Color:</span>
                                         {product.color}
                                     </p>
-                                    <p className="text-sm">
+                                    <p className="text-sm flex gap-2">
                                         <span className='px-2 font-medium text-slate-500'>Size:</span>
                                         {product.size}
                                     </p>
-                                    <p className="text-sm">
+                                    <p className="text-sm flex gap-2">
                                         <span className='px-2 font-medium text-slate-500'>Quantity:</span>
                                         {product.quantity}
                                     </p>
-                                    <p className="text-sm">
+                                    <p className="text-sm flex gap-2">
                                         <span className='px-2 font-medium text-slate-500'>Price:</span>
                                         ₹{product.price}
                                     </p>
                                     <p className="text-sm grid gap-2">
                                         <span className='px-2 font-medium text-slate-500'>Delivery Status:</span>
-                                        <Badge className='w-fit'>
+                                        <Badge className='w-fit ml-2'>
                                             {product.deliveryStatus}
                                         </Badge>
                                     </p>
