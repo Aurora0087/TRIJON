@@ -13,7 +13,7 @@ interface ProductCardProps {
     viewColor?: boolean;
 }
 
-function ProductCard({ id, imageSrc, productName, price, sizes, colors, viewColor = true }: ProductCardProps) {
+function ProductCard({ id, imageSrc, productName, price, sizes, colors, viewColor = false }: ProductCardProps) {
     return (
         <div className="max-w-xs rounded-lg overflow-hidden shadow-lg bg-white">
             <Link href={`/shop/product/${id}`}>

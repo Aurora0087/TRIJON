@@ -49,7 +49,7 @@ function Footer() {
                     <div>
                         <h3 className="font-bold text-white mb-4">About TRIJON</h3>
                         <ul className="space-y-2">
-                            <li>About Us</li>
+                            <li><a href="/about">About Us</a></li>
                             <li>Contacts</li>
                         </ul>
                     </div>
