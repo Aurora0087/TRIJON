@@ -16,6 +16,7 @@ import {
     LifeBuoy,
     LogOut,
     Menu,
+    Notebook,
     Plus,
     Settings,
     Shirt,
@@ -123,8 +124,8 @@ function BurgurManu() {
                     </SheetHeader>
                     <div className="flex flex-col gap-2 py-4 pl-4">
                         {categoryItems.map((item, index) => (
-                            <SheetClose asChild>
-                                <Link key={index} href={item.link}>
+                            <SheetClose  key={index} asChild>
+                                <Link href={item.link}>
                                     <motion.div
                                         className="flex items-center gap-2"
                                         whileHover={{ x: 5, color: "#3b82f6" }}
@@ -152,6 +153,14 @@ function BurgurManu() {
                                         <Link href="/dashbord/upload" className='flex items-center space-x-2 text-blue-400 hover:text-blue-600'>
                                             <Plus className="h-4 w-4" />
                                             <span>Add Product</span>
+                                        </Link>
+                                    </SheetClose>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <SheetClose asChild>
+                                        <Link href="/dashbord/products" className='flex items-center space-x-2'>
+                                            <Notebook className="h-4 w-4" />
+                                            <span>View Products</span>
                                         </Link>
                                     </SheetClose>
                                 </DropdownMenuItem>

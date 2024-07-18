@@ -392,6 +392,14 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
                             <span>{`₹ ${goodsCost}`}</span>
                         </div>
                         <div className="flex justify-between">
+                            <span>Packaging</span>
+                            <span>{`₹ ${goodsCost}`}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Tax</span>
+                            <span>{`₹ ${goodsCost}`}</span>
+                        </div>
+                        <div className="flex justify-between">
                             <span>Delivery</span>
                             <span>{`₹ ${deliveryCost}`}</span>
                         </div>
@@ -400,7 +408,7 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
                             <span>{`₹ ${discont}`}</span>
                         </div>
                         <div className="flex justify-between font-semibold mt-2">
-                            <span>Total</span>
+                            <span>Order Summary</span>
                             <span>{`₹ ${total}`}</span>
                         </div>
                     </div>

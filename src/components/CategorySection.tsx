@@ -10,7 +10,7 @@ const categories = [
     },
     {
         name: 'Shirt',
-        image: '/assets/image/T-shirts.png',
+        image: '/assets/image/shirts.png',
     },
     {
         name: 'Jogger',
@@ -19,10 +19,6 @@ const categories = [
     {
         name: 'Polo',
         image: '/assets/image/POLO.png',
-    },
-    {
-        name: 'Sale',
-        image: '/assets/image/sale.png',
     },
 ]
 
@@ -34,7 +30,7 @@ const CategorySection = () => {
                 {categories.map((category) => (
                     <Link
                         href={`/shop/${category.name}`}
-                        key={category.name} className="text-center">
+                        key={category.name} className="text-center hover:text-blue-500">
                         <div className="relative w-24 h-24 mx-auto overflow-hidden rounded-full">
                         <Avatar className=' border-2 hover:border-blue-400 w-full h-full'>
                             <AvatarImage src={`/j${category.image}` } className=' w-full h-full object-cover'/>

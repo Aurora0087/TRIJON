@@ -68,9 +68,8 @@ export async function addToCart({
 }
 
 export async function getCartItemsByEmail({ email }: { email: string }) {
-
     try {
-        await dbConnect()
+        await dbConnect();
 
         // Find the user by email
         const user = await UserModel.findOne({ email }).exec();
@@ -80,11 +79,11 @@ export async function getCartItemsByEmail({ email }: { email: string }) {
 
         // Find the cart for the user
         const cart = await Cart.findOne({ userId: user._id })
-            .populate('products.productId', 'title imageList')
+            .populate('products.productId', 'title imageList price')
             .exec();
 
         if (!cart) {
-            return { products: [] };
+            return { products: [], costOfGoods: 0, tax: 0, packaging: 12, discount: 0, orderSummary: 12 };
         }
 
         // Generate signed URLs for imageList
@@ -96,15 +95,29 @@ export async function getCartItemsByEmail({ email }: { email: string }) {
                 );
             }
             return productWithUrls;
-        }))
+        }));
 
-        return JSON.parse(JSON.stringify({ products: productsWithImageUrls }))
+        // Calculate cost of goods
+        const costOfGoods = cart.products.reduce((sum: any, product: { price: any; }) => {
+            return sum + product.price;
+        }, 0);
+
+        // Calculate tax
+        const tax = costOfGoods > 1000 ? costOfGoods * 0.12 : costOfGoods * 0.05;
+
+        // Packaging and discount
+        const packaging = 12;
+        const discount = 0;
+
+        // Order summary
+        const orderSummary = costOfGoods + tax + packaging - discount;
+
+        return JSON.parse(JSON.stringify({ products: productsWithImageUrls, costOfGoods, tax, packaging, discount, orderSummary }));
     } catch (error) {
         console.error("Error retrieving cart items: ", error);
         throw new Error("Error retrieving cart items");
     }
 }
-
 export async function deleteCartItems({itemId}: {itemId:string}) {
     
     try {

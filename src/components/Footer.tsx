@@ -81,18 +81,6 @@ function Footer() {
                     </div>
                 </div>
                 <div className='grid gap-4 md:hidden text-white'>
-                    <CollapsibleCard triggerComponent="Payment Method">
-                        <ul className="space-y-2 pb-4">
-                            <li>Pay on Delivery</li>
-                            <li>Pay online</li>
-                        </ul>
-                    </CollapsibleCard>
-                    <CollapsibleCard triggerComponent="Category">
-                        <ul className="space-y-2 pb-4">
-                            <li><a href="/shop/trackpants">Summer Sale</a></li>
-                            <li><a href="/shop/trackpants">Winter Sale</a></li>
-                        </ul>
-                    </CollapsibleCard>
                     <div>
                         <h3 className="font-bold text-white mb-4">Social networks</h3>
                         <div className="flex space-x-4">
@@ -105,11 +93,36 @@ function Footer() {
                             </a>
                         </div>
                     </div>
+                    <CollapsibleCard triggerComponent="About TRIJON">
+                        <ul className="space-y-2 pb-4">
+                            <li><a href="/about" className=' hover:text-blue-400'>About Us</a></li>
+                            <li><a href="/contacts" className=' hover:text-green-400'>Contacts</a></li>
+                        </ul>
+                    </CollapsibleCard>
+                    <CollapsibleCard triggerComponent="Category">
+                        <ul className="space-y-2 pb-4">
+                            <li className=' hover:text-blue-500'><a href="/shop/trackpants">Summer Sale</a></li>
+                            <li className=' hover:text-blue-500'><a href="/shop/trackpants">Winter Sale</a></li>
+                        </ul>
+                    </CollapsibleCard>
+                    <CollapsibleCard triggerComponent="Payment Method">
+                        <ul className="space-y-2 pb-4">
+                            <li>Pay on Delivery</li>
+                            <li>Pay online</li>
+                        </ul>
+                    </CollapsibleCard>
+                    <CollapsibleCard triggerComponent="Category">
+                        <ul className="space-y-2 pb-4">
+                            <li><a href="/shop/trackpants">Summer Sale</a></li>
+                            <li><a href="/shop/trackpants">Winter Sale</a></li>
+                        </ul>
+                    </CollapsibleCard>
+
                 </div>
                 {/* Copyright */}
-                <div className="mt-8 text-sm w-full grid place-content-center">
-                    <p>&copy; 2024 TRIJON</p>
-                    <p>All Rights Reserved.</p>
+                <div className="mt-8 text-sm w-full flex flex-col md:flex-row justify-center items-center gap-x-2">
+                    <p>Copyright © TRIJON.</p>
+                    <p> All Rights Reserved.</p>
                 </div>
             </div>
         </footer>

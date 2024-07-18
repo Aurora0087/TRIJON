@@ -12,7 +12,7 @@ import {
 import { ChevronDown } from 'lucide-react'
 
 import { FaRegNewspaper, FaFire, FaTshirt } from 'react-icons/fa';
-import { GiHoodie, GiMonclerJacket, GiUnderwearShorts, GiPirateCoat, GiBilledCap } from 'react-icons/gi';
+import { GiHoodie, GiMonclerJacket, GiUnderwearShorts, GiPirateCoat, GiBilledCap, GiWinterHat } from 'react-icons/gi';
 import { RiRunLine } from 'react-icons/ri';
 import { PiPants } from "react-icons/pi";
 import { LuShirt } from "react-icons/lu";
@@ -23,14 +23,13 @@ const navLinkItems = [
     { title: "T-Shirt", href: "/shop/t-Shirt", icon: <FaTshirt className="h-4 w-4" /> },
     { title: "Trackpant", href: "/shop/trackpant", icon: <PiPants className="h-4 w-4" /> },
     { title: "Hoody", href: "/shop/hoody", icon: <GiHoodie className="h-4 w-4" /> },
-    { title: "Sweat Shirt", href: "/shop/Sweat-Shirt", icon: <GiMonclerJacket className="h-4 w-4" /> },
-    { title: "Shirts", href: "/shop/shirt", icon: <LuShirt className="h-4 w-4" /> },
+    { title: "Sweat Shirt", href: "/shop/sweat shirt", icon: <GiMonclerJacket className="h-4 w-4" /> },
+    { title: "Shirt", href: "/shop/shirt", icon: <LuShirt className="h-4 w-4" /> },
     { title: "Jogger", href: "/shop/jogger", icon: <RiRunLine className="h-4 w-4" /> },
     { title: "Boxer", href: "/shop/boxer", icon: <GiUnderwearShorts className="h-4 w-4" /> },
     { title: "Blazer", href: "/shop/blazer", icon: <GiPirateCoat className="h-4 w-4" /> },
     { title: "Casual Cap", href: "/shop/casual cap", icon: <GiBilledCap className="h-4 w-4" /> },
-    { title: "Winter Cap", href: "/shop/winter cap", icon: <GiBilledCap className="h-4 w-4" /> },
-    { title: "Sweat Shirt", href: "/shop/sweat shirt", icon: <GiMonclerJacket className="h-4 w-4" /> },
+    { title: "Winter Cap", href: "/shop/winter cap", icon: <GiWinterHat className="h-4 w-4" /> },
     { title: "Cotton Pant", href: "/shop/cotton pant", icon: <PiPants className="h-4 w-4" /> }
 ];
 

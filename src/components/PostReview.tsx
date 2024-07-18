@@ -64,7 +64,7 @@ function PostReview({ productId }: { productId: string }) {
             })
             return
         }
-        await addReview({ userEmail: user?.email as string, productId:productId, rating: values.rating, comment: values.text })
+        await addReview({ userEmail: user?.email as string, productId: productId, rating: values.rating, comment: values.text })
             .then((res) => {
                 toast({
                     description: "Your Review is posted, thankes for Your feedback.",
@@ -76,7 +76,7 @@ function PostReview({ productId }: { productId: string }) {
                     variant: "destructive",
                     description: `${String(e)}`,
                 })
-        })
+            })
     }
 
 
@@ -86,7 +86,7 @@ function PostReview({ productId }: { productId: string }) {
             {user ? (
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormField
+                        <FormField
                             control={form.control}
                             name="rating"
                             render={({ field }) => (
@@ -114,7 +114,6 @@ function PostReview({ productId }: { productId: string }) {
                                 </FormItem>
                             )}
                         />
-                        
                         <Button
                             disabled={form.formState.isSubmitting || form.getValues().text === ""}
                             type="submit"
@@ -125,7 +124,9 @@ function PostReview({ productId }: { productId: string }) {
                     </form>
                 </Form>
             ) : (
-                <Button>Login to Write Review</Button>
+                <a href="/">
+                    <Button className=' rounded-full'>Login to Write Review</Button>
+                </a>
             )}
         </div>
     )

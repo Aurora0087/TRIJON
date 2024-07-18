@@ -71,7 +71,7 @@ function ProductDetailspage({ params: { id } }: SearchParamProps) {
                         images={product.imageList}
                         varient={product.varient} />
                     <div>
-                        <SemilarProduct category={product.category[0]} />
+                        <SemilarProduct category={product.category[0]} productId={product._id} />
                     </div>
                     <div className='py-8'>
                         <div className='w-full'>

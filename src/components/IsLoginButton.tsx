@@ -74,7 +74,7 @@ function IsLoginButton() {
                     </DropdownMenuContent>
                 </DropdownMenu>
             ) : (
-                <Button onClick={handleGoogleSignIn} className=' rounded-full'>
+                <Button variant={'ghost'} onClick={handleGoogleSignIn} className=' rounded-full'>
                         Login
                 </Button>
             )}

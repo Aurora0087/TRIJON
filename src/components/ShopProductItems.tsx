@@ -76,7 +76,7 @@ function ShopProductItems({ category }: { category?: string[] }) {
                 <span className='text-sm text-slate-600'>Filter</span>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="link">
+                        <Button className=' text-black hover:text-slate-600' variant="link">
                             Price <ChevronDown className="ml-2" />
                         </Button>
                     </DropdownMenuTrigger>
@@ -89,7 +89,7 @@ function ShopProductItems({ category }: { category?: string[] }) {
                 </DropdownMenu>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="link">
+                        <Button className=' text-black hover:text-slate-600' variant="link">
                             Size <ChevronDown className="ml-2" />
                         </Button>
                     </DropdownMenuTrigger>

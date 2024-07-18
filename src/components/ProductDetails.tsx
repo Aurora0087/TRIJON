@@ -1,8 +1,8 @@
 "use client"
 
 import { motion } from 'framer-motion';
-import { Heart, ShoppingCart } from 'lucide-react'
-import React, { use, useEffect, useState } from 'react'
+import { Heart, Share2, ShoppingCart } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 import { Button } from './ui/button';
 
 import {
@@ -13,16 +13,26 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel"
-import Image from 'next/image';
-import { useRouter } from 'next/router';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+
 import { getSession } from 'next-auth/react';
 import { User } from 'next-auth';
 import { addToCart } from '@/database/action/cart.action';
 import { Toaster } from './ui/toaster';
 import { useToast } from './ui/use-toast';
 import { addToWishList } from '@/database/action/product.action';
+import ShareButtons from './ShareButtons';
 
-function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating, images, varient ,totalReviews }: { id: string, title: string, description: string,totalReviews:number, buyingPrice: number, mainPrice: number, rating: number, images: string[], varient: { size: string, colors: { name: string, value: string, stockes: number }[] }[] }) {
+function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating, images, varient, totalReviews }: { id: string, title: string, description: string, totalReviews: number, buyingPrice: number, mainPrice: number, rating: number, images: string[], varient: { size: string, colors: { name: string, value: string, stockes: number }[] }[] }) {
 
   const [variantIndex, setVarientIndex] = useState(0)
   const [sizeTYpe, setSizeType] = useState(varient[0].size)
@@ -66,7 +76,7 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
       return
     }
     try {
-      
+
       await addToWishList({ email: String(user.email), productId: id })
       toast({
         description: "Added to wishlist.",
@@ -88,9 +98,23 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
 
         {/* Product Details */}
         <div className="flex-1">
-          <h1 className="text-2xl font-bold mb-2">
-            {title}
-          </h1>
+          <div className=' flex items-center justify-between'>
+            <h1 className="text-2xl font-bold mb-2 w-fit">
+              {title}
+            </h1>
+            <div className=' pr-4'>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Share2 />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Share on</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <ShareButtons/>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
           <div className="flex items-center mb-2">
             <StarRating rating={rating} />
             <span className="ml-2 text-sm">{totalReviews}</span>
@@ -100,9 +124,8 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
             {buyingPrice !== mainPrice && (
               <>
                 <del className=" text-red-500 mb-4 text-center py-2">{`₹ ${mainPrice}`}</del>
-                <span className=' bg-red-400 rounded-full px-4 py-2 h-fit font-semibold text-white'>{`${(((mainPrice-buyingPrice)/mainPrice)*100).toFixed(2)}% OFF`}</span>
+                <span className=' bg-red-400 rounded-full px-4 py-2 h-fit font-semibold text-white'>{`${(((mainPrice - buyingPrice) / mainPrice) * 100).toFixed(2)}% OFF`}</span>
               </>
-              
             )}
           </div>
           <div className="mb-4">
@@ -111,12 +134,12 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
               {
                 varient[variantIndex].colors.map((v, i) => {
                   return (
-                    <div key={i} className=' flex flex-col gap-2 capitalize'>
-                      <span className={`${colorIndex === i && "text-blue-500 font-semibold"} text-sm`}>{v.name}</span>
+                    <div key={i} className=' flex flex-col gap-2 capitalize justify-center items-center'>
                       <Button
                         onClick={() => setColorIndex(i)}
                         style={{ backgroundColor: `${v.value}` }}
                         className={`w-8 h-8 p-1 border-2 rounded-full ${colorIndex === i && "border-[#519fff]"} shadow`}></Button>
+                      <span className={`${colorIndex === i && "text-blue-500 font-semibold"} text-sm`}>{v.name}</span>
                     </div>
                   )
                 })
@@ -138,10 +161,14 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
               }
             </div>
           </div>
-          <div className="mb-4">
-            <label className="block mb-1">Available Stock:</label>
-            <span className="text-xl font-semibold mb-4 py-2">{avalableStock}</span>
-          </div>
+          {
+            avalableStock === 0 && (
+              <div className="mb-4">
+                <span className="text-xl font-semibold mb-4 py-2 text-red-400">Out Of Stock</span>
+              </div>
+            )
+          }
+
           <div className="flex items-center mb-4">
             <label className="block mb-1">Quantity:</label>
             <div className="flex items-center ml-2">
@@ -164,7 +191,7 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
           </div>
           <div className=''>
             <Button className=' w-full mb-4 rounded-full' onClick={handleAddToWishList}>
-              <Heart className=' mr-2'/>
+              <Heart className=' mr-2' />
               Add to WishList
             </Button>
           </div>
@@ -212,7 +239,7 @@ export function StarRating({ rating }: { rating: number }) {
 }
 
 
-function ImageShower({ images }: { images: string[] }) {
+export function ImageShower({ images }: { images: string[] }) {
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
   const [count, setCount] = useState(0)
@@ -270,20 +297,20 @@ function AddtoCart({
   productId, quantity, size, color
 }: {
   productId: string, quantity: string, size: string, color: string
-  }) {
-  
-    const [user, setUser] = useState<User | null | undefined>(null)
+}) {
+
+  const [user, setUser] = useState<User | null | undefined>(null)
 
   const { toast } = useToast()
 
-    useEffect(() => {
-        fatchUser()
-    }, [])
+  useEffect(() => {
+    fatchUser()
+  }, [])
 
-    async function fatchUser() {
-        await getSession().then((res) => {
-            setUser(res?.user)
-        })
+  async function fatchUser() {
+    await getSession().then((res) => {
+      setUser(res?.user)
+    })
   }
 
   async function addIntoCart() {
@@ -294,7 +321,7 @@ function AddtoCart({
       return
     }
     await addToCart({ email: user?.email as string, productId, quantity, size, color }).then((res) => {
-      
+
       toast({
         description: "Added to cart.",
       })
@@ -305,12 +332,12 @@ function AddtoCart({
       })
     })
   }
-  
+
   return (
     <Button disabled={user === null || user === undefined || quantity === "0"} className="w-full px-4 py-2 rounded-full flex items-center justify-center gap-2" onClick={addIntoCart}>
       <Toaster />
       <ShoppingCart />
-      {user === null || user === undefined ? "Login to Add to Cart":" Add to cart"}
+      {user === null || user === undefined ? "Login to Add to Cart" : " Add to cart"}
     </Button>
   )
 }

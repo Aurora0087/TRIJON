@@ -1,8 +1,9 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@tailwind components;
+@tailwind utilities;
 
-  
+@import url(https://db.onlinewebfonts.com/c/86992d9cf72f993ae8cd621e3714c1e8?family=Yu+Gothic);
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -11,7 +12,7 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
+    --primary: 60 75% 70%;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -50,11 +51,16 @@
   }
 }
 
-  @layer base {
-    * {
-      @apply border-border;
-    }
-    body {
-      @apply bg-background text-foreground;
-    }
+@layer base {
+  * {
+    @apply border-border;
   }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+#logo {
+  font-family: "Yu Gothic";
+}

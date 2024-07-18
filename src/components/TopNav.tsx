@@ -1,10 +1,9 @@
 import React from 'react'
 import WidthWrraper from './WidthWrraper'
-import Image from 'next/image'
 import BurgurManu from './BurgurManu'
-import Link from 'next/link'
 import IsLoginButton from './IsLoginButton'
 import { Heart, ShoppingCart } from 'lucide-react'
+import SearchForm from './SearchForm'
 
 function TopNav() {
     return (
@@ -12,26 +11,31 @@ function TopNav() {
             <div className=' flex justify-between'>
                 <div className=' flex gap-12 justify-center items-center'>
                     <div>
-                        <BurgurManu/>
+                        <BurgurManu />
                     </div>
-                    <div className=' aspect-square w-10 h-10 overflow-hidden'>
-                        <Link href={"/"}>
-                            <img src={'/assets/logo/BLACK.png'} alt='TRIJON' width={500} height={500}/>
-                        </Link>
+                    <div className=' w-fit h-10 overflow-hidden'>
+                        <a href="/" className='flex items-center gap-1 justify-center hover:text-blue-500'>
+                            <div className=' w-10 h-10 grid place-content-center'>
+                                <img src={'/assets/logo/BLACK.png'} alt='TRIJON' className='' />
+                            </div>
+                            <span id='logo' className=' w-full h-full grid place-content-center mt-[6px]'>TRIJON</span>
+                        </a>
                     </div>
                 </div>
                 <div className=' hidden md:flex gap-6 justify-center items-center capitalize'>
-                    <Link href='/shop/new' className=' hover:text-blue-500'>New</Link>
-                    <Link href='/shop/best' className=' hover:text-blue-500'>Best selling</Link>
+                    <a href='/shop/new' className=' hover:text-blue-500'>New</a>
+                    <a href='/shop/best' className=' hover:text-blue-500 line-clamp-1'>Best selling</a>
+                    <a href='/shop/eimited edition' className=' hover:text-blue-500 line-clamp-1'>Limited Edition</a>
+                    <SearchForm/>
                 </div>
                 <div className='flex gap-6 justify-center items-center capitalize'>
                     <IsLoginButton />
-                    <Link href='/wishList' className=' hover:text-blue-500'>
-                    <Heart/>
-                    </Link>
-                    <Link href='/cart' className=' hover:text-blue-500'>
-                    <ShoppingCart/>
-                    </Link>
+                    <a href='/wishList' className=' hover:text-blue-500'>
+                        <Heart />
+                    </a>
+                    <a href='/cart' className=' hover:text-blue-500'>
+                        <ShoppingCart />
+                    </a>
                 </div>
             </div>
         </WidthWrraper>

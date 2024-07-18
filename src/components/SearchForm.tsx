@@ -54,7 +54,7 @@ function SearchForm() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className=' rounded-full h-full'>
+                <Button variant={'ghost'} type="submit" className=' rounded-full h-full'>
                     <Search />
                 </Button>
             </form>
