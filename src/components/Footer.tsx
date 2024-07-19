@@ -14,9 +14,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 const facebookPageId = '361122133747842'
 const fallbackUrl = 'https://www.facebook.com/share/Geqdk99gyv4AaEW2/?mibextid=LQQJ4d';
+
 function Footer() {
     return (
-        <footer id='footer' className="bg-gray-900 text-gray-300 py-10">
+        <footer id='footer' className="bg-gray-900 text-gray-300 py-10 pb-5">
             <div className="container mx-auto px-4">
                 <div className="grid  gap-2 md:grid-cols-4 mb-8">
                     <div className="flex items-center">
@@ -113,7 +114,7 @@ function Footer() {
                     </CollapsibleCard>
                 </div>
                 {/* Copyright */}
-                <div className="mt-8 text-sm w-full flex flex-col md:flex-row justify-center items-center gap-x-2">
+                <div className="mt-8 text-xs w-full flex flex-col md:flex-row justify-center items-center gap-x-2">
                     <p>Copyright © TRIJON.</p>
                     <p> All Rights Reserved.</p>
                 </div>

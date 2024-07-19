@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils';
 import { Star } from 'lucide-react';
 import React, { useState } from 'react'
 
-function ReviewRating({ totalStars, onRatingChange }: { totalStars: number, onRatingChange: (index:number) => void }) {
-    const [rating, setRating] = useState<number>(1);
+function ReviewRating({ totalStars, onRatingChange,defaultRating=1 }: { totalStars: number,defaultRating?:number, onRatingChange: (index:number) => void }) {
+    const [rating, setRating] = useState<number>(defaultRating);
     const [hoverRating, setHoverRating] = useState<number>(0);
 
     const handleClick = (index: number) => {

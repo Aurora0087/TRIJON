@@ -48,10 +48,6 @@ export async function addReview({ userEmail, productId, rating, comment }: { use
     }
 }
 
-export interface IReviewWithUsername extends Omit<IReview, 'userId'> {
-    username: string;
-}
-
 export async function isAuthor({ reviewId, userId }: { reviewId: string, userId: string }) {
     try {
         // Fetch the review
@@ -69,17 +65,20 @@ export async function isAuthor({ reviewId, userId }: { reviewId: string, userId:
     }
 }
 
-export async function getReviews({ productId }: { productId: string }) {
+export interface IReviewWithUsername extends Omit<IReview, 'userId'> {
+    username: string;
+    isAuthor: boolean;
+}
 
+export async function getReviews({ productId, userEmail }: { productId: string, userEmail: string }) {
     try {
-        // Fetch reviews from the database based on productId with pagination
+        // Fetch reviews from the database based on productId
         const reviews: IReview[] = await Review.find({ productId })
-            .sort({ createdAt: -1 }) // Sort by newest first
+            .sort({ createdAt: -1 })
             .exec();
 
         // Get the total number of reviews for the product
         const totalReviews = await Review.countDocuments({ productId });
-
 
         // Aggregate the number of reviews for each rating
         const ratingCounts: { _id: number; count: number }[] = await Review.aggregate([
@@ -100,12 +99,14 @@ export async function getReviews({ productId }: { productId: string }) {
             ratingPercentages[rating._id as 1 | 2 | 3 | 4 | 5] = (rating.count / totalReviews) * 100;
         });
 
-        // Fetch usernames for each review
+        // Fetch usernames and check if the current user is the author
         const reviewsWithUsernames: Promise<IReviewWithUsername>[] = reviews.map(async (review) => {
             const user: IUser | null = await UserModel.findById(review.userId);
+            const currentUser: IUser | null = await UserModel.findOne({ email: userEmail });
             return {
                 ...(review.toObject()),
-                username: user ? user.name : 'Unknown User' // Provide a default if user not found
+                username: user ? user.name : 'Unknown User',
+                isAuthor: user && currentUser ? user._id.toString() === currentUser._id.toString() : false,
             };
         });
 
@@ -117,27 +118,28 @@ export async function getReviews({ productId }: { productId: string }) {
             reviews: resolvedReviews,
             totalReviews,
             ratingPercentages,
-        }))
+        }));
     } catch (error) {
         console.error('Error retrieving reviews:', error);
         throw new Error('Error retrieving reviews. Please try again later.');
     }
 }
 
+
 export async function editReview({
     reviewId,
     comment,
     rating,
-    editerUserId,
+    editerUserEmail,
 }: {
     reviewId: string;
     comment: string;
     rating: number;
-    editerUserId: string;
+    editerUserEmail: string;
 }) {
     try {
         // Find the user by email
-        const user = await UserModel.findById(editerUserId).exec();
+        const user = await UserModel.findOne({ email: editerUserEmail });
         if (!user) throw new Error('User not found');
 
         // Fetch the review

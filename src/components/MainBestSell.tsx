@@ -81,7 +81,7 @@ function MainBestSell() {
             </div>
             <div className=' w-full grid place-content-center'>
                 <Link href="/shop/best">
-                    <Button className=' rounded-full'>
+                    <Button id='yu-gothic' className=' rounded-full'>
                         View All
                     </Button>
                 </Link>

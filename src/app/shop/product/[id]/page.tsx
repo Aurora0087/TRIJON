@@ -28,21 +28,24 @@ function ProductDetailspage({ params: { id } }: SearchParamProps) {
         5: 0,
     });
 
-    const [currentUserID,setCurrentUserID] = useState<null| undefined | string>("")
+    const [currentUserEmail,setCurrentUserEmail] = useState<null| undefined | string>("")
 
     async function getProduct() {
         try {
             const res = await getProductsById({ id });
             setProduct(res);
-            fetchReviews()
+            
         } catch (error) {
             console.error('Error fetching product:', error);
         }
     }
 
     async function fetchReviews() {
+        if (currentUserEmail === null || currentUserEmail === undefined) {
+            setCurrentUserEmail("")
+        }
         try {
-            const { reviews, ratingPercentages, totalReviews } = await getReviews({ productId:id });
+            const { reviews, ratingPercentages, totalReviews } = await getReviews({ productId:id,userEmail:String(currentUserEmail) });
             setReviews(reviews);
             setTotalReviews(totalReviews)
             setRatingPercentages(ratingPercentages);
@@ -53,7 +56,10 @@ function ProductDetailspage({ params: { id } }: SearchParamProps) {
 
     async function fatchUser() {
         await getSession().then((res) => {
-            setCurrentUserID(res?.user.id)
+            setCurrentUserEmail(res?.user.email)
+        })
+            .catch((e) => {
+                setCurrentUserEmail("")
         })
     }
 
@@ -61,6 +67,10 @@ function ProductDetailspage({ params: { id } }: SearchParamProps) {
         getProduct()
         fatchUser()
     }, [id, currentPage]);
+
+    useEffect(() => {
+        fetchReviews()
+    },[currentUserEmail])
 
     return (
         <div className='py-8 px-3 w-full bg-slate-50'>
@@ -95,7 +105,8 @@ function ProductDetailspage({ params: { id } }: SearchParamProps) {
                                     date={new Date(review.createdAt)}
                                     rating={review.rating}
                                     comment={review.comment}
-                                    currentUserName={String(currentUserID)}
+                                    currentUserEmail={String(currentUserEmail)}
+                                    isAuther={review.isAuthor}
                                     afterEdit={fetchReviews}
                                 />
                             ))}

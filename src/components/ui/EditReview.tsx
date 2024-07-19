@@ -34,6 +34,7 @@ import { Textarea } from './textarea'
 import ReviewRating from '../ReviewRating'
 import { Toaster } from './toaster'
 import { Edit } from 'lucide-react'
+import { editReview } from '@/database/action/review.action'
 
 const formSchema = z.object({
     text: z.string().min(2, "Review must be at least 2 characters").max(500, "Review must be at most 500 characters"),
@@ -41,6 +42,7 @@ const formSchema = z.object({
 })
 
 function EditReview({rating,comment,currentUserEmail,reviewId, afterEdit}: {rating:number,comment:string,currentUserEmail:string,reviewId:string, afterEdit: ()=>void}) {
+
     const { toast } = useToast()
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -52,7 +54,24 @@ function EditReview({rating,comment,currentUserEmail,reviewId, afterEdit}: {rati
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-
+        try {
+            await editReview({ 
+                reviewId, 
+                comment: values.text, 
+                rating: values.rating, 
+                editerUserEmail: currentUserEmail 
+            });
+            toast({
+                title: "Success",
+                description: "Your review has been updated",
+            });
+            afterEdit();
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: `${String(error)}`,
+            });
+        }
     }
 
     return (
@@ -75,7 +94,7 @@ function EditReview({rating,comment,currentUserEmail,reviewId, afterEdit}: {rati
                                                 <FormLabel>Overall Rating</FormLabel>
                                                 <FormControl>
                                                     <>
-                                                        <ReviewRating totalStars={5} onRatingChange={field.onChange} />
+                                                        <ReviewRating defaultRating={rating} totalStars={5} onRatingChange={field.onChange} />
                                                     </>
                                                 </FormControl>
                                                 <FormMessage />
@@ -110,12 +129,10 @@ function EditReview({rating,comment,currentUserEmail,reviewId, afterEdit}: {rati
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Continue</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
             <Toaster />
-
         </div>
     )
 }

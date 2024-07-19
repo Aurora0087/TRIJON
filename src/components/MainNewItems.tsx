@@ -56,7 +56,7 @@ function MainNewItems() {
             </div>
             <div className=' w-full grid place-content-center py-8'>
                 <Link href="/shop/new">
-                    <Button className=' rounded-full'>
+                    <Button id='yu-gothic' className=' rounded-full'>
                         View All
                     </Button>
                 </Link>

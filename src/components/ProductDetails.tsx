@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from 'framer-motion';
+import { GoLink } from "react-icons/go";
 import { Heart, Share2, ShoppingCart } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Button } from './ui/button';
@@ -105,7 +105,7 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
             <div className=' pr-4'>
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  <Share2 />
+                  <GoLink className=" w-6 h-6 hover:text-blue-500"/>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuLabel>Share on</DropdownMenuLabel>
@@ -117,7 +117,7 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
           </div>
           <div className="flex items-center mb-2">
             <StarRating rating={rating} />
-            <span className="ml-2 text-sm">{totalReviews}</span>
+            <span className="ml-2 text-sm">{`${totalReviews} Reviews`}</span>
           </div>
           <div className=' flex gap-4'>
             <p className="text-xl font-semibold mb-4 py-2">{`₹ ${buyingPrice}`}</p>
@@ -190,7 +190,7 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
             </div>
           </div>
           <div className=' w-fullt'>
-            <Button className=' w-full md:w-[50%] mb-4 rounded-full hover:text-slate-600' onClick={handleAddToWishList}>
+            <Button className=' w-full md:w-[50%] mb-4 rounded-full' onClick={handleAddToWishList}>
               <Heart className=' mr-2' />
               Add to WishList
             </Button>
@@ -334,7 +334,7 @@ function AddtoCart({
   }
 
   return (
-    <Button disabled={user === null || user === undefined || quantity === "0"} className=" w-full md:w-[50%] hover:text-slate-600 rounded-full flex items-center justify-center gap-2" onClick={addIntoCart}>
+    <Button disabled={user === null || user === undefined || quantity === "0"} className=" w-full md:w-[50%] rounded-full flex items-center justify-center gap-2" onClick={addIntoCart}>
       <Toaster />
       <ShoppingCart className=''/>
       {user === null || user === undefined ? "Login to Add to Cart" : " Add to cart"}

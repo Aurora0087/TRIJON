@@ -28,7 +28,7 @@ function Hero() {
                                 <a
                                     href="/shop"
                             >
-                                <Button className=' rounded-full'>
+                                <Button id='yu-gothic' className=' rounded-full'>
                                     Shop Now
                                 </Button>
                                 </a>

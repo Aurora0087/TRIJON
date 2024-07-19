@@ -8,34 +8,26 @@ import { motion } from 'framer-motion';
 import { Instagram, Mail } from 'lucide-react';
 import React from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
-import { RiTwitterLine, RiTwitterXLine } from 'react-icons/ri';
+import { RiTwitterXLine } from 'react-icons/ri';
 
 const ContactsPage: React.FC = () => {
     return (
-        <WidthWrraper className='py-8 min-h-svh flex flex-col gap-4 bg-slate-100'>
-            <div className='w-fit'>
-                <BackButton />
-            </div>
-            <div className='flex flex-col gap-2 text-xl'>
-                <div className='overflow-hidden relative w-fit'>
+        <WidthWrraper className='py-8 h-fit flex flex-col gap-4 bg-slate-50'>
+            <div className='flex flex-col gap-2 text-xl shadow-lg h-svh rounded-lg border p-4 mt-8'>
+                <div className='overflow-hidden relative w-fit pt-12'>
                     <motion.h1
                         initial={{ x: '-100%' }}
                         animate={{ x: 0 }}
                         transition={{ type: "spring", stiffness: 500 }}
-                        className='font-semibold text-5xl mb-8 text-blue-500'>Contact Us :</motion.h1>
+                        className='font-semibold text-5xl mb-8 text-blue-500'>Contact Us </motion.h1>
                 </div>
                 <div className='p-10 flex flex-col gap-10'>
                     <div className=' overflow-hidden text-slate-500'>
-                        <TextRevealOnScroll
-                            text="For any queries, feel free to contact us at info@trijoncreation.in or fill out the form below."
-                            fontSize="48px"
-                        />
+                        <p>For any queries, feel free to contact us at info@trijoncreation.in or fill out the form below.</p>
                     </div>
                     <div className=' grid md:grid-cols-2 gap-4 md:gap-y-8 p-4'>
                         <div className=' overflow-hidden'>
                             <motion.a
-                                initial={{ x: '-100%' }}
-                                animate={{ x: 0 }}
                                 transition={{ type: "spring", stiffness: 500 }}
                                 href="https://wa.me/918942974275"
                                 target="_blank"
@@ -48,9 +40,6 @@ const ContactsPage: React.FC = () => {
                         </div>
                         <div className=' overflow-hidden'>
                             <motion.a
-                                initial={{ x: '-100%' }}
-                                animate={{ x: 0 }}
-                                transition={{ type: "spring", stiffness: 500 }}
                                 href="mailto:info@trijoncreation.in"
                                 className="flex items-center hover:text-blue-500  w-fit"
                             >
@@ -60,9 +49,6 @@ const ContactsPage: React.FC = () => {
                         </div>
                         <div className=' overflow-hidden'>
                             <motion.div
-                                initial={{ x: '-100%' }}
-                                animate={{ x: 0 }}
-                                transition={{ type: "spring", stiffness: 500 }}
                                 className=' flex items-center  hover:text-blue-500  w-fit'>
                                 <FacebookLink />
                                 <span className=' ml-1'>TRIJON.in</span>
@@ -70,9 +56,6 @@ const ContactsPage: React.FC = () => {
                         </div>
                         <div className=' overflow-hidden'>
                             <motion.a
-                                initial={{ x: '-100%' }}
-                                animate={{ x: 0 }}
-                                transition={{ type: "spring", stiffness: 500 }}
                                 href="https://www.instagram.com/trijon.in" target="_blank"
                                 className="flex items-center hover:text-red-400  w-fit"
                             >
@@ -82,9 +65,6 @@ const ContactsPage: React.FC = () => {
                         </div>
                         <div className=' overflow-hidden'>
                             <motion.a
-                                initial={{ x: '-100%' }}
-                                animate={{ x: 0 }}
-                                transition={{ type: "spring", stiffness: 500 }}
                                 href="https://twitter.com/TrijonIN" target="_blank"
                                 className="flex items-center hover:text-blue-500 w-fit"
                             >
@@ -92,7 +72,6 @@ const ContactsPage: React.FC = () => {
                                 <span>@TrijonIN</span>
                             </motion.a>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -100,5 +79,4 @@ const ContactsPage: React.FC = () => {
     );
 };
 
-export default ContactsPage;
-
+export default ContactsPage

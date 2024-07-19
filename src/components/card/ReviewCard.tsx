@@ -3,18 +3,20 @@
 import { Star } from 'lucide-react';
 import React from 'react'
 import IsReviewAuther from '../ui/IsReviewAuther';
+import EditReview from '../ui/EditReview';
 
 interface ReviewProps {
     name: string;
     date: Date;
     rating: number;
     comment: string;
-    currentUserName?: string;
+    currentUserEmail?: string;
     reviewId: string;
+    isAuther: boolean;
     afterEdit: ()=>void
 }
 
-function ReviewCard({ name, date, rating, comment ,currentUserName="",reviewId, afterEdit }: ReviewProps) {
+function ReviewCard({ name, date, rating, comment ,currentUserEmail="",reviewId,isAuther, afterEdit }: ReviewProps) {
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
@@ -24,7 +26,12 @@ function ReviewCard({ name, date, rating, comment ,currentUserName="",reviewId, 
 
     return (
         <div className="p-4 border border-gray-200 rounded-md mb-4 relative">
-            <IsReviewAuther reviewId={reviewId} comment={comment} rating={rating} afterEdit={afterEdit} currentUserId={currentUserName} />
+            {isAuther ? (
+                <div className=' absolute top-4 right-4'>
+                    <EditReview rating={rating} comment={comment} currentUserEmail={currentUserEmail} reviewId={reviewId} afterEdit={afterEdit} />
+                </div>
+            
+            ):(null)}
             <div className="flex items-center mb-2">
                 <div className="mr-4">
                     <h3 className="text-lg font-semibold">{name}</h3>

@@ -64,7 +64,7 @@ function NavLink({ link, name, isCurrnt, icon }: { link: string, name: string, i
                     color: isCurrnt ? "#3b82f6" : "black", 
                     x: isCurrnt ? 5 : 0 
                 }}
-                whileHover={{ x: 10, backgroundColor: "#ecec79" }}
+                whileHover={{ x: 10, backgroundColor: "#111827",color: "white"}}
                 transition={{ type: "spring", stiffness: 200 }}
             >
                 {icon}
