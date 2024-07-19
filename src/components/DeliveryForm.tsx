@@ -33,6 +33,7 @@ import { User } from 'next-auth'
 import { useToast } from './ui/use-toast'
 import { useRouter } from 'next/navigation'
 import { updateRazorpayOrderAfterPayment } from '@/database/action/razorpayOrder.action'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
 
 const formSchema = z.object({
     fullName: z.string().min(2, { message: "Full name must be at least 2 characters" }).max(50, { message: "Full name must be less than 50 characters" }),
@@ -48,9 +49,7 @@ const formSchema = z.object({
 
 
 
-function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { goodsCost: number, discont: number, deliveryCost: number, afterPayment: () => void }) {
-
-    const [total, setTotal] = useState(0)
+function DeliveryForm({ costOfGoods, tax, packaging, discount, orderSummary, deliveryCost, afterPayment }: { costOfGoods: number, tax: number, packaging: number, discount: number, deliveryCost: number, orderSummary: number, afterPayment: () => void }) {
 
     const [user, setUser] = useState<User | null | undefined>(null)
 
@@ -67,10 +66,6 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
     useEffect(() => {
         fatchUser();
     }, []);
-
-    useEffect(() => {
-        setTotal((goodsCost + deliveryCost - discont) < 0 ? 0 : goodsCost + deliveryCost - discont)
-    }, [goodsCost, discont, deliveryCost])
 
     const loadRazorpayScript = () => {
         return new Promise((resolve) => {
@@ -110,7 +105,7 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
                         toast({
                             description: `${res.message}`,
                         });
-                        await updateRazorpayOrderAfterPayment({razorpayOrderId:razorpayOrderId,razorpayPaymentId:razorpay_payment_id})
+                        await updateRazorpayOrderAfterPayment({ razorpayOrderId: razorpayOrderId, razorpayPaymentId: razorpay_payment_id })
                         afterPayment()
 
                         router.push("/orders")
@@ -244,7 +239,6 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
                             </FormItem>
                         )}
                     />
-
                     <FormField
                         control={form.control}
                         name="pincode"
@@ -294,7 +288,7 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
                             <FormItem>
                                 <FormLabel>Landmark</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Nearby landmark..." {...field} />
+                                    <Textarea placeholder="Nearby landmark..." {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -389,15 +383,16 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
                         <h3 className="font-semibold mb-2">TOTAL AMOUNT</h3>
                         <div className="flex justify-between">
                             <span>Cost of goods</span>
-                            <span>{`₹ ${goodsCost}`}</span>
+                            <span>{`₹ ${costOfGoods}`}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Tax
+                            </span>
+                            <span>{`₹ ${tax}`}</span>
                         </div>
                         <div className="flex justify-between">
                             <span>Packaging</span>
-                            <span>{`₹ ${goodsCost}`}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span>Tax</span>
-                            <span>{`₹ ${goodsCost}`}</span>
+                            <span>{`₹ ${packaging}`}</span>
                         </div>
                         <div className="flex justify-between">
                             <span>Delivery</span>
@@ -405,11 +400,11 @@ function DeliveryForm({ goodsCost, discont, deliveryCost, afterPayment }: { good
                         </div>
                         <div className="flex justify-between">
                             <span>Discount amount</span>
-                            <span>{`₹ ${discont}`}</span>
+                            <span>{`₹ ${discount}`}</span>
                         </div>
                         <div className="flex justify-between font-semibold mt-2">
                             <span>Order Summary</span>
-                            <span>{`₹ ${total}`}</span>
+                            <span>{`₹ ${orderSummary}`}</span>
                         </div>
                     </div>
                     <Button

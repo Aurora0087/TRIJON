@@ -36,6 +36,9 @@ export interface IProduct extends Document {
     varient: IVarient[];
     createdAt: Date;
     updatedAt: Date;
+    tax: number;
+    packaging: number;
+    deliveryCharges: number;
 }
 
 const ProductSchema = new Schema({
@@ -47,6 +50,9 @@ const ProductSchema = new Schema({
     rating: { type: Number, default: 0 },
     imageList: { type: [String], required: true },
     varient: [VarientSchema],
+    tax: { type: Number, default: 0 },
+    packaging: { type: Number, default: 0 },
+    deliveryCharges: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });

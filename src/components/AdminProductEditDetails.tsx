@@ -37,6 +37,15 @@ const formSchema = z.object({
     mainPrice: z.string().min(1, {
         message: "Main Price must be at least 1 character.",
     }),
+    tax: z.string().min(0, {
+        message: "Tax must be non-negative.",
+    }),
+    packaging: z.string().min(0, {
+        message: "Packaging must be non-negative.",
+    }),
+    deliveryCharges: z.string().min(0, {
+        message: "Delivery Charges must be non-negative.",
+    }),
     varient: z.array(
         z.object({
             size: z.string(),
@@ -59,7 +68,7 @@ const formSchema = z.object({
 interface UpdateProductProps {
     productId: string;
     varient: any[];
-    afterUpdate:()=>void
+    afterUpdate: () => void
 }
 
 function AdminProductEditDetails({ productId, varient, afterUpdate }: UpdateProductProps) {
@@ -82,6 +91,9 @@ function AdminProductEditDetails({ productId, varient, afterUpdate }: UpdateProd
             categorys: "",
             buyingPrice: "",
             mainPrice: "",
+            tax: "0",
+            packaging: "0",
+            deliveryCharges: "0",
             varient: initialVarient,
         },
     })
@@ -89,14 +101,15 @@ function AdminProductEditDetails({ productId, varient, afterUpdate }: UpdateProd
     useEffect(() => {
         async function fetchProductDetails() {
             const product = await getProductsById({ id: productId });
-
             form.setValue("title", product.title);
             form.setValue("description", product.description);
             form.setValue("categorys", product.category.join(","));
             form.setValue("buyingPrice", product.buyingPrice.toString());
             form.setValue("mainPrice", product.mainPrice.toString());
+            form.setValue("tax", product.tax.toString());
+            form.setValue("packaging", product.packaging.toString());
+            form.setValue("deliveryCharges", product.deliveryCharges.toString());
         }
-
         fetchProductDetails();
     }, [productId, form]);
 
@@ -109,6 +122,9 @@ function AdminProductEditDetails({ productId, varient, afterUpdate }: UpdateProd
                 categorys: values.categorys,
                 buyingPrice: values.buyingPrice,
                 mainPrice: values.mainPrice,
+                tax: (values.tax),
+                packaging: (values.packaging),
+                deliveryCharges: (values.deliveryCharges),
                 productId,
                 varient: values.varient,
             });
@@ -221,6 +237,45 @@ function AdminProductEditDetails({ productId, varient, afterUpdate }: UpdateProd
                             <FormLabel>Main Price</FormLabel>
                             <FormControl>
                                 <Input type="number" placeholder="Enter main price" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="tax"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Tax(In %)</FormLabel>
+                            <FormControl>
+                                <Input type="number" placeholder="Enter tax" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="packaging"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Packaging</FormLabel>
+                            <FormControl>
+                                <Input type="number" placeholder="Enter packaging cost" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="deliveryCharges"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Delivery Charges</FormLabel>
+                            <FormControl>
+                                <Input type="number" placeholder="Enter delivery charges" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

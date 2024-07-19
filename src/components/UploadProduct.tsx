@@ -47,6 +47,15 @@ const formSchema = z.object({
     mainPrice: z.string().min(1, {
         message: "Main Price must be at least 1 character.",
     }),
+    tax: z.string().min(0, {
+        message: "Tax must be non-negative.",
+    }),
+    packaging: z.string().min(0, {
+        message: "Packaging must be non-negative.",
+    }),
+    deliveryCharges: z.string().min(0, {
+        message: "Delivery Charges must be non-negative.",
+    }),
     varient: z.array(
         z.object({
             size: z.string(),
@@ -61,7 +70,7 @@ const formSchema = z.object({
     ),
 }).refine(data => parseFloat(data.mainPrice) >= parseFloat(data.buyingPrice), {
     message: "Main Price must be greater than or equal to Buying Price.",
-    path: ["mainPrice"], // This will make the error appear in the mainPrice field
+    path: ["mainPrice"],
 });
 
 function UploadProduct() {
@@ -79,6 +88,9 @@ function UploadProduct() {
             categorys: "",
             buyingPrice: "",
             mainPrice: "",
+            tax: "0",
+            packaging: "0",
+            deliveryCharges: "0",
             varient: [],
         },
     })
@@ -112,6 +124,9 @@ function UploadProduct() {
                 categorys: values.categorys,
                 buyingPrice: values.buyingPrice,
                 mainPrice: values.mainPrice,
+                tax: values.tax,
+                packaging: values.packaging,
+                deliveryCharges: values.deliveryCharges,
                 imageList: imageBase64List,
                 varient: values.varient,
             });
@@ -231,6 +246,45 @@ function UploadProduct() {
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={form.control}
+                    name="tax"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Tax(In %)</FormLabel>
+                            <FormControl>
+                                <Input type="number" placeholder="Enter tax" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="packaging"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Packaging</FormLabel>
+                            <FormControl>
+                                <Input type="number" placeholder="Enter packaging cost" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="deliveryCharges"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Delivery Charges</FormLabel>
+                            <FormControl>
+                                <Input type="number" placeholder="Enter delivery charges" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <div className=" grid gap-3">
                     <h1 className=" font-semibold text-sm">Product Images(Max size 5mb) </h1>
                     <Input
@@ -242,7 +296,7 @@ function UploadProduct() {
                         required
                     />
                     {imagesUrl && (
-                        <div className=" flex gap-2">
+                        <div className=" grid grid-cols-3 place-content-center gap-4">
                             {imagesUrl.map((url, index) => (
                                 <div key={index} className="w-full overflow-hidden rounded-xl border-2 border-blue-500">
                                     <img src={url} alt="Product Images Preview" className="w-full object-cover" />

@@ -153,7 +153,7 @@ const columns: ColumnDef<IProduct>[] = [
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             <Link href={`/dashbord/products/${product._id}`}>
-                                View product details
+                                View product details & edit
                             </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>

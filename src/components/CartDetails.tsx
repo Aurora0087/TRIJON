@@ -11,7 +11,12 @@ import { getCartItemsByEmail } from '@/database/action/cart.action'
 function CartDetails() {
 
     const [cartItems, setCartItems] = useState([])
-    const [totalGoodsPrice, setTotalGoodsPrice] = useState(0)
+    const [costOfGoods, setCostOfGoods] = useState(0)
+    const [tax, setTax] = useState(0)
+    const [packaging, setPackaging] = useState(0)
+    const [discount, setDiscount] = useState(0)
+    const [orderSummary, setOrderSummary] = useState(0)
+    const [delivery,setDelivery] = useState(0)
     const [user, setUser] = useState<User | null | undefined>(null)
     const [loading, setLoading] = useState(true)
 
@@ -27,19 +32,17 @@ function CartDetails() {
         try {
             const res = await getCartItemsByEmail({ email: user.email as string })
             setCartItems(res.products)
-            calculateTotalPrice(res.products)
+            setCostOfGoods(res.costOfGoods)
+            setTax(res.tax)
+            setPackaging(res.packaging)
+            setDiscount(res.discount)
+            setOrderSummary(res.orderSummary)
+            setDelivery(res.deliveryCharges)
         } catch (error) {
             console.error(error)
         } finally {
             setLoading(false)
         }
-    }
-
-    function calculateTotalPrice(products: any[]) {
-        const total = products.reduce((sum, product) => {
-            return sum + product.price
-        }, 0)
-        setTotalGoodsPrice(total)
     }
 
     useEffect(() => {
@@ -84,7 +87,7 @@ function CartDetails() {
                         ))}
                     </div>
                     <div className='w-full md:w-fit'>
-                        <DeliveryForm afterPayment={getItems} goodsCost={totalGoodsPrice} discont={0} deliveryCost={0} />
+                        <DeliveryForm afterPayment={getItems} costOfGoods={costOfGoods} tax={tax} packaging={packaging} orderSummary={orderSummary} discount={discount} deliveryCost={delivery} />
                     </div>
                 </div>
             ) : (

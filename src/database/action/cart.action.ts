@@ -1,12 +1,10 @@
 "use server"
 
-import mongoose from "mongoose";
 import Cart from "../models/cart.model";
 import Product from "../models/product.model";
 import UserModel from "../models/user.model";
 import dbConnect from "../connect";
 import { getImageUrl } from "../aws/s3/Utils";
-
 
 export async function addToCart({
     email, productId, quantity, size, color
@@ -79,11 +77,11 @@ export async function getCartItemsByEmail({ email }: { email: string }) {
 
         // Find the cart for the user
         const cart = await Cart.findOne({ userId: user._id })
-            .populate('products.productId', 'title imageList price')
+            .populate('products.productId', 'title imageList mainPrice tax packaging deliveryCharges buyingPrice')
             .exec();
 
         if (!cart) {
-            return { products: [], costOfGoods: 0, tax: 0, packaging: 12, discount: 0, orderSummary: 12 };
+            return { products: [], costOfGoods: 0, tax: 0, packaging: 0, deliveryCharges: 0, discount: 0, orderSummary: 0 };
         }
 
         // Generate signed URLs for imageList
@@ -97,27 +95,39 @@ export async function getCartItemsByEmail({ email }: { email: string }) {
             return productWithUrls;
         }));
 
-        // Calculate cost of goods
-        const costOfGoods = cart.products.reduce((sum: any, product: { price: any; }) => {
-            return sum + product.price;
-        }, 0);
+        // Calculate cost of goods and other costs
+        let costOfGoods = 0;
+        let totalTax = 0;
+        let totalPackaging = 0;
+        let totalDelivery = 0;
+        let totalDiscount = 0;
 
-        // Calculate tax
-        const tax = costOfGoods > 1000 ? costOfGoods * 0.12 : costOfGoods * 0.05;
-
-        // Packaging and discount
-        const packaging = 12;
-        const discount = 0;
+        cart.products.forEach((product: any) => {
+            const { tax, packaging, deliveryCharges } = product.productId;
+            costOfGoods += product.price;
+            totalTax += (product.price * (tax / 100));
+            totalPackaging += packaging;
+            totalDelivery += deliveryCharges;
+        });
 
         // Order summary
-        const orderSummary = costOfGoods + tax + packaging - discount;
+        const orderSummary = (costOfGoods + totalTax + totalPackaging + totalDelivery - totalDiscount).toFixed(2);
 
-        return JSON.parse(JSON.stringify({ products: productsWithImageUrls, costOfGoods, tax, packaging, discount, orderSummary }));
+        return JSON.parse(JSON.stringify({ 
+            products: productsWithImageUrls, 
+            costOfGoods, 
+            tax: totalTax.toFixed(2), 
+            packaging: totalPackaging,
+            deliveryCharges: totalDelivery, 
+            discount: totalDiscount, 
+            orderSummary 
+        }));
     } catch (error) {
         console.error("Error retrieving cart items: ", error);
         throw new Error("Error retrieving cart items");
     }
 }
+
 export async function deleteCartItems({itemId}: {itemId:string}) {
     
     try {

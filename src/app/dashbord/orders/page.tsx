@@ -86,10 +86,10 @@ const columns: ColumnDef<IOrder>[] = [
         ),
     },
     {
-        accessorKey: "totalPrice",
-        header: () => <div className="text-right">Total Price</div>,
+        accessorKey: "orderSummary",
+        header: () => <div className="text-right">Order Summary</div>,
         cell: ({ row }) => {
-            const totalPrice = parseFloat(row.getValue("totalPrice"))
+            const totalPrice = parseFloat(row.getValue("orderSummary"))
 
             const formatted = new Intl.NumberFormat("en-US", {
                 style: "currency",

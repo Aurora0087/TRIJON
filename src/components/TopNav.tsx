@@ -25,7 +25,7 @@ function TopNav() {
                 <div className=' hidden md:flex gap-6 justify-center items-center capitalize'>
                     <a href='/shop/new' className=' hover:text-blue-500'>New</a>
                     <a href='/shop/best' className=' hover:text-blue-500 line-clamp-1'>Best selling</a>
-                    <a href='/shop/eimited edition' className=' hover:text-blue-500 line-clamp-1'>Limited Edition</a>
+                    <a href='/shop/limited edition' className=' hover:text-blue-500 line-clamp-1'>Limited Edition</a>
                     <SearchForm/>
                 </div>
                 <div className='flex gap-6 justify-center items-center capitalize'>

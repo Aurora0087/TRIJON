@@ -22,7 +22,12 @@ export interface IOrder extends Document {
         price: number; // price at the time of order
         deliveryStatus: string;
     }[];
-    totalPrice: number;
+    costOfGoods: number; // New field for the cost of goods
+    tax: number; // New field for tax
+    packaging: number; // New field for packaging
+    deliveryCharges: number; // New field for delivery charges
+    discount: number; // New field for discount
+    orderSummary: number; // Changed from totalPrice to orderSummary
     createdAt: Date;
     updatedAt: Date;
 }
@@ -39,7 +44,7 @@ const OrderSchema: Schema<IOrder> = new Schema(
         landmark: { type: String },
         city: { type: String, required: true },
         state: { type: String, required: true },
-        paymentMethod:{type:String,required:true},
+        paymentMethod: { type: String, required: true },
         isPaid: { type: Boolean, default: false },
         products: [
             {
@@ -51,7 +56,12 @@ const OrderSchema: Schema<IOrder> = new Schema(
                 deliveryStatus: { type: String, default: 'Pending' },
             }
         ],
-        totalPrice: { type: Number, required: true },
+        costOfGoods: { type: Number, required: true },
+        tax: { type: Number, required: true },
+        packaging: { type: Number, required: true },
+        deliveryCharges: { type: Number, required: true },
+        discount: { type: Number, required: true },
+        orderSummary: { type: Number, required: true },
     },
     { timestamps: true }
 );

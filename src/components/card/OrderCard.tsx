@@ -1,16 +1,14 @@
 "use client"
 
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react';
 import { Badge } from '../ui/badge';
-
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, MapPin } from 'lucide-react';
-
 
 interface IProduct {
     _id: string;
@@ -34,7 +32,12 @@ interface IOrder {
     street: string;
     fullName: string;
     mobileNumber: string;
-    totalPrice: number;
+    costOfGoods: number;
+    tax: number;
+    packaging: number;
+    deliveryCharges: number;
+    discount: number;
+    orderSummary: number;
     products: IProduct[];
     createdAt: string;
     paymentMethod: string;
@@ -46,15 +49,13 @@ interface OrderCardProps {
 
 function OrderCard({ order }: OrderCardProps) {
 
-    const [paymentMethod, setPaymentMethod] = useState("Pay on Delivery")
-
-
+    const [paymentMethod, setPaymentMethod] = useState("Pay on Delivery");
 
     useEffect(() => {
         if (order.paymentMethod === "RAZORPAY") {
-            setPaymentMethod("Online")
+            setPaymentMethod("Online");
         }
-    }, [])
+    }, [order.paymentMethod]);
 
     return (
         <div className="p-4 bg-white shadow-md rounded-md mt-4 flex flex-col md:flex-row gap-4">
@@ -62,19 +63,24 @@ function OrderCard({ order }: OrderCardProps) {
                 <h3 className="text-lg font-bold mb-2">Order ID: {order._id}</h3>
                 <p className="text-sm mb-1 font-semibold text-slate-500">Full Name: {order.fullName}</p>
                 <p className="text-sm mb-1 font-semibold text-slate-500">Mobile: {order.mobileNumber}</p>
-                <p className="text-sm mb-1 font-semibold text-slate-500">Total Price: ₹{order.totalPrice}</p>
+                <p className="text-sm mb-1 font-semibold text-slate-500">Total Price: ₹{order.orderSummary}</p>
                 <p className="text-sm mb-1 font-semibold text-slate-500">Payment Method: {paymentMethod}</p>
                 <p className="text-sm mb-1 font-semibold text-slate-500">Order Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-                <div className=' rounded-lg p-2 border-2 border-blue-400 my-2'>
-                    <div>
-                        
-                    </div>
-                    <p className="text-sm mb-1 font-semibold text-slate-500 flex items-center"><MapPin className=' mr-2'/>Address:</p>
+                
+                <div className="my-4">
+                    <p className="text-sm mb-1 font-semibold text-slate-500">Cost of Goods: ₹{order.costOfGoods}</p>
+                    <p className="text-sm mb-1 font-semibold text-slate-500">Tax: ₹{order.tax}</p>
+                    <p className="text-sm mb-1 font-semibold text-slate-500">Packaging: ₹{order.packaging}</p>
+                    <p className="text-sm mb-1 font-semibold text-slate-500">Delivery Charges: ₹{order.deliveryCharges}</p>
+                    <p className="text-sm mb-1 font-semibold text-slate-500">Discount: ₹{order.discount}</p>
+                </div>
+                
+                <div className='rounded-lg p-2 border-2 border-blue-400 my-2'>
+                    <p className="text-sm mb-1 font-semibold text-slate-500 flex items-center"><MapPin className='mr-2' />Address:</p>
                     <p className="text-sm mb-1 text-slate-500">{order.houseNumber}, {order.street}</p>
                     {order.landmark && <p className="text-sm mb-1 text-slate-500">Landmark: {order.landmark}</p>}
                     <p className="text-sm mb-1 text-slate-500">{order.city}, {order.state} - {order.pincode}</p>
                 </div>
-
             </div>
 
             <div className='w-full md:w-auto'>
@@ -119,7 +125,6 @@ function OrderCard({ order }: OrderCardProps) {
     )
 }
 
-
 function CollapsibleCard({ triggerComponent, children }: { triggerComponent: string, children: ReactNode }) {
 
     const [isOpen, setIsOpen] = useState(false);
@@ -129,8 +134,8 @@ function CollapsibleCard({ triggerComponent, children }: { triggerComponent: str
     };
 
     return (
-        <Collapsible open={isOpen} onOpenChange={toggleOpen} className=' border-b'>
-            <CollapsibleTrigger className=' w-full flex gap-4 justify-between '>
+        <Collapsible open={isOpen} onOpenChange={toggleOpen} className='border-b'>
+            <CollapsibleTrigger className='w-full flex gap-4 justify-between'>
                 <h3 className="font-bold mb-4">{triggerComponent}</h3>
                 <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
@@ -155,9 +160,7 @@ function CollapsibleCard({ triggerComponent, children }: { triggerComponent: str
                 )}
             </AnimatePresence>
         </Collapsible>
-    )
-
+    ) 
 }
 
-
-export default OrderCard
+export default OrderCard;

@@ -46,14 +46,33 @@ export async function makeOrder({
             throw new Error('User not found');
         }
 
-        // Find the cart for the user
-        const cart = await Cart.findOne({ userId: user._id }).exec();
+        // Find the cart for the user and populate product details
+        const cart = await Cart.findOne({ userId: user._id })
+            .populate('products.productId', 'title imageList mainPrice tax packaging deliveryCharges buyingPrice')
+            .exec();
         if (!cart || cart.products.length === 0) {
             throw new Error('Cart is empty');
         }
 
-        // Calculate total price
-        const totalPrice = cart.products.reduce((acc: number, product: { price: number; quantity: number; }) => acc + product.price, 0);
+        // Calculate cost of goods and other costs
+        let costOfGoods = 0;
+        let totalTax = 0;
+        let totalPackaging = 0;
+        let totalDelivery = 0;
+        let totalDiscount = 0; // Assuming discount logic will be added later
+
+        cart.products.forEach((product: any) => {
+            const { tax, packaging, deliveryCharges } = product.productId;
+            const productTotalPrice = product.price;
+
+            costOfGoods += productTotalPrice;
+            totalTax += (productTotalPrice * (tax / 100));
+            totalPackaging += packaging;
+            totalDelivery += deliveryCharges;
+        });
+
+        // Calculate order summary
+        const orderSummary = (costOfGoods + (totalTax) + totalPackaging + totalDelivery - totalDiscount).toFixed(2);
 
         // Create the order in your database
         const order = new Order({
@@ -66,10 +85,15 @@ export async function makeOrder({
             landmark,
             city,
             state,
-            totalPrice,
+            costOfGoods,
+            tax: totalTax.toFixed(2),
+            packaging: totalPackaging,
+            deliveryCharges: totalDelivery,
+            discount: totalDiscount,
+            orderSummary: parseFloat(orderSummary),
             paymentMethod,
-            products: cart.products.map((product: { productId: any; color: any; size: any; quantity: any; price: any; }) => ({
-                productId: product.productId,
+            products: cart.products.map((product: any) => ({
+                productId: product.productId._id,
                 color: product.color,
                 size: product.size,
                 quantity: product.quantity,
@@ -77,14 +101,14 @@ export async function makeOrder({
                 deliveryStatus: 'Pending',
             })),
             isPaid: false,
-        })
+        });
 
         const savedOrder = await order.save();
 
         if (paymentMethod === "RAZORPAY") {
             // Create Razorpay order
             const razorpayOrder = await razorpay.orders.create({
-                amount: totalPrice * 100, // amount in paise
+                amount: Number(orderSummary) * 100, // amount in paise
                 currency: 'INR',
                 receipt: savedOrder._id.toString(),
             });
@@ -112,12 +136,11 @@ export async function makeOrder({
         }
 
         if (paymentMethod === "POD") {
-
             await Cart.findOneAndUpdate(
                 { userId: user._id },
                 { products: [] }
             ).exec();
-            
+
             return JSON.parse(JSON.stringify({
                 success: true,
                 orderId: savedOrder._id,
@@ -215,11 +238,35 @@ export async function getOrdersPayedByUser({ email }: { email: string }) {
         // Generate image URLs for each product
         const formattedOrders = await Promise.all(
             orders.map(async order => ({
-                ...order.toObject(),
+                _id: order._id,
+                userId: order.userId,
+                fullName: order.fullName,
+                mobileNumber: order.mobileNumber,
+                pincode: order.pincode,
+                houseNumber: order.houseNumber,
+                street: order.street,
+                landmark: order.landmark,
+                city: order.city,
+                state: order.state,
+                paymentMethod: order.paymentMethod,
+                isPaid: order.isPaid,
+                createdAt: order.createdAt,
+                updatedAt: order.updatedAt,
+                costOfGoods: order.costOfGoods,
+                tax: order.tax,
+                packaging: order.packaging,
+                deliveryCharges: order.deliveryCharges,
+                discount: order.discount,
+                orderSummary: order.orderSummary,
                 products: await Promise.all(
                     order.products.map(async (product: {
-                        paymentMethod: any; productId: { _id: any; title: any; imageList: string[]; }; color: any; size: any; quantity: any; price: any; deliveryStatus: any; 
-}) => ({
+                        productId: { _id: string; title: string; imageList: string[] };
+                        color: string;
+                        size: string;
+                        quantity: number;
+                        price: number;
+                        deliveryStatus: string;
+                    }) => ({
                         _id: product.productId._id,
                         title: product.productId.title,
                         imageUrl: await getImageUrl(product.productId.imageList[0]),
@@ -227,8 +274,7 @@ export async function getOrdersPayedByUser({ email }: { email: string }) {
                         size: product.size,
                         quantity: product.quantity,
                         price: product.price,
-                        deliveryStatus: product.deliveryStatus,
-                        paymentMethod: product.paymentMethod
+                        deliveryStatus: product.deliveryStatus
                     }))
                 )
             }))
@@ -251,7 +297,9 @@ export async function getOrdersDetails(): Promise<OrderDetailsResponse> {
 
     try {
         // Retrieve all orders
-        const orders: IOrder[] = await Order.find().exec();
+        const orders: IOrder[] = await Order.find()
+            .sort({ createdAt: -1 })
+            .exec();
 
         // Count the total number of orders
         const totalOrders: number = await Order.countDocuments().exec();

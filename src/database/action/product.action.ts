@@ -6,6 +6,9 @@ import Cart from "../models/cart.model";
 import Product, { IProduct } from "../models/product.model";
 import UserModel from "../models/user.model";
 
+import mongoose from 'mongoose';
+const { ObjectId } = mongoose.Types;
+
 interface varientProp {
     size: string;
     colors: {
@@ -15,29 +18,40 @@ interface varientProp {
     }[]
 }
 
-export async function createNewProduct({ title, description, categorys, buyingPrice, mainPrice, imageList, varient }:
-    {
-        title: string,
-        description: string,
-        categorys: string,
-        buyingPrice: string,
-        mainPrice: string,
-        imageList: string[],
-        varient: varientProp[]
-    }
-) {
+export async function createNewProduct({
+    title,
+    description,
+    categorys,
+    buyingPrice,
+    mainPrice,
+    imageList,
+    varient,
+    tax,
+    packaging,
+    deliveryCharges,
+}: {
+    title: string;
+    description: string;
+    categorys: string;
+    buyingPrice: string;
+    mainPrice: string;
+    imageList: string[];
+    varient: varientProp[];
+    tax: string;
+    packaging: string;
+    deliveryCharges: string;
+}) {
     try {
-
         const imageUrls = await Promise.all(
             imageList.map(async (base64String) => {
                 const buffer = Buffer.from(base64String.split(',')[1], 'base64');
                 const imageUrl = await uploadImage(buffer);
                 return imageUrl;
             })
-        )
+        );
 
-        await dbConnect()
-        const category = categorys.toLocaleLowerCase().split(",")
+        await dbConnect();
+        const category = categorys.toLowerCase().split(",");
 
         const setVarients = varient.map((v) => ({
             size: v.size,
@@ -46,16 +60,26 @@ export async function createNewProduct({ title, description, categorys, buyingPr
                 value: c.value,
                 stockes: Number(c.stockes),
             })),
-        }))
+        }));
 
         const product = new Product({
-            title: title, description: description, category: category, buyingPrice: Number(buyingPrice), mainPrice: Number(mainPrice), imageList: imageUrls, varient: setVarients
-        })
+            title,
+            description,
+            category,
+            buyingPrice: Number(buyingPrice),
+            mainPrice: Number(mainPrice),
+            imageList: imageUrls,
+            varient: setVarients,
+            tax: Number(tax),
+            packaging: Number(packaging),
+            deliveryCharges: Number(deliveryCharges),
+        });
 
-        const savedProduct = await product.save()
-        return JSON.parse(JSON.stringify(savedProduct))
+        const savedProduct = await product.save();
+        return JSON.parse(JSON.stringify(savedProduct));
     } catch (error) {
-        throw new Error("Error saving product");
+        console.log(error);
+        throw new Error(`Error saving product, ${error as string}`);
     }
 }
 
@@ -67,6 +91,9 @@ export async function editProductDetails({
     mainPrice,
     productId,
     varient,
+    tax,
+    packaging,
+    deliveryCharges,
 }: {
     title: string;
     description: string;
@@ -75,6 +102,9 @@ export async function editProductDetails({
     mainPrice: string;
     productId: string;
     varient: varientProp[];
+    tax: string;
+    packaging: string;
+    deliveryCharges: string;
 }) {
     try {
         await dbConnect();
@@ -97,6 +127,9 @@ export async function editProductDetails({
                 category,
                 buyingPrice: Number(buyingPrice),
                 mainPrice: Number(mainPrice),
+                tax: Number(tax),
+                packaging: Number(packaging),
+                deliveryCharges: Number(deliveryCharges),
                 varient: updatedVarients,
             },
             { new: true }
@@ -106,11 +139,26 @@ export async function editProductDetails({
             throw new Error("Product not found");
         }
 
+        // Fetch all carts containing the product
+        const carts = await Cart.find({ 'products.productId': productId }).exec();
+
+        // Update each cart's product prices
+        for (const cart of carts) {
+            cart.products.forEach((product: { productId: { toString: () => string; }; price: number; quantity: number; }) => {
+                if (product.productId.toString() === productId) {
+                    product.price = updatedProduct.buyingPrice * product.quantity;
+                }
+            });
+            await cart.save();
+        }
+
         return JSON.parse(JSON.stringify(updatedProduct));
-    } catch (error) {
-        throw new Error("Error updating product");
+    } catch (error: any) {
+        console.error("Error updating product: ", error);
+        throw new Error(`Error updating product: ${error.message}`);
     }
 }
+
 
 export async function editProductImages({
     imageList,
@@ -186,7 +234,6 @@ export async function deleteProductDetails({ productId }: { productId: string })
         throw new Error('Error deleting product');
     }
 }
-
 
 export async function getProducts(
     { page }: { page: number }
