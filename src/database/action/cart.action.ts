@@ -101,10 +101,12 @@ export async function getCartItemsByEmail({ email }: { email: string }) {
         let totalPackaging = 0;
         let totalDelivery = 0;
         let totalDiscount = 0;
+        let taxCalculationSummary = "";
 
         cart.products.forEach((product: any) => {
-            const { tax, packaging, deliveryCharges } = product.productId;
+            const {title, tax, packaging, deliveryCharges } = product.productId;
             costOfGoods += product.price;
+            taxCalculationSummary += `${title} Tax ${tax}%, `
             totalTax += (product.price * (tax / 100));
             totalPackaging += packaging;
             totalDelivery += deliveryCharges;
@@ -116,11 +118,12 @@ export async function getCartItemsByEmail({ email }: { email: string }) {
         return JSON.parse(JSON.stringify({ 
             products: productsWithImageUrls, 
             costOfGoods, 
-            tax: totalTax.toFixed(2), 
+            tax: totalTax.toFixed(2),
+            taxCalculationSummary,
             packaging: totalPackaging,
             deliveryCharges: totalDelivery, 
             discount: totalDiscount, 
-            orderSummary 
+            orderSummary
         }));
     } catch (error) {
         console.error("Error retrieving cart items: ", error);

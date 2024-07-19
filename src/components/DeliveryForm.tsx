@@ -34,6 +34,7 @@ import { useToast } from './ui/use-toast'
 import { useRouter } from 'next/navigation'
 import { updateRazorpayOrderAfterPayment } from '@/database/action/razorpayOrder.action'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
+import { FaQuestion } from 'react-icons/fa'
 
 const formSchema = z.object({
     fullName: z.string().min(2, { message: "Full name must be at least 2 characters" }).max(50, { message: "Full name must be less than 50 characters" }),
@@ -49,7 +50,7 @@ const formSchema = z.object({
 
 
 
-function DeliveryForm({ costOfGoods, tax, packaging, discount, orderSummary, deliveryCost, afterPayment }: { costOfGoods: number, tax: number, packaging: number, discount: number, deliveryCost: number, orderSummary: number, afterPayment: () => void }) {
+function DeliveryForm({ costOfGoods, tax, packaging, discount, orderSummary, deliveryCost, taxCalculationSummary, afterPayment }: { costOfGoods: number, tax: number, packaging: number, discount: number, deliveryCost: number, orderSummary: number, taxCalculationSummary: string, afterPayment: () => void }) {
 
     const [user, setUser] = useState<User | null | undefined>(null)
 
@@ -385,9 +386,17 @@ function DeliveryForm({ costOfGoods, tax, packaging, discount, orderSummary, del
                             <span>Cost of goods</span>
                             <span>{`₹ ${costOfGoods}`}</span>
                         </div>
-                        <div className="flex justify-between">
-                            <span>Tax
-                            </span>
+                        <div className="flex justify-between items-center">
+                            <p className=' flex gap-2 items-center'>Tax
+                                <HoverCard>
+                                    <HoverCardTrigger className=' aspect-square w-4 h-4 bg-slate-500 text-white rounded-full grid place-content-center'>
+                                        <FaQuestion className=' w-2 h-2' />
+                                    </HoverCardTrigger>
+                                    <HoverCardContent>
+                                        {taxCalculationSummary}
+                                    </HoverCardContent>
+                                </HoverCard>
+                            </p>
                             <span>{`₹ ${tax}`}</span>
                         </div>
                         <div className="flex justify-between">

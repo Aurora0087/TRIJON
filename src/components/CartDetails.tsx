@@ -13,6 +13,7 @@ function CartDetails() {
     const [cartItems, setCartItems] = useState([])
     const [costOfGoods, setCostOfGoods] = useState(0)
     const [tax, setTax] = useState(0)
+    const [taxCalculationSummary,setTaxCalculationSummary] = useState("")
     const [packaging, setPackaging] = useState(0)
     const [discount, setDiscount] = useState(0)
     const [orderSummary, setOrderSummary] = useState(0)
@@ -38,6 +39,7 @@ function CartDetails() {
             setDiscount(res.discount)
             setOrderSummary(res.orderSummary)
             setDelivery(res.deliveryCharges)
+            setTaxCalculationSummary(res.taxCalculationSummary)
         } catch (error) {
             console.error(error)
         } finally {
@@ -87,7 +89,7 @@ function CartDetails() {
                         ))}
                     </div>
                     <div className='w-full md:w-fit'>
-                        <DeliveryForm afterPayment={getItems} costOfGoods={costOfGoods} tax={tax} packaging={packaging} orderSummary={orderSummary} discount={discount} deliveryCost={delivery} />
+                            <DeliveryForm afterPayment={getItems} costOfGoods={costOfGoods} tax={tax} taxCalculationSummary={taxCalculationSummary} packaging={packaging} orderSummary={orderSummary} discount={discount} deliveryCost={delivery} />
                     </div>
                 </div>
             ) : (
