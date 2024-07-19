@@ -111,7 +111,7 @@ function OrderCard({ order }: OrderCardProps) {
                                     </p>
                                     <p className="text-sm grid gap-2">
                                         <span className='px-2 font-medium text-slate-500'>Delivery Status:</span>
-                                        <Badge className='w-fit ml-2'>
+                                        <Badge className='w-fit ml-2 text-black'>
                                             {product.deliveryStatus}
                                         </Badge>
                                     </p>
