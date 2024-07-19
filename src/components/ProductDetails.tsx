@@ -135,10 +135,10 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
                 varient[variantIndex].colors.map((v, i) => {
                   return (
                     <div key={i} className=' flex flex-col gap-2 capitalize justify-center items-center'>
-                      <Button
+                      <button
                         onClick={() => setColorIndex(i)}
                         style={{ backgroundColor: `${v.value}` }}
-                        className={`w-8 h-8 p-1 border-2 rounded-full ${colorIndex === i && "border-[#519fff]"} shadow`}></Button>
+                        className={`w-8 h-8 p-1 border-2 rounded-full ${colorIndex === i && "border-[#519fff]"} shadow`}></button>
                       <span className={`${colorIndex === i && "text-blue-500 font-semibold"} text-sm`}>{v.name}</span>
                     </div>
                   )
@@ -189,8 +189,8 @@ function ProductDetails({ id, title, description, buyingPrice, mainPrice, rating
               </Button>
             </div>
           </div>
-          <div className=''>
-            <Button className=' w-full mb-4 rounded-full' onClick={handleAddToWishList}>
+          <div className=' w-fullt'>
+            <Button className=' w-full md:w-[50%] mb-4 rounded-full hover:text-slate-600' onClick={handleAddToWishList}>
               <Heart className=' mr-2' />
               Add to WishList
             </Button>
@@ -334,9 +334,9 @@ function AddtoCart({
   }
 
   return (
-    <Button disabled={user === null || user === undefined || quantity === "0"} className="w-full px-4 py-2 rounded-full flex items-center justify-center gap-2" onClick={addIntoCart}>
+    <Button disabled={user === null || user === undefined || quantity === "0"} className=" w-full md:w-[50%] hover:text-slate-600 rounded-full flex items-center justify-center gap-2" onClick={addIntoCart}>
       <Toaster />
-      <ShoppingCart />
+      <ShoppingCart className=''/>
       {user === null || user === undefined ? "Login to Add to Cart" : " Add to cart"}
     </Button>
   )

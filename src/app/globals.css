@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url(https://db.onlinewebfonts.com/c/86992d9cf72f993ae8cd621e3714c1e8?family=Yu+Gothic);
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -51,6 +49,11 @@
   }
 }
 
+@font-face {
+  font-family: 'yugothib';
+  src: url('/fonts/YuGothR.ttc') format('truetype');
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -61,6 +64,6 @@
   }
 }
 
-#logo {
-  font-family: "Yu Gothic";
+#yu-gothic {
+  font-family: 'yugothib';
 }

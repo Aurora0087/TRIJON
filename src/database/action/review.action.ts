@@ -6,8 +6,8 @@ import Review, { IReview } from "../models/review.model";
 import { getUserByEmail } from "./user.action";
 import UserModel, { IUser } from "../models/user.model";
 
-export async function addReview({userEmail,productId,rating,comment}:{userEmail:string,productId:string,rating:number,comment:string}) {
-    
+export async function addReview({ userEmail, productId, rating, comment }: { userEmail: string, productId: string, rating: number, comment: string }) {
+
     try {
         // Fetch the user by email
         const user = await getUserByEmail({ email: userEmail });
@@ -52,23 +52,34 @@ export interface IReviewWithUsername extends Omit<IReview, 'userId'> {
     username: string;
 }
 
-export async function getReviews({productId,page}: { productId: string,page:number }) {
-    const pageSize = 10; // Number of reviews per page
-    const skip = (page - 1) * pageSize; // Calculate the number of documents to skip
+export async function isAuthor({ reviewId, userId }: { reviewId: string, userId: string }) {
+    try {
+        // Fetch the review
+        const review = await Review.findById(reviewId).exec();
+        if (!review) {
+            throw new Error('Review not found');
+        }
+
+        // Check if the user is the author
+        const isAuthor = review.userId === userId;
+        return JSON.parse(JSON.stringify({isAuthor}));
+    } catch (error) {
+        console.error('Error checking author:', error);
+        return false;
+    }
+}
+
+export async function getReviews({ productId }: { productId: string }) {
 
     try {
         // Fetch reviews from the database based on productId with pagination
         const reviews: IReview[] = await Review.find({ productId })
             .sort({ createdAt: -1 }) // Sort by newest first
-            .skip(skip)
-            .limit(pageSize)
             .exec();
 
         // Get the total number of reviews for the product
         const totalReviews = await Review.countDocuments({ productId });
 
-        // Calculate total pages
-        const totalPages = Math.ceil(totalReviews / pageSize);
 
         // Aggregate the number of reviews for each rating
         const ratingCounts: { _id: number; count: number }[] = await Review.aggregate([
@@ -104,13 +115,60 @@ export async function getReviews({productId,page}: { productId: string,page:numb
         // Return the reviews and additional info
         return JSON.parse(JSON.stringify({
             reviews: resolvedReviews,
-            totalPages,
-            currentPage: page,
             totalReviews,
             ratingPercentages,
-        }));
+        }))
     } catch (error) {
         console.error('Error retrieving reviews:', error);
         throw new Error('Error retrieving reviews. Please try again later.');
+    }
+}
+
+export async function editReview({
+    reviewId,
+    comment,
+    rating,
+    editerUserId,
+}: {
+    reviewId: string;
+    comment: string;
+    rating: number;
+    editerUserId: string;
+}) {
+    try {
+        // Find the user by email
+        const user = await UserModel.findById(editerUserId).exec();
+        if (!user) throw new Error('User not found');
+
+        // Fetch the review
+        const review = await Review.findById(reviewId).exec();
+        if (!review) throw new Error('Review not found');
+
+        // Check if the user is the author or an admin
+        if (review.userId !== user._id.toString() && user.role !== 'ADMIN') {
+            throw new Error('Unauthorized to edit this review');
+        }
+
+        // Update the review
+        review.comment = comment;
+        review.rating = rating;
+        review.updatedAt = new Date();
+        await review.save();
+
+        // Update product rating
+        const productId = review.productId;
+        const reviews = await Review.find({ productId }).exec();
+        const totalRating = reviews.reduce((acc, rev) => acc + rev.rating, 0);
+        const averageRating = totalRating / reviews.length;
+
+        await Product.findByIdAndUpdate(productId, { rating: averageRating }).exec();
+
+        return JSON.parse(JSON.stringify({
+            success: true,
+            review,
+        }))
+    } catch (error) {
+        console.error('Error editing review:', error)
+        throw new Error(`error : ${error}`)
     }
 }

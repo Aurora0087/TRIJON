@@ -2,15 +2,19 @@
 
 import { Star } from 'lucide-react';
 import React from 'react'
+import IsReviewAuther from '../ui/IsReviewAuther';
 
 interface ReviewProps {
     name: string;
     date: Date;
     rating: number;
     comment: string;
+    currentUserName?: string;
+    reviewId: string;
+    afterEdit: ()=>void
 }
 
-function ReviewCard({ name, date, rating, comment }: ReviewProps) {
+function ReviewCard({ name, date, rating, comment ,currentUserName="",reviewId, afterEdit }: ReviewProps) {
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
@@ -19,7 +23,8 @@ function ReviewCard({ name, date, rating, comment }: ReviewProps) {
     const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
     return (
-        <div className="p-4 border border-gray-200 rounded-md mb-4">
+        <div className="p-4 border border-gray-200 rounded-md mb-4 relative">
+            <IsReviewAuther reviewId={reviewId} comment={comment} rating={rating} afterEdit={afterEdit} currentUserId={currentUserName} />
             <div className="flex items-center mb-2">
                 <div className="mr-4">
                     <h3 className="text-lg font-semibold">{name}</h3>

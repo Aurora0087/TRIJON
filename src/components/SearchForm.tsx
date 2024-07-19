@@ -48,7 +48,7 @@ function SearchForm() {
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
-                                <Input placeholder="Search Your Own" {...field} className=' rounded-full' />
+                                <Input placeholder="Search Your Own" {...field} className=' rounded-full h-fit' />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

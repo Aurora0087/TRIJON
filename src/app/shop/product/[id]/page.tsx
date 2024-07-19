@@ -8,8 +8,9 @@ import SemilarProduct from '@/components/SemilarProduct'
 import { getProductsById } from '@/database/action/product.action'
 import { getReviews, IReviewWithUsername } from '@/database/action/review.action'
 import { IProduct } from '@/database/models/product.model'
-import { IReview } from '@/database/models/review.model'
 import { SearchParamProps } from '@/types'
+import { User } from 'next-auth'
+import { getSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 
 function ProductDetailspage({ params: { id } }: SearchParamProps) {
@@ -27,30 +28,38 @@ function ProductDetailspage({ params: { id } }: SearchParamProps) {
         5: 0,
     });
 
+    const [currentUserID,setCurrentUserID] = useState<null| undefined | string>("")
+
     async function getProduct() {
         try {
             const res = await getProductsById({ id });
             setProduct(res);
+            fetchReviews()
         } catch (error) {
             console.error('Error fetching product:', error);
         }
     }
 
-    async function fetchReviews(productId: string, page: number) {
+    async function fetchReviews() {
         try {
-            const { reviews, totalPages, totalReviews, ratingPercentages } = await getReviews({ productId, page });
+            const { reviews, ratingPercentages, totalReviews } = await getReviews({ productId:id });
             setReviews(reviews);
-            setTotalPages(totalPages);
-            setTotalReviews(totalReviews);
+            setTotalReviews(totalReviews)
             setRatingPercentages(ratingPercentages);
         } catch (error) {
             console.error('Error fetching reviews:', error);
         }
     }
 
+    async function fatchUser() {
+        await getSession().then((res) => {
+            setCurrentUserID(res?.user.id)
+        })
+    }
+
     useEffect(() => {
-        getProduct();
-        fetchReviews(id, currentPage);
+        getProduct()
+        fatchUser()
     }, [id, currentPage]);
 
     return (
@@ -78,13 +87,16 @@ function ProductDetailspage({ params: { id } }: SearchParamProps) {
                             <PostReview productId={id} />
                         </div>
                         <div className='flex flex-col gap-4'>
-                            {reviews.map((review, index) => (
+                            {reviews.map((review) => (
                                 <ReviewCard
-                                    key={index}
+                                    key={review._id}
+                                    reviewId={review._id}
                                     name={review.username}
                                     date={new Date(review.createdAt)}
                                     rating={review.rating}
                                     comment={review.comment}
+                                    currentUserName={String(currentUserID)}
+                                    afterEdit={fetchReviews}
                                 />
                             ))}
                         </div>
