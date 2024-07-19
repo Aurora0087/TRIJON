@@ -13,10 +13,6 @@ function ShareButtons() {
             url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`,
         },
         {
-            icon: <FaInstagram className="w-6 h-6 hover:text-red-400"/>,
-            url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`,
-        },
-        {
             icon: <RiTwitterXLine className="w-6 h-6 hover:text-blue-500" />,
             url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}`,
         },

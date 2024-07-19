@@ -111,13 +111,6 @@ function Footer() {
                             <li>Pay online</li>
                         </ul>
                     </CollapsibleCard>
-                    <CollapsibleCard triggerComponent="Category">
-                        <ul className="space-y-2 pb-4">
-                            <li><a href="/shop/trackpants">Summer Sale</a></li>
-                            <li><a href="/shop/trackpants">Winter Sale</a></li>
-                        </ul>
-                    </CollapsibleCard>
-
                 </div>
                 {/* Copyright */}
                 <div className="mt-8 text-sm w-full flex flex-col md:flex-row justify-center items-center gap-x-2">
