@@ -85,7 +85,7 @@ function OrderCard({ order }: OrderCardProps) {
 
             <div className='w-full md:w-auto'>
                 <CollapsibleCard triggerComponent='Products:'>
-                    <div className='p-2 flex flex-wrap gap-4'>
+                    <div className='p-2 grid md:grid-cols-3 gap-4'>
                         {order.products.map((product, i) => (
                             <div key={i} className="flex p-2 gap-2 bg-slate-200 rounded-xl w-full md:w-fit">
                                 <a href={`/shop/product/${product._id}`} className='rounded-xl overflow-hidden border-2 md:max-w-[350px]'>
