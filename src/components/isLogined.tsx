@@ -45,7 +45,7 @@ function IsLogined(
                     {children}
                 </>
             ) : (
-                <Button onClick={handleGoogleSignIn} className=' rounded-full text-black'>
+                <Button onClick={handleGoogleSignIn} className=' rounded-full'>
                     Login
                 </Button>
             )}

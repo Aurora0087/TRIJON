@@ -62,22 +62,23 @@ function page() {
     }, [user]);
 
     async function getUserDetails() {
-        if (!user) {
+        if (user === null || user === undefined) {
             return;
         }
         setLoading(true);
-        await getUserByEmail({ email: user.email as string }).then((res) => {
+        await getUserByEmail({ email: String(user.email) }).then((res) => {
             setUserDetails(res);
             setLoading(false);
             console.log(res);
-        });
+        }).catch((e) => {
+            setLoading(false);
+        })
     }
 
     async function fetchUserAuth() {
         const session = await getSession();
         if (session?.user) {
             setUser(session.user);
-            console.log(session.user);
         }
     }
 
@@ -127,7 +128,7 @@ function page() {
                         <div className='flex flex-col gap-2 p-2 text-sm'>
                             <div className='flex gap-2 items-center'>
                                 <span>Information:</span>
-                                {/* EditProfile component here */}
+                                <EditProfile uid={userDetails._id} firstName={String(userDetails.firstName)} lastName={String(userDetails.lastName)} userName={userDetails.name} mobile={userDetails.mobile} getUser={getUserDetails}                                />
                             </div>
                             <div className='flex flex-col md:flex-row gap-x-8 gap-y-2'>
                                 <div className='flex gap-2 items-center text-slate-500'>
